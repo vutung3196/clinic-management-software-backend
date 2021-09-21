@@ -218,3 +218,5 @@ D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\C
 D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\obj\Debug\net5.0\ref\ClinicManagementSoftware.Web.dll
 D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\obj\Debug\net5.0\ClinicManagementSoftware.Web.pdb
 D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\obj\Debug\net5.0\ClinicManagementSoftware.Web.genruntimeconfig.cache
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\MySqlConnector.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\Pomelo.EntityFrameworkCore.MySql.dll

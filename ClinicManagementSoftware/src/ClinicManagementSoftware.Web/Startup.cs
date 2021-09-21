@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using ClinicManagementSoftware.Core.Constants;
 
 namespace ClinicManagementSoftware.Web
 {
@@ -32,9 +33,9 @@ namespace ClinicManagementSoftware.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            string connectionString = Configuration.GetConnectionString("SqliteConnection");  //Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Configuration.GetConnectionString(ConfigurationConstant.ClinicManagementSoftwareDatabase);  //Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext(connectionString);
+            services.AddAffordableClinicDbContext(connectionString);
 
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages();
