@@ -21,12 +21,33 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         }
 
         public DbSet<Clinic> Clinics { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyAllConfigurationsFromCurrentAssembly();
+
+            // 1 TO MANY
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Clinic)
+                .WithMany(clinic => clinic.Users);
+
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Role)
+                .WithMany(role => role.Users);
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rolePermission => rolePermission.Role)
+                .WithMany(role => role.RolePermissions);
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(user => user.Permission)
+                .WithMany(role => role.RolePermissions);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

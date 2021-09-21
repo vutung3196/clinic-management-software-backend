@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -16,6 +17,6 @@ namespace ClinicManagementSoftware.Core.Entities
 
         [Column("is_enabled")] public byte IsEnabled { get; set; }
 
-        //public IList<User> Users { get; set; }
+        public IList<User> Users { get; set; }
     }
 }

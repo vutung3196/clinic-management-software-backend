@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicManagementSoftware.SharedKernel
 {
@@ -6,6 +8,8 @@ namespace ClinicManagementSoftware.SharedKernel
     public abstract class BaseEntity
     {
         public long Id { get; set; }
+        [Column("created_at")] public DateTime CreatedAt { get; set; }
+        [Column("updated_at")] public DateTime? UpdatedAt { get; set; }
 
         public List<BaseDomainEvent> Events = new List<BaseDomainEvent>();
     }
