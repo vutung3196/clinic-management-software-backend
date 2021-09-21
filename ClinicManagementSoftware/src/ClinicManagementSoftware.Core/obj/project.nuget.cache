@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "xpfduktW/YI89cSpgYlCPRlmhQfb3GgmDm/A3gUzxSJv1u9BRv4wEmmC5eOvXKD2UGsUR22CA6bPvZBgJakk2Q==",
+  "success": true,
+  "projectFilePath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ADMIN\\.nuget\\packages\\ardalis.guardclauses\\3.2.0\\ardalis.guardclauses.3.2.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\ardalis.result\\3.1.1\\ardalis.result.3.1.1.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\ardalis.specification\\5.1.0\\ardalis.specification.5.1.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\autofac\\6.2.0\\autofac.6.2.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\jetbrains.annotations\\2021.1.0\\jetbrains.annotations.2021.1.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\mediatr\\9.0.0\\mediatr.9.0.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.7.1\\system.diagnostics.diagnosticsource.4.7.1.nupkg.sha512"
+  ],
+  "logs": []
+}

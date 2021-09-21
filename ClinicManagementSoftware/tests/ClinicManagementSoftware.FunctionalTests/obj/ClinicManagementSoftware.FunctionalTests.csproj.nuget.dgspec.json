@@ -1,0 +1,555 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.FunctionalTests\\ClinicManagementSoftware.FunctionalTests.csproj": {}
+  },
+  "projects": {
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj",
+        "projectName": "ClinicManagementSoftware.Core",
+        "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj": {
+                "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Ardalis.GuardClauses": {
+              "target": "Package",
+              "version": "[3.2.0, )"
+            },
+            "Ardalis.Result": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Ardalis.Specification": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "Autofac": {
+              "target": "Package",
+              "version": "[6.2.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Infrastructure\\ClinicManagementSoftware.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Infrastructure\\ClinicManagementSoftware.Infrastructure.csproj",
+        "projectName": "ClinicManagementSoftware.Infrastructure",
+        "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Infrastructure\\ClinicManagementSoftware.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj": {
+                "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj"
+              },
+              "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj": {
+                "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Ardalis.EFCore.Extensions": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            },
+            "Ardalis.Specification.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "Autofac": {
+              "target": "Package",
+              "version": "[6.2.0, )"
+            },
+            "Autofac.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[7.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[5.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "NETStandard.Library": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "SQLite": {
+              "target": "Package",
+              "version": "[3.13.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj",
+        "projectName": "ClinicManagementSoftware.SharedKernel",
+        "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Ardalis.Specification": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Web\\ClinicManagementSoftware.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Web\\ClinicManagementSoftware.Web.csproj",
+        "projectName": "ClinicManagementSoftware.Web",
+        "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Web\\ClinicManagementSoftware.Web.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Infrastructure\\ClinicManagementSoftware.Infrastructure.csproj": {
+                "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Infrastructure\\ClinicManagementSoftware.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Ardalis.ApiEndpoints": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Ardalis.ListStartupServices": {
+              "target": "Package",
+              "version": "[1.1.3, )"
+            },
+            "Ardalis.Result": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Ardalis.Result.AspNetCore": {
+              "target": "Package",
+              "version": "[3.0.1, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "NETStandard.Library": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.1.4, )"
+            },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.1.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.FunctionalTests\\ClinicManagementSoftware.FunctionalTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.FunctionalTests\\ClinicManagementSoftware.FunctionalTests.csproj",
+        "projectName": "ClinicManagementSoftware.FunctionalTests",
+        "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.FunctionalTests\\ClinicManagementSoftware.FunctionalTests.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.FunctionalTests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.UnitTests\\ClinicManagementSoftware.UnitTests.csproj": {
+                "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.UnitTests\\ClinicManagementSoftware.UnitTests.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Ardalis.HttpClientTestExtensions": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[5.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.9.4, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.3, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.UnitTests\\ClinicManagementSoftware.UnitTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.UnitTests\\ClinicManagementSoftware.UnitTests.csproj",
+        "projectName": "ClinicManagementSoftware.UnitTests",
+        "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.UnitTests\\ClinicManagementSoftware.UnitTests.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\tests\\ClinicManagementSoftware.UnitTests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Web\\ClinicManagementSoftware.Web.csproj": {
+                "projectPath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Web\\ClinicManagementSoftware.Web.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.9.4, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.16.1, )"
+            },
+            "ReportGenerator": {
+              "target": "Package",
+              "version": "[4.8.8, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.3, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

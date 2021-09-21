@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "hepUsd80WV6b+TyqeC8wyuU71qP1R+JUf8KAdQjQN7OC+65QqeQXyfcXcYSkooA1A+6iq8+5SeyGiJebzn3gXw==",
+  "success": true,
+  "projectFilePath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.SharedKernel\\ClinicManagementSoftware.SharedKernel.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ADMIN\\.nuget\\packages\\ardalis.guardclauses\\3.1.0\\ardalis.guardclauses.3.1.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\ardalis.specification\\5.1.0\\ardalis.specification.5.1.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\jetbrains.annotations\\2019.1.3\\jetbrains.annotations.2019.1.3.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\mediatr\\9.0.0\\mediatr.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
