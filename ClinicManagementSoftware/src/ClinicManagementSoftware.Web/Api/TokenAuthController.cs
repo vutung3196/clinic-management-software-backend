@@ -6,7 +6,6 @@ using ClinicManagementSoftware.Core.Exceptions.User;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Authentication.Model;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -58,17 +57,17 @@ namespace ClinicManagementSoftware.Web.Api
             catch (UserNotFoundException exception)
             {
                 _logger.LogInformation(exception.Message);
-                return BadRequest("Incorrect username or password");
+                return BadRequest("Tài khoản hoặc mật khẩu chưa chính xác");
             }
             catch (InCorrectPasswordException exception)
             {
                 _logger.LogInformation(exception.Message);
-                return BadRequest("Incorrect username or password");
+                return BadRequest("Tài khoản hoặc mật khẩu chưa chính xác");
             }
             catch (UserInActiveException exception)
             {
                 _logger.LogInformation(exception.Message);
-                return BadRequest("Inactive user");
+                return BadRequest("Tài khoản đang bị khóa");
             }
             catch (Exception exception)
             {
