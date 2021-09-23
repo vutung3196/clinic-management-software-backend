@@ -7,6 +7,7 @@ using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
 using ClinicManagementSoftware.Core.Exceptions.Authentication;
+using ClinicManagementSoftware.Core.Exceptions.Clinic;
 using ClinicManagementSoftware.Core.Exceptions.User;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
@@ -51,9 +52,14 @@ namespace ClinicManagementSoftware.Core.Services
             var user = await _userSpecificationRepository.GetBySpecAsync(@spec);
             if (user == null)
                 throw new UserNotFoundException("Invalid username or password");
-            if (user.IsEnabled == (byte) EnumEnabledUser.InActive)
+            if (user.Enabled == (byte) EnumEnabled.InActive)
             {
                 throw new UserInActiveException("This user is not active");
+            }
+
+            if (user.Clinic.IsEnabled == (byte) EnumEnabled.InActive)
+            {
+                throw new ClinicInActiveException("The clinic is not active");
             }
 
             if (!VerifyPasswordHash(password, user.Password))
@@ -78,7 +84,7 @@ namespace ClinicManagementSoftware.Core.Services
             var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
             if (duplicatedUser != null)
             {
-                throw new ArgumentException("Username should be unique");
+                throw new ArgumentException("Username đã có người dùng");
             }
 
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
@@ -94,7 +100,7 @@ namespace ClinicManagementSoftware.Core.Services
                 CreatedAt = DateTime.UtcNow,
                 Username = input.UserName.Trim(),
                 ClinicId = currentUserContext.ClinicId,
-                IsEnabled = input.Enabled ? (byte) EnumEnabledUser.Active : (byte) EnumEnabledUser.InActive,
+                Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
                 Password = passwordHash,
                 PhoneNumber = input.PhoneNumber,
                 FullName = input.FullName,
@@ -102,6 +108,45 @@ namespace ClinicManagementSoftware.Core.Services
             };
             user = await _userSpecificationRepository.AddAsync(user);
             return _mapper.Map<UserResultResponse>(user);
+        }
+
+        public async Task<UserResultResponse> CreateUserWithClinic(CreateUserDto input, long clinicId)
+        {
+            var @spec = new GetUserRoleAndClinicByUsernameSpec(input.UserName.Trim());
+            var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            if (duplicatedUser != null)
+            {
+                throw new ArgumentException("Username should be unique");
+            }
+
+            var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
+            var role = await _roleSpecificationRepository.GetBySpecAsync(@roleSpec);
+            if (role == null)
+            {
+                throw new ArgumentException($"Cannot find a role having name: {input.Role}");
+            }
+
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
+            var user = new User
+            {
+                CreatedAt = DateTime.UtcNow,
+                Username = input.UserName.Trim(),
+                ClinicId = clinicId,
+                Enabled = input.Enabled ? (byte)EnumEnabled.Active : (byte)EnumEnabled.InActive,
+                Password = passwordHash,
+                PhoneNumber = input.PhoneNumber,
+                FullName = input.FullName,
+                RoleId = role.Id
+            };
+            user = await _userSpecificationRepository.AddAsync(user);
+            return _mapper.Map<UserResultResponse>(user);
+        }
+
+        public async Task<bool> IsDuplicatedUser(string username)
+        {
+            var @spec = new GetUserRoleAndClinicByUsernameSpec(username);
+            var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            return duplicatedUser != null;
         }
 
         public async Task<UserResultResponse> EditUser(long id, EditUserDto input)
@@ -128,7 +173,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             user.FullName = input.FullName;
             user.PhoneNumber = input.PhoneNumber;
-            user.IsEnabled = input.Enabled ? (byte) EnumEnabledUser.Active : (byte) EnumEnabledUser.InActive;
+            user.Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
             var newRole = await _roleSpecificationRepository.GetBySpecAsync(@roleSpec);
             if (newRole == null)
@@ -144,7 +189,7 @@ namespace ClinicManagementSoftware.Core.Services
             return _mapper.Map<UserResultResponse>(user);
         }
 
-        public async Task DeleteUser(long id)
+        public async Task DeactivateUser(long id)
         {
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetUserAndRoleByIdSpec(id);
@@ -160,8 +205,8 @@ namespace ClinicManagementSoftware.Core.Services
                     $"This admin cannot have access to this user having id: {user.Id}");
             }
 
-
-            await _userSpecificationRepository.DeleteAsync(user);
+            user.Enabled = (byte) EnumEnabled.InActive;
+            await _userSpecificationRepository.UpdateAsync(user);
         }
 
         private static bool VerifyPasswordHash(string loginPassword, string hashedPassword)

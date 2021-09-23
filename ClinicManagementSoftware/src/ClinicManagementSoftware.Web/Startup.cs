@@ -97,8 +97,8 @@ namespace ClinicManagementSoftware.Web
             services.AddHttpContextAccessor();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserContext, UserContext>();
-            //services.AddScoped<ITokenManagerService, TokenManagerService>();
             services.AddScoped<IJwtAuthManagerService, JwtAuthManagerService>();
+            services.AddScoped<IClinicManagementService, ClinicManagementService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

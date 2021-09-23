@@ -114,12 +114,12 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public async Task<IActionResult> DeactivateUser(long id)
         {
             try
             {
-                await _userService.DeleteUser(id);
-                return Ok("Delete user successfully");
+                await _userService.DeactivateUser(id);
+                return Ok("Deactivate user successfully");
             }
             catch (ArgumentException exception)
             {
