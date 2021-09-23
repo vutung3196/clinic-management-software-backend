@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Exceptions.Authentication;
+using ClinicManagementSoftware.Core.Exceptions.Clinic;
 using ClinicManagementSoftware.Core.Exceptions.User;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
@@ -39,7 +40,7 @@ namespace ClinicManagementSoftware.Web.Api
                 var claims = new[]
                 {
                     new Claim(ClaimTypes.Name, loginResult.UserName),
-                    new Claim(ClaimTypes.Role, loginResult.Role.RoleName ?? string.Empty)
+                    new Claim(ClaimTypes.Role, loginResult.Role.RoleName)
                 };
 
                 var jwtResult = _jwtAuthManagerService.GenerateTokens(request.UserName, claims, DateTime.Now);
@@ -47,11 +48,10 @@ namespace ClinicManagementSoftware.Web.Api
                 return Ok(new Response<AuthenticateResultModel>(new AuthenticateResultModel
                 {
                     AccessToken = jwtResult.AccessToken,
-                    //RefreshToken = jwtResult.RefreshToken.TokenString,
                     AccessTokenExpiredAt = jwtResult.AccessTokenExpireAt,
                     UserName = request.UserName,
                     ClinicId = userContext.ClinicId,
-                    Role = loginResult.Role.RoleName ?? string.Empty
+                    Role = loginResult.Role.RoleName
                 }));
             }
             catch (UserNotFoundException exception)
@@ -68,6 +68,11 @@ namespace ClinicManagementSoftware.Web.Api
             {
                 _logger.LogInformation(exception.Message);
                 return BadRequest("Tài khoản đang bị khóa");
+            }
+            catch (ClinicInActiveException exception)
+            {
+                _logger.LogInformation(exception.Message);
+                return BadRequest("Phòng khám đang bị khóa");
             }
             catch (Exception exception)
             {

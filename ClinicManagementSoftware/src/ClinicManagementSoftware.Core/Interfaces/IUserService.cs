@@ -12,5 +12,7 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<UserResultResponse> CreateUser(CreateUserDto input);
         Task<UserResultResponse> EditUser(long id, EditUserDto input);
         Task DeleteUser(long id);
+        Task<UserResultResponse> CreateUserWithClinic(CreateUserDto input, long clinicId);
+        Task<bool> IsDuplicatedUser(string username);
     }
 }

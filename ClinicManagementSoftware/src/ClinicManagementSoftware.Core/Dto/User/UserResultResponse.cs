@@ -16,7 +16,7 @@ namespace ClinicManagementSoftware.Core.Dto.User
         public string CreatedAt { get; set; }
         public DateTime DeletedAt { get; set; }
         public byte Enabled { get; set; }
-        public bool IsEnabled => Enabled == (byte) EnumEnabledUser.Active;
+        public bool IsEnabled => Enabled == (byte) EnumEnabled.Active;
         public long ClinicId { get; set; }
         public string Role { get; set; }
     }

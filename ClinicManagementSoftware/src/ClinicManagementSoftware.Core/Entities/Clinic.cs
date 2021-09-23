@@ -10,12 +10,9 @@ namespace ClinicManagementSoftware.Core.Entities
     public class Clinic : BaseEntity, IAggregateRoot
     {
         [Column("name")] public string Name { get; set; }
-
         [Column("address")] public string Address { get; set; }
-
-        [Column("description")] public string Description { get; set; }
-
         [Column("is_enabled")] public byte IsEnabled { get; set; }
+        [Column("phone_number")] public string PhoneNumber { get; set; }
 
         public IList<User> Users { get; set; }
     }
