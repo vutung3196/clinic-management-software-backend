@@ -52,7 +52,7 @@ namespace ClinicManagementSoftware.Core.Services
             var user = await _userSpecificationRepository.GetBySpecAsync(@spec);
             if (user == null)
                 throw new UserNotFoundException("Invalid username or password");
-            if (user.IsEnabled == (byte) EnumEnabled.InActive)
+            if (user.Enabled == (byte) EnumEnabled.InActive)
             {
                 throw new UserInActiveException("This user is not active");
             }
@@ -84,7 +84,7 @@ namespace ClinicManagementSoftware.Core.Services
             var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
             if (duplicatedUser != null)
             {
-                throw new ArgumentException("Username should be unique");
+                throw new ArgumentException("Username đã có người dùng");
             }
 
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
@@ -100,7 +100,7 @@ namespace ClinicManagementSoftware.Core.Services
                 CreatedAt = DateTime.UtcNow,
                 Username = input.UserName.Trim(),
                 ClinicId = currentUserContext.ClinicId,
-                IsEnabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
+                Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
                 Password = passwordHash,
                 PhoneNumber = input.PhoneNumber,
                 FullName = input.FullName,
@@ -132,7 +132,7 @@ namespace ClinicManagementSoftware.Core.Services
                 CreatedAt = DateTime.UtcNow,
                 Username = input.UserName.Trim(),
                 ClinicId = clinicId,
-                IsEnabled = input.Enabled ? (byte)EnumEnabled.Active : (byte)EnumEnabled.InActive,
+                Enabled = input.Enabled ? (byte)EnumEnabled.Active : (byte)EnumEnabled.InActive,
                 Password = passwordHash,
                 PhoneNumber = input.PhoneNumber,
                 FullName = input.FullName,
@@ -173,7 +173,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             user.FullName = input.FullName;
             user.PhoneNumber = input.PhoneNumber;
-            user.IsEnabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
+            user.Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
             var newRole = await _roleSpecificationRepository.GetBySpecAsync(@roleSpec);
             if (newRole == null)
@@ -189,7 +189,7 @@ namespace ClinicManagementSoftware.Core.Services
             return _mapper.Map<UserResultResponse>(user);
         }
 
-        public async Task DeleteUser(long id)
+        public async Task DeactivateUser(long id)
         {
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetUserAndRoleByIdSpec(id);
@@ -205,8 +205,8 @@ namespace ClinicManagementSoftware.Core.Services
                     $"This admin cannot have access to this user having id: {user.Id}");
             }
 
-
-            await _userSpecificationRepository.DeleteAsync(user);
+            user.Enabled = (byte) EnumEnabled.InActive;
+            await _userSpecificationRepository.UpdateAsync(user);
         }
 
         private static bool VerifyPasswordHash(string loginPassword, string hashedPassword)

@@ -11,7 +11,7 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("user_name")] public string Username { get; set; }
         [Column("password_hash")] public string Password { get; set; }
         [Column("full_name")] public string FullName { get; set; }
-        [Column("is_enabled")] public byte IsEnabled { get; set; }
+        [Column("is_enabled")] public byte Enabled { get; set; }
 
         [Column("role_id")] public long RoleId { get; set; }
         [Column("clinic_id")] public long ClinicId { get; set; }
