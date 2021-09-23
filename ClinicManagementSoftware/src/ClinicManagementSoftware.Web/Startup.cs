@@ -1,4 +1,5 @@
-﻿using Ardalis.ListStartupServices;
+﻿using System;
+using Ardalis.ListStartupServices;
 using Autofac;
 using ClinicManagementSoftware.Core;
 using ClinicManagementSoftware.Infrastructure;
@@ -9,6 +10,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.Text;
+using AutoMapper;
+using ClinicManagementSoftware.Core.Constants;
+using ClinicManagementSoftware.Core.Helpers;
+using ClinicManagementSoftware.Core.Interfaces;
+using ClinicManagementSoftware.Core.Services;
+using ClinicManagementSoftware.Web.Authentication.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClinicManagementSoftware.Web
 {
@@ -32,16 +43,45 @@ namespace ClinicManagementSoftware.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            string connectionString = Configuration.GetConnectionString("SqliteConnection");  //Configuration.GetConnectionString("DefaultConnection");
+            services.AddCors();
+            services.AddMvc().SetCompatibilityVersion(version: CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext(connectionString);
+            // add authentication
+            var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
+            services.AddSingleton(jwtTokenConfig);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtTokenConfig.Issuer,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenConfig.Secret)),
+                    ValidAudience = jwtTokenConfig.Audience,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            var connectionString =
+                Configuration.GetConnectionString(ConfigurationConstant
+                    .ClinicManagementSoftwareDatabase); //Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddAffordableClinicDbContext(connectionString);
 
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "My API", Version = "v1"});
                 c.EnableAnnotations();
             });
 
@@ -53,12 +93,27 @@ namespace ClinicManagementSoftware.Web
                 // optional - default path to view services is /listallservices - recommended to choose your own path
                 config.Path = "/listservices";
             });
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserContext, UserContext>();
+            //services.AddScoped<ITokenManagerService, TokenManagerService>();
+            services.AddScoped<IJwtAuthManagerService, JwtAuthManagerService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new DefaultCoreModule());
             builder.RegisterModule(new DefaultInfrastructureModule(_env.EnvironmentName == "Development"));
+            builder.Register(
+                    c => new MapperConfiguration(cfg => { cfg.AddProfile(new AutoMapperProfile()); }))
+                .AsSelf()
+                .SingleInstance();
+
+            builder.Register(
+                    c => c.Resolve<MapperConfiguration>().CreateMapper(c.Resolve))
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
         }
 
 
@@ -74,11 +129,20 @@ namespace ClinicManagementSoftware.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseRouting();
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

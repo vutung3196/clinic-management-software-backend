@@ -5,7 +5,7 @@ namespace ClinicManagementSoftware.Web.ApiModels
     // ApiModel DTOs are used by ApiController classes and are typically kept in a side-by-side folder
     public class ProjectDTO : CreateProjectDTO
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public List<ToDoItemDTO> Items = new();
     }
 

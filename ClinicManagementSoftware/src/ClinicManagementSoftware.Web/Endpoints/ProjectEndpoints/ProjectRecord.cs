@@ -1,5 +1,5 @@
 ﻿
 namespace ClinicManagementSoftware.Web.Endpoints.ProjectEndpoints
 {
-    public record ProjectRecord(int Id, string Name);
+    public record ProjectRecord(long Id, string Name);
 }
