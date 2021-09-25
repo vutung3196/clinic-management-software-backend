@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
@@ -21,7 +22,14 @@ namespace ClinicManagementSoftware.Core.Helpers
                     => opt.MapFrom(src => src.CreatedAt.Format()));
             CreateMap<UserResultResponse, User>();
             CreateMap<UserDto, User>();
-            //CreateMap<RegistrationUserModel, UserDto>();
+            CreateMap<Patient, PatientDto>()
+                .ForMember(dest => dest.Gender,
+                    opt
+                        => opt.MapFrom(src => src.Gender == null ? string.Empty : ((EnumGender) src.Gender).ToString()))
+                .ForMember(dest => dest.CreatedAt, opt
+                    => opt.MapFrom(src => src.CreatedAt.Format()))
+                .ForMember(dest => dest.UpdatedAt, opt
+                    => opt.MapFrom(src => src.UpdatedAt.Format()));
         }
     }
 }

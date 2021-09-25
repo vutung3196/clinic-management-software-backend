@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
+using ClinicManagementSoftware.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateClinic([FromBody] CreateUpdateClinicRequestDto request)
         {
             try
@@ -86,6 +88,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize(Roles = "MasterAdmin,Admin")]
         [HttpPut("{id}")]
+        [ValidateModel]
         public async Task<IActionResult> EditClinic(long id, [FromBody] CreateUpdateClinicRequestDto request)
         {
             try

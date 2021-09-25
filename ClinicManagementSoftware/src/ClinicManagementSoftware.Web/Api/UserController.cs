@@ -7,6 +7,7 @@ using ClinicManagementSoftware.Core.Exceptions.User;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.User;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
+using ClinicManagementSoftware.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto request)
         {
             try
@@ -88,6 +90,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
+        [ValidateModel]
         public async Task<IActionResult> EditUser(long id, [FromBody] EditUserDto request)
         {
             try
