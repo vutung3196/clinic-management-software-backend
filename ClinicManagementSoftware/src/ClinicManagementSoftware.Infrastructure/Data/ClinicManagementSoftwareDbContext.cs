@@ -28,6 +28,8 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<MedicalService> MedicalServices { get; set; }
         public DbSet<MedicalServiceGroup> MedicalServiceGroups { get; set; }
+        public DbSet<Medication> Medications { get; set; }
+        public DbSet<MedicationGroup> MedicationGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,6 +61,10 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<MedicalService>()
                 .HasOne(medicalService => medicalService.MedicalServiceGroup)
                 .WithMany(medicalServiceGroup => medicalServiceGroup.MedicalServices);
+
+            modelBuilder.Entity<Medication>()
+                .HasOne(medication => medication.MedicationGroup)
+                .WithMany(medicationGroup => medicationGroup.Medications);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

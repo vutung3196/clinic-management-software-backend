@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using ClinicManagementSoftware.Core.Helpers;
 
-namespace ClinicManagementSoftware.Core.Dto.MedicationService
+namespace ClinicManagementSoftware.Core.Dto.MedicalService
 {
     public class MedicalServiceDto
     {
