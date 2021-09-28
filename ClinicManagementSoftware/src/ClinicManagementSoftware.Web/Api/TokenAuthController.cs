@@ -7,6 +7,7 @@ using ClinicManagementSoftware.Core.Exceptions.User;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Authentication.Model;
+using ClinicManagementSoftware.Web.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpPost("auth")]
+        [ValidateModel]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateModel request)
         {
             try

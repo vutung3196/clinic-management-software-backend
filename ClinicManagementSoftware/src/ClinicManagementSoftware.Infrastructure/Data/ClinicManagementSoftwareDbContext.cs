@@ -25,6 +25,9 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<MedicalService> MedicalServices { get; set; }
+        public DbSet<MedicalServiceGroup> MedicalServiceGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,8 +49,16 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .WithMany(role => role.RolePermissions);
 
             modelBuilder.Entity<RolePermission>()
-                .HasOne(user => user.Permission)
-                .WithMany(role => role.RolePermissions);
+                .HasOne(rolePermission => rolePermission.Permission)
+                .WithMany(permission => permission.RolePermissions);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(patient => patient.Clinic)
+                .WithMany(clinic => clinic.Patients);
+
+            modelBuilder.Entity<MedicalService>()
+                .HasOne(medicalService => medicalService.MedicalServiceGroup)
+                .WithMany(medicalServiceGroup => medicalServiceGroup.MedicalServices);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

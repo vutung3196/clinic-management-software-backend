@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagementSoftware.Web.ApiModels.User
 {
-    public class RegistrationUserModel
+    public class GetPatientVisitingDoctorFormRequest
     {
         [Required] public string UserName { get; set; }
 
