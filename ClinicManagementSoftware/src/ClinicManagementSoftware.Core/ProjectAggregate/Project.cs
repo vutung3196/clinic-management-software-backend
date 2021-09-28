@@ -26,7 +26,7 @@ namespace ClinicManagementSoftware.Core.ProjectAggregate
             _items.Add(newItem);
 
             var newItemAddedEvent = new NewItemAddedEvent(this, newItem);
-            Events.Add(newItemAddedEvent);
+            //Events.Add(newItemAddedEvent);
         }
 
         public void UpdateName(string newName)

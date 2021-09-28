@@ -100,6 +100,7 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<IJwtAuthManagerService, JwtAuthManagerService>();
             services.AddScoped<IClinicManagementService, ClinicManagementService>();
             services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<IPatientDoctorVisitingFormService, PatientDoctorVisitingFormService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

@@ -30,6 +30,16 @@ namespace ClinicManagementSoftware.Core.Helpers
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.UpdatedAt, opt
                     => opt.MapFrom(src => src.UpdatedAt.Format()));
+            CreateMap<Patient, PatientDto>()
+                .ForMember(dest => dest.Gender,
+                    opt
+                        => opt.MapFrom(src => src.Gender == null ? string.Empty : ((EnumGender)src.Gender).ToString()))
+                .ForMember(dest => dest.CreatedAt, opt
+                    => opt.MapFrom(src => src.CreatedAt.Format()))
+                .ForMember(dest => dest.UpdatedAt, opt
+                    => opt.MapFrom(src => src.UpdatedAt.Format()));
+
+            CreateMap<>()
         }
     }
 }

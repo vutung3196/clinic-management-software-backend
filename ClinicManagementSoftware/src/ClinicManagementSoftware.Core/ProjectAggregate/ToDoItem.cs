@@ -13,7 +13,7 @@ namespace ClinicManagementSoftware.Core.ProjectAggregate
         {
             IsDone = true;
 
-            Events.Add(new ToDoItemCompletedEvent(this));
+            //Events.Add(new ToDoItemCompletedEvent(this));
         }
 
         public override string ToString()

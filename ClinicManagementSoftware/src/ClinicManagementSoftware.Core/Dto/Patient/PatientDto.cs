@@ -14,7 +14,7 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public string CreatedAt { get; set; }
         public string UpdatedAt { get; set; }
         public string Address { get; set; }
-        public int? YearOfBirth { get; set; }
-        public int? Age => YearOfBirth.HasValue ? DateTime.Now.Year - YearOfBirth : null;
+        public DateTime? DateOfBirth { get; set; }
+        //public int? Age => DateOfBirth.HasValue ? DateTime.Now.Year - DateOfBirth : null;
     }
 }

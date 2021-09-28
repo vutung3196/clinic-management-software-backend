@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagementSoftware.Web.ApiModels.Patient
 {
@@ -12,7 +13,7 @@ namespace ClinicManagementSoftware.Web.ApiModels.Patient
 
         [EmailAddress(ErrorMessage = "Vui lòng nhập email đúng định dạng")] public string EmailAddress { get; set; }
 
-        public int? YearOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string PhoneNumber { get; set; }
 

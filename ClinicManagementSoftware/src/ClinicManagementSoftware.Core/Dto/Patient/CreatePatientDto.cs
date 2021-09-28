@@ -30,6 +30,6 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
 
         public DateTime? DeletedAt { get; set; }
         public string Address { get; set; }
-        public int? YearOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
     }
 }

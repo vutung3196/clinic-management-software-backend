@@ -28,4 +28,8 @@
     <ProjectReference Include="..\ClinicManagementSoftware.Infrastructure\ClinicManagementSoftware.Infrastructure.csproj" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Folder Include="ApiModels\PatientVisitingDoctorForm\" />
+  </ItemGroup>
+  
 </Project>

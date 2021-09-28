@@ -76,7 +76,7 @@ namespace ClinicManagementSoftware.Core.Services
                 Address = request.Address,
                 PhoneNumber = request.PhoneNumber,
                 Gender = Convert.ToByte(genderResult),
-                YearOfBirth = request.YearOfBirth,
+                DateOfBirth = request.DateOfBirth,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = 0
@@ -115,7 +115,7 @@ namespace ClinicManagementSoftware.Core.Services
             patientModel.Gender = Convert.ToByte(genderResult);
             patientModel.UpdatedAt = DateTime.UtcNow;
             patientModel.Address = patient.Address;
-            patientModel.YearOfBirth = patient.YearOfBirth;
+            patientModel.DateOfBirth = patient.DateOfBirth;
             patientModel.IsDeleted = 0;
             await _patientRepository.UpdateAsync(patientModel);
             var result = _mapper.Map<PatientDto>(patientModel);

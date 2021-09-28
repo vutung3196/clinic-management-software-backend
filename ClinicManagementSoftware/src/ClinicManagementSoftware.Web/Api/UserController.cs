@@ -143,7 +143,7 @@ namespace ClinicManagementSoftware.Web.Api
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegistrationUserModel model)
+        public async Task<IActionResult> Register([FromBody] GetPatientVisitingDoctorFormRequest model)
         {
             var userDto = _mapper.Map<UserDto>(model);
             try

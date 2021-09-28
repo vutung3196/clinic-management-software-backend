@@ -84,7 +84,7 @@ namespace ClinicManagementSoftware.Web.Api
                     FullName = request.FullName,
                     Occupation = request.Occupation,
                     PhoneNumber = request.PhoneNumber,
-                    YearOfBirth = request.YearOfBirth,
+                    DateOfBirth = request.DateOfBirth,
                     Address = request.Address
                 };
 
@@ -131,7 +131,7 @@ namespace ClinicManagementSoftware.Web.Api
                     Occupation = request.Occupation,
                     PhoneNumber = request.PhoneNumber,
                     Address = request.Address,
-                    YearOfBirth = request.YearOfBirth
+                    DateOfBirth = request.DateOfBirth
                 };
                 var result = await _patientService.UpdateAsync(updatePatientDto);
                 var response = new Response<PatientDto>(result);

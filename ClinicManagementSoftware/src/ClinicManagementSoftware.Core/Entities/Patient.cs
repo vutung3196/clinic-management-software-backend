@@ -22,7 +22,7 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("address")] public string Address { get; set; }
 
         [Column("gender")] public byte? Gender { get; set; }
-        [Column("year_of_birth")] public int? YearOfBirth { get; set; }
+        [Column("date_of_birth")] public DateTime? DateOfBirth { get; set; }
 
         [Column("is_deleted")] public byte IsDeleted { get; set; }
 
