@@ -1,4 +1,4 @@
-﻿namespace ClinicManagementSoftware.Core.Dto.MedicationService
+﻿namespace ClinicManagementSoftware.Core.Dto.MedicalService
 {
     public class MedicalServiceGroupDto
     {

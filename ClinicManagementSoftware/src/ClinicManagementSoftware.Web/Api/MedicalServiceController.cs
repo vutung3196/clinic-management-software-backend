@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ClinicManagementSoftware.Core.Dto.MedicationService;
+using ClinicManagementSoftware.Core.Dto.MedicalService;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin,Accountant")]
     public class MedicalServiceController : ControllerBase
     {
         private readonly IMedicalServiceService _medicalService;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ClinicManagementSoftware.Core.Dto.MedicationService;
+using ClinicManagementSoftware.Core.Dto.MedicalService;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
