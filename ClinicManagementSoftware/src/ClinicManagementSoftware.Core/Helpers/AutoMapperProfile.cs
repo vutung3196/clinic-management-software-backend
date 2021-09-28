@@ -39,7 +39,6 @@ namespace ClinicManagementSoftware.Core.Helpers
                 .ForMember(dest => dest.UpdatedAt, opt
                     => opt.MapFrom(src => src.UpdatedAt.Format()));
 
-            CreateMap<>()
         }
     }
 }
