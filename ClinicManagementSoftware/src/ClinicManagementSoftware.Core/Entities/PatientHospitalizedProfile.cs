@@ -1,0 +1,25 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using ClinicManagementSoftware.SharedKernel;
+using ClinicManagementSoftware.SharedKernel.Interfaces;
+
+namespace ClinicManagementSoftware.Core.Entities
+{
+    [Table("patient_hospitalized_profile")]
+    public class PatientHospitalizedProfile : BaseEntity, IAggregateRoot
+    {
+        [Column("patient_id")] public long PatientId { get; set; }
+        public Patient Patient { get; set; }
+        
+        [Column("disease_name")] public string DiseaseName { get; set; }
+        [Column("description")] public string Description { get; set; }
+
+        [Column("revisit_date")] public DateTime? RevisitDate { get; set; }
+
+        [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
+
+        // 1 to many
+        //public ICollection<PatientPrescription> PatientPrescriptions { get; set; }
+        //public ICollection<PatientMedicalImageFile> PatientMedicalImageFiles { get; set; }
+    }
+}

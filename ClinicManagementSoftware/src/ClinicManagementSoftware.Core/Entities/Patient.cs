@@ -16,9 +16,6 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("email_address")] public string EmailAddress { get; set; }
 
         [Column("phone_number")] public string PhoneNumber { get; set; }
-
-        [Column("occupation")] public string Occupation { get; set; }
-
         [Column("address")] public string Address { get; set; }
 
         [Column("gender")] public byte? Gender { get; set; }
@@ -29,5 +26,6 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
 
         public Clinic Clinic { get; set; }
+        public ICollection<PatientHospitalizedProfile> PatientHospitalizedProfiles { get; set; }
     }
 }

@@ -72,7 +72,6 @@ namespace ClinicManagementSoftware.Core.Services
                 ClinicId = currentUserContext.ClinicId,
                 EmailAddress = request.EmailAddress,
                 FullName = request.FullName,
-                Occupation = request.Occupation,
                 Address = request.Address,
                 PhoneNumber = request.PhoneNumber,
                 Gender = Convert.ToByte(genderResult),
@@ -110,7 +109,6 @@ namespace ClinicManagementSoftware.Core.Services
             patientModel.ClinicId = currentUserContext.ClinicId;
             patientModel.EmailAddress = patient.EmailAddress;
             patientModel.FullName = patient.FullName;
-            patientModel.Occupation = patient.Occupation;
             patientModel.PhoneNumber = patient.PhoneNumber;
             patientModel.Gender = Convert.ToByte(genderResult);
             patientModel.UpdatedAt = DateTime.UtcNow;
