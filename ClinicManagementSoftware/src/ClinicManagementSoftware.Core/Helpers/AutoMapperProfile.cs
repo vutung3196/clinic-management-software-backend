@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using ClinicManagementSoftware.Core.Dto.Patient;
+using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
@@ -33,12 +34,24 @@ namespace ClinicManagementSoftware.Core.Helpers
             CreateMap<Patient, PatientDto>()
                 .ForMember(dest => dest.Gender,
                     opt
-                        => opt.MapFrom(src => src.Gender == null ? string.Empty : ((EnumGender)src.Gender).ToString()))
+                        => opt.MapFrom(src => src.Gender == null ? string.Empty : ((EnumGender) src.Gender).ToString()))
                 .ForMember(dest => dest.CreatedAt, opt
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.UpdatedAt, opt
                     => opt.MapFrom(src => src.UpdatedAt.Format()));
 
+            CreateMap<Prescription, PrescriptionInformation>()
+                .ForMember(dest => dest.RevisitDate,
+                    opt => opt.MapFrom(src => src.RevisitDate == null ? string.Empty : src.RevisitDate.Format()))
+                .ForMember(dest => dest.CreatedAt, opt
+                    => opt.MapFrom(src => src.CreatedAt.Format()))
+                .ForMember(dest => dest.DoctorId, opt
+                    => opt.MapFrom(src => src.DoctorId))
+                .ForMember(dest => dest.DoctorName, opt
+                    => opt.MapFrom(src => src.Doctor.FullName))
+                .ForMember(dest => dest.MedicationInformation,
+                    opt => opt.MapFrom(src => JsonConvert
+                        .DeserializeObject<List<MedicationInformation>>(src.MedicationInformation)));
         }
     }
 }

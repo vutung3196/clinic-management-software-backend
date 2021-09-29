@@ -105,6 +105,7 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<IMedicalServiceGroupService, MedicalServiceGroupService>();
             services.AddScoped<IMedicationService, MedicationService>();
             services.AddScoped<IPatientHospitalizedProfileService, PatientHospitalizedProfileService>();
+            services.AddScoped<IPrescriptionService, PrescriptionService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

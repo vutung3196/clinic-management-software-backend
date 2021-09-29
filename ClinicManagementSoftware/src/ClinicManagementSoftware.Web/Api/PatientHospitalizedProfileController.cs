@@ -15,7 +15,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Doctor")]
+    [Authorize(Roles = "Doctor")]
     public class PatientHospitalizedProfileController : ControllerBase
     {
         private readonly IPatientHospitalizedProfileService _patientHospitalizedProfileService;
