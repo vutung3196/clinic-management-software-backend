@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using ClinicManagementSoftware.Core.Dto.Prescription;
+using ClinicManagementSoftware.Core.Dto.Clinic;
+using ClinicManagementSoftware.Core.Dto.LabOrderForm;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
 using ClinicManagementSoftware.Core.Exceptions.Prescription;
 using ClinicManagementSoftware.Core.Interfaces;
@@ -19,64 +19,42 @@ namespace ClinicManagementSoftware.Web.Api
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Doctor")]
-    public class PrescriptionController : ControllerBase
+    public class LabOrderFormController : ControllerBase
     {
-        private readonly IPrescriptionService _prescriptionService;
-        private readonly ILogger<PrescriptionController> _logger;
+        private readonly ILabOrderFormService _labOrderFormService;
+        private readonly ILogger<LabOrderFormController> _logger;
 
-        public PrescriptionController(IPrescriptionService prescriptionService,
-            ILogger<PrescriptionController> logger)
+        public LabOrderFormController(ILabOrderFormService labOrderFormService,
+            ILogger<LabOrderFormController> logger)
         {
-            _prescriptionService = prescriptionService;
+            _labOrderFormService = labOrderFormService;
             _logger = logger;
         }
 
-        [HttpGet("getbypatient")]
-        public async Task<IActionResult> GetByPatientId(long patientId)
-        {
-            try
-            {
-                var result = await _prescriptionService.GetPrescriptionsByPatientId(patientId);
-                var response = new Response<ICollection<PrescriptionInformation>>(result);
-                
-                return Ok(response);
-            }
-            catch (PatientNotFoundException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetByClinicId()
+        //{
+        //    try
+        //    {
+        //        var result = await _labOrderFormService.GetAll();
+        //        var response = new Response<IEnumerable<PatientPrescriptionResponse>>(result);
 
-        [HttpGet]
-        public async Task<IActionResult> GetByClinicId()
-        {
-            try
-            {
-                var result = await _prescriptionService.GetPrescriptionsByClinicId();
-                var response = new Response<IEnumerable<PatientPrescriptionResponse>>(result);
-
-                return Ok(response);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //        return Ok(response);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
 
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetById(long id)
         {
             try
             {
-                var result = await _prescriptionService.GetPatientPrescriptionById(id);
-                return Ok(new Response<PrescriptionInformation>(result));
+                var result = await _labOrderFormService.GetLabOrderForm(id);
+                return Ok(new Response<ClinicInformationResponse>(result));
             }
             catch (PrescriptionNotFoundException exception)
             {
@@ -93,11 +71,11 @@ namespace ClinicManagementSoftware.Web.Api
         // POST api/<PrescriptionController>
         [HttpPost]
         [ValidateModel]
-        public async Task<IActionResult> Post([FromBody] CreateLabOrderFormDto request)
+        public async Task<IActionResult> Post([FromBody] CreateOrEditLabOrderFormDto request)
         {
             try
             {
-                await _prescriptionService.CreatePrescription(request);
+                await _labOrderFormService.CreateLabOrderForm(request);
                 return Ok("Create prescription successfully");
             }
             catch (ArgumentException exception)
@@ -119,19 +97,14 @@ namespace ClinicManagementSoftware.Web.Api
 
         // PUT api/<PrescriptionController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CreateLabOrderFormDto request)
+        public async Task<IActionResult> Put(long id, [FromBody] CreateOrEditLabOrderFormDto request)
         {
             try
             {
-                var result =  await _prescriptionService.EditPrescription(id, request);
-                return Ok(new Response<PrescriptionInformation>(result));
+                await _labOrderFormService.EditLabOrderForm(id, request);
+                return Ok("Update successfully");
             }
             catch (ArgumentException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (PrescriptionNotFoundException exception)
             {
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);
@@ -149,10 +122,10 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _prescriptionService.DeleteAsync(id);
+                await _labOrderFormService.DeleteLabOrderForm(id);
                 return Ok("Delete successfully");
             }
-            catch (PrescriptionNotFoundException exception)
+            catch (ArgumentException exception)
             {
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);

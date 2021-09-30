@@ -33,6 +33,8 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<MedicationGroup> MedicationGroups { get; set; }
         public DbSet<PatientHospitalizedProfile> PatientHospitalizedProfiles { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<LabTest> LabTests { get; set; }
+        public DbSet<LabOrderForm> LabOrderForms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +67,7 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(medicalService => medicalService.MedicalServiceGroup)
                 .WithMany(medicalServiceGroup => medicalServiceGroup.MedicalServices);
 
+
             modelBuilder.Entity<Medication>()
                 .HasOne(medication => medication.MedicationGroup)
                 .WithMany(medicationGroup => medicationGroup.Medications);
@@ -80,6 +83,14 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<Prescription>()
                 .HasOne(prescription => prescription.Doctor)
                 .WithMany(user => user.Prescriptions);
+
+            modelBuilder.Entity<LabTest>()
+                .HasOne(labTest => labTest.LabOrderForm)
+                .WithMany(labOrderForm => labOrderForm.LabTests);
+
+            modelBuilder.Entity<LabTest>()
+                .HasOne(labTest => labTest.MedicalService)
+                .WithMany(medicalService => medicalService.LabTests);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

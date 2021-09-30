@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
 
@@ -12,5 +13,7 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("name")] public string Name { get; set; }
         [Column("price")] public double Price { get; set; }
         [Column("description")] public string Description { get; set; }
+
+        public ICollection<LabTest> LabTests { get; set; }
     }
 }

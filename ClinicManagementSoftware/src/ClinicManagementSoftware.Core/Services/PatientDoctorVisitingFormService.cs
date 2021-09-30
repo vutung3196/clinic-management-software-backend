@@ -13,12 +13,12 @@ namespace ClinicManagementSoftware.Core.Services
 {
     public class PatientDoctorVisitingFormService : IPatientDoctorVisitingFormService
     {
-        private readonly IRepository<PatientDoctorVisitingForm> _patientDoctorVisitingFormRepository;
+        private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
 
         public PatientDoctorVisitingFormService(
-            IRepository<PatientDoctorVisitingForm> patientDoctorVisitingFormRepository,
+            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository,
             IUserContext userContext, IMapper mapper)
         {
             _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
@@ -35,7 +35,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             var currentContext = await _userContext.GetCurrentContext();
-            var visitingForms = new List<PatientDoctorVisitingForm>();
+            var visitingForms = new List<PatientDoctorVisitForm>();
             // get by each role
             if (byRole.Equals("Accountant"))
             {
