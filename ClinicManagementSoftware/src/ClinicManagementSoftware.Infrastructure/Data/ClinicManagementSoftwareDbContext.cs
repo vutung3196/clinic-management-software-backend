@@ -35,6 +35,8 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<LabTest> LabTests { get; set; }
         public DbSet<LabOrderForm> LabOrderForms { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -91,6 +93,10 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<LabTest>()
                 .HasOne(labTest => labTest.MedicalService)
                 .WithMany(medicalService => medicalService.LabTests);
+
+            modelBuilder.Entity<Receipt>()
+                .HasOne(receipt => receipt.Patient)
+                .WithMany(patient => patient.Receipts);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -93,7 +93,7 @@ namespace ClinicManagementSoftware.Web.Api
         // POST api/<PrescriptionController>
         [HttpPost]
         [ValidateModel]
-        public async Task<IActionResult> Post([FromBody] CreateLabOrderFormDto request)
+        public async Task<IActionResult> Post([FromBody] CreatePrescriptionDto request)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // PUT api/<PrescriptionController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CreateLabOrderFormDto request)
+        public async Task<IActionResult> Put(long id, [FromBody] CreatePrescriptionDto request)
         {
             try
             {

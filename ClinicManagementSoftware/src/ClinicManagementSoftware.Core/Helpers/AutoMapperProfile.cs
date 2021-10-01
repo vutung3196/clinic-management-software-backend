@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Dto.MedicalService;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.Prescription;
+using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
@@ -52,6 +54,12 @@ namespace ClinicManagementSoftware.Core.Helpers
                 .ForMember(dest => dest.MedicationInformation,
                     opt => opt.MapFrom(src => JsonConvert
                         .DeserializeObject<List<MedicationInformation>>(src.MedicationInformation)));
+
+            CreateMap<Receipt, ReceiptResponse>()
+                .ForMember(dest => dest.CreatedAt, opt
+                    => opt.MapFrom(src => src.CreatedAt.Format()))
+                .ForMember(dest => dest.MedicalServices, opt
+                => opt.MapFrom(src => JsonConvert.DeserializeObject<MedicalServiceDto>(src.Description)));
         }
     }
 }
