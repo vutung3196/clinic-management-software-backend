@@ -1,0 +1,545 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ClinicManagementSoftware.Core.DefaultCoreModule" Collapsed="true">
+    <Position X="108.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Constants.ConfigurationConstant" Collapsed="true">
+    <Position X="105.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Authentication.JwtAuthResult" Collapsed="true">
+    <Position X="66" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Authentication.JwtTokenConfig" Collapsed="true">
+    <Position X="79.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Authentication.RefreshTokenDto" Collapsed="true">
+    <Position X="81.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Authentication.RefreshTokenRequest" Collapsed="true">
+    <Position X="90.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.ClinicInformationForAdminResponse" Collapsed="true">
+    <Position X="30" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.ClinicInformationResponse" Collapsed="true">
+    <Position X="39" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.CreateUpdateClinicRequestDto" Collapsed="true">
+    <Position X="21" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.LabOrderForm.CreateLabTestInformation" Collapsed="true">
+    <Position X="68.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.LabOrderForm.CreateOrEditLabOrderFormDto" Collapsed="true">
+    <Position X="84" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.MedicalService.MedicalServiceDto" Collapsed="true">
+    <Position X="41.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.MedicalService.MedicalServiceGroupDto" Collapsed="true">
+    <Position X="54.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Medication.MedicationDto" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Patient.CreatePatientDto" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Patient.PatientDto" Collapsed="true">
+    <Position X="93" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Patient.UpdatePatientDto">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm.PatientDoctorVisitingFormDto" Collapsed="true">
+    <Position X="70.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile.CreatePatientHospitalizedProfileDto" Collapsed="true">
+    <Position X="95.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile.PatientHospitalizedProfileResponseDto" Collapsed="true">
+    <Position X="14.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Prescription.CreatePrescriptionDto" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Prescription.MedicalImageFile" Collapsed="true">
+    <Position X="23.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Prescription.MedicationInformation" Collapsed="true">
+    <Position X="25.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Prescription.PatientPrescriptionResponse" Collapsed="true">
+    <Position X="45.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Prescription.PrescriptionInformation" Collapsed="true">
+    <Position X="97.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Receipt.CreateReceiptRequestDto" Collapsed="true">
+    <Position X="16.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.Receipt.ReceiptResponse" Collapsed="true">
+    <Position X="48" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.User.CreateUserDto" Collapsed="true">
+    <Position X="32.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.User.CurrentUserContext" Collapsed="true">
+    <Position X="43.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.User.EditUserDto" Collapsed="true">
+    <Position X="72.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.User.UserDto" Collapsed="true">
+    <Position X="75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Dto.User.UserResultResponse" Collapsed="true">
+    <Position X="9.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Clinic" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="101.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.LabOrderForm" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="103.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.LabTest" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="105.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.MedicalService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="107" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.MedicalServiceGroup" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="108.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Medication" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="110.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.MedicationGroup" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="100" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Patient" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="103.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.PatientDoctorVisitForm" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="105.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.PatientHospitalizedProfile" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="107" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Permission" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="100" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Prescription" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="101.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Receipt" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="108.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.RefreshToken" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="110.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.Role" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="100" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.RolePermission" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="101.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Entities.User" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="107" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.Authentication.InCorrectPasswordException" Collapsed="true">
+    <Position X="100" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.Clinic.ClinicInActiveException" Collapsed="true">
+    <Position X="103.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.Patient.InvalidGenderException" Collapsed="true">
+    <Position X="101.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.Patient.PatientNotFoundException" Collapsed="true">
+    <Position X="110.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.Prescription.PrescriptionNotFoundException" Collapsed="true">
+    <Position X="103.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.User.UserInActiveException" Collapsed="true">
+    <Position X="108.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.User.UserNotFoundException" Collapsed="true">
+    <Position X="110.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Helpers.AutoMapperProfile" Collapsed="true">
+    <Position X="100" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Helpers.DateFormatterExtensions" Collapsed="true">
+    <Position X="107" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Events.NewItemAddedEvent" Collapsed="true">
+    <Position X="101.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Events.ToDoItemCompletedEvent" Collapsed="true">
+    <Position X="105.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Handlers.ItemCompletedEmailNotificationHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="50.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Specifications.IncompleteItemsSearchSpec" Collapsed="true">
+    <Position X="108.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Specifications.IncompleteItemsSpec" Collapsed="true">
+    <Position X="110.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Specifications.ProjectByIdWithItemsSpec" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="107" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.Project" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="105.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.ProjectAggregate.ToDoItem" Collapsed="true">
+    <Position X="103.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.ClinicManagementService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="52.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.JwtAuthManagerService" BaseTypeListCollapsed="true">
+    <Position X="53" Y="6.25" Width="2" />
+    <TypeIdentifier />
+    <Lollipop Position="0.305" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.LabOrderFormService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.MedicalServiceGroupService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="77.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.MedicalServiceService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="86.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.MedicationService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.PatientDoctorVisitingFormService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="88.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.PatientHospitalizedProfileService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.PatientService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="59.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.PrescriptionService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.ReceiptService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="61.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.ToDoItemSearchService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.UserContext" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="63.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.UserService" BaseTypeListCollapsed="true">
+    <Position X="5" Y="4.75" Width="4.5" />
+    <TypeIdentifier />
+    <Lollipop Orientation="Right" Position="0.331" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetAllMedicalServiceGroupByClinicIdSpec" Collapsed="true">
+    <Position X="110.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetAllReceiptOfClinicSpec" Collapsed="true">
+    <Position X="100" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetClinicsAndAdminSpec" Collapsed="true">
+    <Position X="101.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetLabOrderFormAndLabTestsSpec" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="103.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetPatientDoctorVisitingFormsByAccountantSpec" Collapsed="true">
+    <Position X="105.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetPatientHospitalizedProfilesByPatientId" Collapsed="true">
+    <Position X="107" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetPatientsOfClinicSpec" Collapsed="true">
+    <Position X="108.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetPrescriptionsByClinicIdSpec" Collapsed="true">
+    <Position X="110.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetRefreshTokenByTokenStringSpec" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="100" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetRoleByRoleNameSpec" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="101.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetUserAndRoleByIdSpec" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="103.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetUserRoleAndClinicByUsernameSpec" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="105.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.GetUsersByClinicIdSpec" Collapsed="true">
+    <Position X="107" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Specifications.PatientHospitalizedProfileSpec" Collapsed="true">
+    <Position X="108.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="49" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Web.ApiModels.Wrapper.Response&lt;T&gt;">
+    <Position X="0.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAIAAAAIA=</HashCode>
+      <FileName>ApiModels\Wrapper\Response.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IClinicManagementService" Collapsed="true">
+    <Position X="100" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IEmailSender" Collapsed="true">
+    <Position X="101.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IJwtAuthManagerService" Collapsed="true">
+    <Position X="103.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.ILabOrderFormService" Collapsed="true">
+    <Position X="105.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IMedicalServiceGroupService" Collapsed="true">
+    <Position X="107" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IMedicalServiceService" Collapsed="true">
+    <Position X="108.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IMedicationService" Collapsed="true">
+    <Position X="110.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IPatientDoctorVisitingFormService" Collapsed="true">
+    <Position X="100" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IPatientHospitalizedProfileService" Collapsed="true">
+    <Position X="101.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IPatientService" Collapsed="true">
+    <Position X="103.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IPrescriptionService" Collapsed="true">
+    <Position X="105.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IReceiptService" Collapsed="true">
+    <Position X="107" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IToDoItemSearchService" Collapsed="true">
+    <Position X="108.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IUserContext" Collapsed="true">
+    <Position X="110.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IUserService" Collapsed="true">
+    <Position X="100" Y="9.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumDoctorVisitingFormStatus" Collapsed="true">
+    <Position X="100" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAgAAAAAAAAAAIAAAAABIAAAAAABAAAAAA=</HashCode>
+      <FileName>Enum\EnumDoctorVisitingFormStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumEnabled" Collapsed="true">
+    <Position X="101.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Enum\EnumEnabled.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumGender" Collapsed="true">
+    <Position X="103.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enum\EnumGender.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumGetPatientVisitingDoctorFormBasedOnRole" Collapsed="true">
+    <Position X="105.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Enum\EnumGetPatientVisitingDoctorFormBasedOnRole.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumIsDeleted" Collapsed="true">
+    <Position X="107" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enum\EnumIsDeleted.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumLabOrderFormStatus" Collapsed="true">
+    <Position X="108.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAgAAAAAAAAAAIAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enum\EnumLabOrderFormStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.Enum.EnumLabTestStatus" Collapsed="true">
+    <Position X="110.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAQAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enum\EnumLabTestStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ClinicManagementSoftware.Core.ProjectAggregate.ProjectStatus" Collapsed="true">
+    <Position X="100" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>ProjectAggregate\ProjectStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

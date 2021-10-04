@@ -25,6 +25,7 @@ namespace ClinicManagementSoftware.Core.Dto.MedicalService
 
         public string Description { get; set; }
 
+        [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Vui lòng nhập giá bán lớn hơn {1}")]
         public double Price { get; set; }
 

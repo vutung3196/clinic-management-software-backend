@@ -17,19 +17,19 @@ namespace ClinicManagementSoftware.Core.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<User> _userSpecificationRepository;
-        private readonly IRepository<Role> _roleSpecificationRepository;
+        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Role> _roleRepository;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
 
         public UserService(IMapper mapper,
-            IRepository<User> userSpecificationRepository, IUserContext userContext,
-            IRepository<Role> roleSpecificationRepository)
+            IRepository<User> userRepository, IUserContext userContext,
+            IRepository<Role> roleRepository)
         {
             _mapper = mapper;
-            _userSpecificationRepository = userSpecificationRepository;
+            _userRepository = userRepository;
             _userContext = userContext;
-            _roleSpecificationRepository = roleSpecificationRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<UserDto> CreateAsync(UserDto input)
@@ -37,7 +37,7 @@ namespace ClinicManagementSoftware.Core.Services
             var user = _mapper.Map<User>(input);
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
             user.Password = passwordHash;
-            await _userSpecificationRepository.AddAsync(user);
+            await _userRepository.AddAsync(user);
             return input;
         }
 
@@ -49,7 +49,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentNullException(password);
 
             var @spec = new GetUserRoleAndClinicByUsernameSpec(userName);
-            var user = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            var user = await _userRepository.GetBySpecAsync(@spec);
             if (user == null)
                 throw new UserNotFoundException("Invalid username or password");
             if (user.Enabled == (byte) EnumEnabled.InActive)
@@ -73,7 +73,7 @@ namespace ClinicManagementSoftware.Core.Services
             var currentUserContext = await _userContext.GetCurrentContext();
             var currentClinicId = currentUserContext.ClinicId;
             var @spec = new GetUsersByClinicIdSpec(currentClinicId);
-            var currentUsers = await _userSpecificationRepository.ListAsync(@spec);
+            var currentUsers = await _userRepository.ListAsync(@spec);
             return currentUsers.Select(user => _mapper.Map<UserResultResponse>(user));
         }
 
@@ -81,14 +81,14 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetUserRoleAndClinicByUsernameSpec(input.UserName.Trim());
-            var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            var duplicatedUser = await _userRepository.GetBySpecAsync(@spec);
             if (duplicatedUser != null)
             {
                 throw new ArgumentException("Username đã có người dùng");
             }
 
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
-            var role = await _roleSpecificationRepository.GetBySpecAsync(@roleSpec);
+            var role = await _roleRepository.GetBySpecAsync(@roleSpec);
             if (role == null)
             {
                 throw new ArgumentException($"Cannot find a role having name: {input.Role}");
@@ -106,21 +106,21 @@ namespace ClinicManagementSoftware.Core.Services
                 FullName = input.FullName,
                 RoleId = role.Id
             };
-            user = await _userSpecificationRepository.AddAsync(user);
+            user = await _userRepository.AddAsync(user);
             return _mapper.Map<UserResultResponse>(user);
         }
 
         public async Task<UserResultResponse> CreateUserWithClinic(CreateUserDto input, long clinicId)
         {
             var @spec = new GetUserRoleAndClinicByUsernameSpec(input.UserName.Trim());
-            var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            var duplicatedUser = await _userRepository.GetBySpecAsync(@spec);
             if (duplicatedUser != null)
             {
                 throw new ArgumentException("Username should be unique");
             }
 
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
-            var role = await _roleSpecificationRepository.GetBySpecAsync(@roleSpec);
+            var role = await _roleRepository.GetBySpecAsync(@roleSpec);
             if (role == null)
             {
                 throw new ArgumentException($"Cannot find a role having name: {input.Role}");
@@ -138,14 +138,14 @@ namespace ClinicManagementSoftware.Core.Services
                 FullName = input.FullName,
                 RoleId = role.Id
             };
-            user = await _userSpecificationRepository.AddAsync(user);
+            user = await _userRepository.AddAsync(user);
             return _mapper.Map<UserResultResponse>(user);
         }
 
         public async Task<bool> IsDuplicatedUser(string username)
         {
             var @spec = new GetUserRoleAndClinicByUsernameSpec(username);
-            var duplicatedUser = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            var duplicatedUser = await _userRepository.GetBySpecAsync(@spec);
             return duplicatedUser != null;
         }
 
@@ -153,7 +153,7 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetUserAndRoleByIdSpec(id);
-            var user = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            var user = await _userRepository.GetBySpecAsync(@spec);
             if (user == null)
             {
                 throw new ArgumentException($"Cannot find user with id {id}");
@@ -175,7 +175,7 @@ namespace ClinicManagementSoftware.Core.Services
             user.PhoneNumber = input.PhoneNumber;
             user.Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
             var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
-            var newRole = await _roleSpecificationRepository.GetBySpecAsync(@roleSpec);
+            var newRole = await _roleRepository.GetBySpecAsync(@roleSpec);
             if (newRole == null)
             {
                 throw new ArgumentException($"Cannot find a role having name: {input.Role}");
@@ -183,7 +183,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             user.RoleId = newRole.Id;
 
-            await _userSpecificationRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user);
 
 
             return _mapper.Map<UserResultResponse>(user);
@@ -193,7 +193,7 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetUserAndRoleByIdSpec(id);
-            var user = await _userSpecificationRepository.GetBySpecAsync(@spec);
+            var user = await _userRepository.GetBySpecAsync(@spec);
             if (user == null)
             {
                 throw new ArgumentException($"Cannot find user with id {id}");
@@ -206,7 +206,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             user.Enabled = (byte) EnumEnabled.InActive;
-            await _userSpecificationRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user);
         }
 
         private static bool VerifyPasswordHash(string loginPassword, string hashedPassword)

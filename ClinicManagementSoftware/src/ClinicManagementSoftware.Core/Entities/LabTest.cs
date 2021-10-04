@@ -8,7 +8,7 @@ namespace ClinicManagementSoftware.Core.Entities
     [Table("lab_test")]
     public class LabTest : BaseEntity, IAggregateRoot
     {
-        // foreign keys
+        // foreign key
         [Column("lab_order_form_id")] public long LabOrderFormId { get; set; }
         public LabOrderForm LabOrderForm { get; set; }
 
