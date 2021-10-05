@@ -11,13 +11,16 @@ namespace ClinicManagementSoftware.Core.Entities
 
         [Column("total")] public double Total { get; set; }
 
-        [Column("description", TypeName = "json")]
-        public string Description { get; set; }
+        [Column("services", TypeName = "json")]
+        public string Services { get; set; }
+
+        [Column("description")] public string Description { get; set; }
+
 
         [Column("code")] public string Code { get; set; }
 
         [Column("patient_doctor_visit_form_id")]
-        public long? PatientDoctorVisitingFormId { get; set; }
+        public long? PatientDoctorVisitFormId { get; set; }
 
         public PatientDoctorVisitForm PatientDoctorVisitForm { get; set; }
 

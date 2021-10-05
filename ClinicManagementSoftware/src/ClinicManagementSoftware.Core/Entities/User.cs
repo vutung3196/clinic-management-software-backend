@@ -22,5 +22,6 @@ namespace ClinicManagementSoftware.Core.Entities
         public Role Role { get; set; }
         // FOR DOCTOR ROLE
         public ICollection<Prescription> Prescriptions { get; set; }
+        public ICollection<VisitingDoctorQueue> VisitingDoctorQueues { get; set; }
     }
 }

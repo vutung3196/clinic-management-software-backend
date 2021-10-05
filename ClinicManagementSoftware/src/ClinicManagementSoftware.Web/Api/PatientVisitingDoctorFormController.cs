@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
 using ClinicManagementSoftware.Core.Interfaces;
+using ClinicManagementSoftware.Web.ApiModels.Wrapper;
+using ClinicManagementSoftware.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,70 +41,39 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
-        //// GET api/<PatientController>/5
-        //[HttpGet("{id:long}")]
-        //public async Task<IActionResult> Get(long id)
-        //{
-        //    try
-        //    {
-        //        var result = await _patientDoctorVisitingFormService.GetByIdAsync(id);
-        //        return Ok(new Response<PatientDto>(result));
-        //    }
-        //    catch (ArgumentNullException exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return BadRequest("Id should not be null");
-        //    }
-        //    catch (PatientNotFoundException exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return BadRequest($"Cannot find patient with id {id}");
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return StatusCode(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        // GET api/<PatientController>/5
+        [HttpGet("doctorAvailability")]
+        public async Task<IActionResult> GetDoctorAvailability()
+        {
+            try
+            {
+                var result = await _patientDoctorVisitingFormService.GetCurrentDoctorAvailabilities();
+                return Ok(new Response<IEnumerable<DoctorAvailabilityDto>>(result));
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
-        //// POST api/<PatientController>
-        //[HttpPost]
-        //[ValidateModel]
-        //public async Task<IActionResult> Post([FromBody] CreateOrUpdatePatientModel request)
-        //{
-        //    try
-        //    {
-        //        var createPatientDto = new CreatePatientDto
-        //        {
-        //            EmailAddress = request.EmailAddress,
-        //            Gender = request.Gender,
-        //            FullName = request.FullName,
-        //            Occupation = request.Occupation,
-        //            PhoneNumber = request.PhoneNumber,
-        //            DateOfBirth = request.DateOfBirth,
-        //            AddressDetail = request.AddressDetail
-        //        };
-
-        //        var result = await _patientDoctorVisitingFormService.AddAsync(createPatientDto);
-        //        var response = new Response<PatientDto>(result);
-        //        return Ok(response);
-        //    }
-        //    catch (ArgumentNullException exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return BadRequest("Create patient model should not be null");
-        //    }
-        //    catch (InvalidGenderException exception)
-        //    {
-        //        _logger.LogError(exception.Message + request);
-        //        return BadRequest("Invalid gender");
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError(exception.Message + request);
-        //        return StatusCode(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        // POST api/<PatientController>
+        [HttpPost]
+        [ValidateModel]
+        public async Task<IActionResult> Post([FromBody] CreateOrUpdatePatientDoctorVisitingFormDto request)
+        {
+            try
+            {
+                await _patientDoctorVisitingFormService.CreateVisitingForm(request);
+                var response = new Response<string>("Success");
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message + request);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         //// PUT api/<PatientController>/5
         //[HttpPut("{id:long}")]

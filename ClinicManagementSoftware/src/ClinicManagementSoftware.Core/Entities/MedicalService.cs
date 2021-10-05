@@ -10,10 +10,12 @@ namespace ClinicManagementSoftware.Core.Entities
     {
         [Column("medical_service_group_id")] public long MedicalServiceGroupId { get; set; }
         public MedicalServiceGroup MedicalServiceGroup { get; set; }
+        [Column("clinic_id")] public long ClinicId { get; set; }
+        public Clinic Clinic { get; set; }
         [Column("name")] public string Name { get; set; }
         [Column("price")] public double Price { get; set; }
         [Column("description")] public string Description { get; set; }
-
+        [Column("is_visiting_doctor_service")] public bool IsVisitingDoctorService { get; set; }
         public ICollection<LabTest> LabTests { get; set; }
     }
 }

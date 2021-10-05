@@ -18,6 +18,10 @@ namespace ClinicManagementSoftware.Core.Dto.MedicalService
             CreatedDate = createdAt;
         }
 
+        public MedicalServiceDto()
+        {
+        }
+
         public long Id { get; set; }
 
         [Required(ErrorMessage = "Tên dịch vụ là bắt buộc")]

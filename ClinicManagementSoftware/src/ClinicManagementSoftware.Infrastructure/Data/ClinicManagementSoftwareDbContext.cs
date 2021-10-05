@@ -36,6 +36,7 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<LabTest> LabTests { get; set; }
         public DbSet<LabOrderForm> LabOrderForms { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<VisitingDoctorQueue> VisitingDoctorQueues { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -69,6 +70,9 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(medicalService => medicalService.MedicalServiceGroup)
                 .WithMany(medicalServiceGroup => medicalServiceGroup.MedicalServices);
 
+            modelBuilder.Entity<MedicalService>()
+                .HasOne(medicalService => medicalService.Clinic)
+                .WithMany(clinic => clinic.MedicalServices);
 
             modelBuilder.Entity<Medication>()
                 .HasOne(medication => medication.MedicationGroup)
@@ -97,6 +101,18 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<Receipt>()
                 .HasOne(receipt => receipt.Patient)
                 .WithMany(patient => patient.Receipts);
+
+            modelBuilder.Entity<Receipt>()
+                .HasOne(receipt => receipt.PatientDoctorVisitForm)
+                .WithOne(doctorVisitForm => doctorVisitForm.Receipt);
+
+            modelBuilder.Entity<VisitingDoctorQueue>()
+                .HasOne(visitingDoctorQueue => visitingDoctorQueue.Doctor)
+                .WithMany(user => user.VisitingDoctorQueues);
+
+            modelBuilder.Entity<PatientDoctorVisitForm>()
+                .HasOne(patientDoctorVisitForm => patientDoctorVisitForm.Patient)
+                .WithMany(patient => patient.PatientDoctorVisitForms);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

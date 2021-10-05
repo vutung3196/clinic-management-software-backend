@@ -8,6 +8,7 @@ using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
+using Newtonsoft.Json;
 
 namespace ClinicManagementSoftware.Core.Services
 {
@@ -33,6 +34,21 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             return _mapper.Map<ReceiptResponse>(receipt);
+        }
+
+        public async Task CreateReceipt(CreateReceiptDto createReceiptDto)
+        {
+            var receipt = new Receipt
+            {
+                CreatedAt = DateTime.UtcNow,
+                Description = createReceiptDto.Description,
+                Code = createReceiptDto.Code,
+                PatientId = createReceiptDto.PatientId,
+                PatientDoctorVisitFormId = createReceiptDto.PatientDoctorVisitingFormId,
+                Total = createReceiptDto.Total,
+                Services = JsonConvert.SerializeObject(createReceiptDto.MedicalServices),
+            };
+            await _receiptRepository.AddAsync(receipt);
         }
 
         public async Task Delete(long id)

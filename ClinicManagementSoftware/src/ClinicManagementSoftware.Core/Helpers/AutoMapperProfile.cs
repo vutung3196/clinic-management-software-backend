@@ -59,7 +59,7 @@ namespace ClinicManagementSoftware.Core.Helpers
                 .ForMember(dest => dest.CreatedAt, opt
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.MedicalServices, opt
-                => opt.MapFrom(src => JsonConvert.DeserializeObject<MedicalServiceDto>(src.Description)));
+                => opt.MapFrom(src => JsonConvert.DeserializeObject<MedicalServiceDto>(src.Services)));
         }
     }
 }

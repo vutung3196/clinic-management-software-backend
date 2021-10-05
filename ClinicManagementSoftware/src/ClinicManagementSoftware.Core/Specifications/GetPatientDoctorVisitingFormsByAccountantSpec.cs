@@ -10,9 +10,7 @@ namespace ClinicManagementSoftware.Core.Specifications
         {
             Query.Include(x => x.Patient)
                 .Where(x => x.Patient.ClinicId == clinicId)
-                .Where(x => x.VisitingStatus != (byte) EnumDoctorVisitingFormStatus.VisitingDoctor &&
-                            x.VisitingStatus != (byte) EnumDoctorVisitingFormStatus.Done &&
-                            x.VisitingStatus != (byte) EnumDoctorVisitingFormStatus.HavingTesting);
+                .Where(x => x.VisitingStatus == (byte) EnumDoctorVisitingFormStatus.WaitingForDoctor);
         }
     }
 }
