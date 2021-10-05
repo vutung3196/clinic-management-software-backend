@@ -4,7 +4,7 @@ using ClinicManagementSoftware.Core.Enum;
 
 namespace ClinicManagementSoftware.Core.Specifications
 {
-    public sealed class GetPatientDoctorVisitingFormsByAccountantSpec : Specification<PatientDoctorVisitingForm>
+    public sealed class GetPatientDoctorVisitingFormsByAccountantSpec : Specification<PatientDoctorVisitForm>
     {
         public GetPatientDoctorVisitingFormsByAccountantSpec(long clinicId)
         {

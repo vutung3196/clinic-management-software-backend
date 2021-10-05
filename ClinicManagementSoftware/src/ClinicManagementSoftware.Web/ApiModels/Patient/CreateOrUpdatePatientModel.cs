@@ -9,18 +9,19 @@ namespace ClinicManagementSoftware.Web.ApiModels.Patient
         {
         }
 
-        [Required(ErrorMessage = "Tên phải bắt buộc")] public string FullName { get; set; }
+        [Required(ErrorMessage = "Tên phải bắt buộc")]
+        public string FullName { get; set; }
 
-        [EmailAddress(ErrorMessage = "Vui lòng nhập email đúng định dạng")] public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 
         public string PhoneNumber { get; set; }
-
-        public string Occupation { get; set; }
-
+        public string AddressCity { get; set; }
+        public string AddressStreet { get; set; }
+        public string AddressDistrict { get; set; }
+        public string MedicalInsuranceCode { get; set; }
         public string Gender { get; set; }
-
-        public string Address { get; set; }
+        public string AddressDetail { get; set; }
     }
 }

@@ -14,7 +14,8 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         private readonly IConfiguration _configuration;
         private static readonly MySqlServerVersion MySqlServerVersion = new(new Version(8, 0, 21));
 
-        public ClinicManagementSoftwareDbContext(DbContextOptions<ClinicManagementSoftwareDbContext> options, IConfiguration configuration)
+        public ClinicManagementSoftwareDbContext(DbContextOptions<ClinicManagementSoftwareDbContext> options,
+            IConfiguration configuration)
             : base(options)
         {
             _configuration = configuration;
@@ -30,6 +31,12 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<MedicalServiceGroup> MedicalServiceGroups { get; set; }
         public DbSet<Medication> Medications { get; set; }
         public DbSet<MedicationGroup> MedicationGroups { get; set; }
+        public DbSet<PatientHospitalizedProfile> PatientHospitalizedProfiles { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<LabTest> LabTests { get; set; }
+        public DbSet<LabOrderForm> LabOrderForms { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,14 +69,40 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(medicalService => medicalService.MedicalServiceGroup)
                 .WithMany(medicalServiceGroup => medicalServiceGroup.MedicalServices);
 
+
             modelBuilder.Entity<Medication>()
                 .HasOne(medication => medication.MedicationGroup)
                 .WithMany(medicationGroup => medicationGroup.Medications);
+
+            modelBuilder.Entity<PatientHospitalizedProfile>()
+                .HasOne(patientHospitalizedProfile => patientHospitalizedProfile.Patient)
+                .WithMany(patient => patient.PatientHospitalizedProfiles);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(prescription => prescription.PatientHospitalizedProfile)
+                .WithMany(patientHospitalizedProfile => patientHospitalizedProfile.Prescriptions);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(prescription => prescription.Doctor)
+                .WithMany(user => user.Prescriptions);
+
+            modelBuilder.Entity<LabTest>()
+                .HasOne(labTest => labTest.LabOrderForm)
+                .WithMany(labOrderForm => labOrderForm.LabTests);
+
+            modelBuilder.Entity<LabTest>()
+                .HasOne(labTest => labTest.MedicalService)
+                .WithMany(medicalService => medicalService.LabTests);
+
+            modelBuilder.Entity<Receipt>()
+                .HasOne(receipt => receipt.Patient)
+                .WithMany(patient => patient.Receipts);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = _configuration.GetConnectionString(ConfigurationConstant.ClinicManagementSoftwareDatabase);
+            var connectionString =
+                _configuration.GetConnectionString(ConfigurationConstant.ClinicManagementSoftwareDatabase);
             optionsBuilder.UseMySql(connectionString, MySqlServerVersion)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors();

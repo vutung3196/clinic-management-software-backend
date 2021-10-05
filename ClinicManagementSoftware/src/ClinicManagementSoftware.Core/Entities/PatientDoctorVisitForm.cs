@@ -4,8 +4,8 @@ using ClinicManagementSoftware.SharedKernel.Interfaces;
 
 namespace ClinicManagementSoftware.Core.Entities
 {
-    [Table("patient_doctor_visiting_form")]
-    public class PatientDoctorVisitingForm : BaseEntity, IAggregateRoot
+    [Table("patient_doctor_visit_form")]
+    public class PatientDoctorVisitForm : BaseEntity, IAggregateRoot
     {
         [Column("patient_id")] public long PatientId { get; set; }
 

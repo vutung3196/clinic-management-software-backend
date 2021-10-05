@@ -50,7 +50,9 @@ namespace ClinicManagementSoftware.Core.Services
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetPatientsOfClinicSpec(currentUserContext.ClinicId);
             var patients = await _patientRepository.ListAsync(@spec);
-            var result = patients.Select(x => _mapper.Map<PatientDto>(x));
+            var result = patients.Where(x => x.IsDeleted == (byte) EnumIsDeleted.No)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => _mapper.Map<PatientDto>(x));
             return result;
         }
 
@@ -72,11 +74,14 @@ namespace ClinicManagementSoftware.Core.Services
                 ClinicId = currentUserContext.ClinicId,
                 EmailAddress = request.EmailAddress,
                 FullName = request.FullName,
-                Occupation = request.Occupation,
-                Address = request.Address,
+                AddressDetail = request.AddressDetail,
+                AddressCity = request.AddressCity,
+                AddressDistrict = request.AddressDistrict,
+                AddressStreet = request.AddressStreet,
                 PhoneNumber = request.PhoneNumber,
                 Gender = Convert.ToByte(genderResult),
                 DateOfBirth = request.DateOfBirth,
+                MedicalInsuranceCode = request.MedicalInsuranceCode,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = 0
@@ -87,35 +92,38 @@ namespace ClinicManagementSoftware.Core.Services
             return patientResult;
         }
 
-        public async Task<PatientDto> UpdateAsync(UpdatePatientDto patient)
+        public async Task<PatientDto> UpdateAsync(UpdatePatientDto patientRequest)
         {
-            if (patient == null)
+            if (patientRequest == null)
             {
-                throw new ArgumentNullException(nameof(patient));
+                throw new ArgumentNullException(nameof(patientRequest));
             }
 
-            if (!TryParse(typeof(EnumGender), patient.Gender, out var genderResult))
+            if (!TryParse(typeof(EnumGender), patientRequest.Gender, out var genderResult))
             {
                 throw new ArgumentException("Invalid gender");
             }
 
             // get current user context
             var currentUserContext = await _userContext.GetCurrentContext();
-            var patientModel = await _patientRepository.GetByIdAsync(patient.Id);
+            var patientModel = await _patientRepository.GetByIdAsync(patientRequest.Id);
             if (patientModel == null)
             {
-                throw new PatientNotFoundException($"Cannot find request with id: {patient.Id}");
+                throw new PatientNotFoundException($"Cannot find request with id: {patientRequest.Id}");
             }
 
             patientModel.ClinicId = currentUserContext.ClinicId;
-            patientModel.EmailAddress = patient.EmailAddress;
-            patientModel.FullName = patient.FullName;
-            patientModel.Occupation = patient.Occupation;
-            patientModel.PhoneNumber = patient.PhoneNumber;
+            patientModel.EmailAddress = patientRequest.EmailAddress;
+            patientModel.FullName = patientRequest.FullName;
+            patientModel.PhoneNumber = patientRequest.PhoneNumber;
             patientModel.Gender = Convert.ToByte(genderResult);
             patientModel.UpdatedAt = DateTime.UtcNow;
-            patientModel.Address = patient.Address;
-            patientModel.DateOfBirth = patient.DateOfBirth;
+            patientModel.AddressDetail = patientRequest.AddressDetail;
+            patientModel.AddressCity = patientRequest.AddressCity;
+            patientModel.AddressDistrict = patientRequest.AddressDistrict;
+            patientModel.AddressStreet = patientRequest.AddressStreet;
+            patientModel.DateOfBirth = patientRequest.DateOfBirth;
+            patientModel.MedicalInsuranceCode = patientRequest.MedicalInsuranceCode;
             patientModel.IsDeleted = 0;
             await _patientRepository.UpdateAsync(patientModel);
             var result = _mapper.Map<PatientDto>(patientModel);
@@ -132,10 +140,11 @@ namespace ClinicManagementSoftware.Core.Services
             var patient = await _patientRepository.GetByIdAsync(id.Value);
             if (patient == null)
             {
-                throw new PatientNotFoundException($"Cannot find a patient with id: {id}");
+                throw new PatientNotFoundException($"Cannot find a patientRequest with id: {id}");
             }
 
             patient.IsDeleted = 1;
+            patient.DeletedAt = DateTime.UtcNow;
             await _patientRepository.UpdateAsync(patient);
         }
     }

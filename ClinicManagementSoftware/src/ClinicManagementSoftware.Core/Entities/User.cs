@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -19,5 +20,7 @@ namespace ClinicManagementSoftware.Core.Entities
 
         public Clinic Clinic { get; set; }
         public Role Role { get; set; }
+        // FOR DOCTOR ROLE
+        public ICollection<Prescription> Prescriptions { get; set; }
     }
 }

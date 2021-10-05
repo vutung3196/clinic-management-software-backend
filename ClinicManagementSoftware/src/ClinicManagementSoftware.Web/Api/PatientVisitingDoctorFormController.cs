@@ -78,7 +78,7 @@ namespace ClinicManagementSoftware.Web.Api
         //            Occupation = request.Occupation,
         //            PhoneNumber = request.PhoneNumber,
         //            DateOfBirth = request.DateOfBirth,
-        //            Address = request.Address
+        //            AddressDetail = request.AddressDetail
         //        };
 
         //        var result = await _patientDoctorVisitingFormService.AddAsync(createPatientDto);
@@ -123,7 +123,7 @@ namespace ClinicManagementSoftware.Web.Api
         //            FullName = request.FullName,
         //            Occupation = request.Occupation,
         //            PhoneNumber = request.PhoneNumber,
-        //            Address = request.Address,
+        //            AddressDetail = request.AddressDetail,
         //            DateOfBirth = request.DateOfBirth
         //        };
         //        var result = await _patientDoctorVisitingFormService.UpdateAsync(updatePatientDto);
