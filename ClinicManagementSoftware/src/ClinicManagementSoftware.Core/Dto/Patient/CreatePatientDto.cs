@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClinicManagementSoftware.Core.Dto.Patient
 {
@@ -10,6 +11,7 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
 
         public long ClinicId { get; set; }
 
+        [Required]
         public string FullName { get; set; }
 
         public string EmailAddress { get; set; }
@@ -29,7 +31,11 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public DateTime? UpdatedAt { get; set; }
 
         public DateTime? DeletedAt { get; set; }
-        public string Address { get; set; }
+        public string AddressDetail { get; set; }
+        public string AddressCity { get; set; }
+        public string AddressStreet { get; set; }
+        public string AddressDistrict { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public string MedicalInsuranceCode { get; set; }
     }
 }

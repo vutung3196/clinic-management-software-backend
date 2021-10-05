@@ -16,7 +16,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Accountant")]
+    [Authorize(Roles = "Receptionist")]
     public class PatientController : ControllerBase
     {
         private readonly IPatientService _patientService;
@@ -82,10 +82,13 @@ namespace ClinicManagementSoftware.Web.Api
                     EmailAddress = request.EmailAddress,
                     Gender = request.Gender,
                     FullName = request.FullName,
-                    Occupation = request.Occupation,
                     PhoneNumber = request.PhoneNumber,
                     DateOfBirth = request.DateOfBirth,
-                    Address = request.Address
+                    AddressDetail = request.AddressDetail,
+                    MedicalInsuranceCode = request.MedicalInsuranceCode,
+                    AddressCity = request.AddressCity,
+                    AddressDistrict = request.AddressDistrict,
+                    AddressStreet = request.AddressStreet
                 };
 
                 var result = await _patientService.AddAsync(createPatientDto);
@@ -128,9 +131,12 @@ namespace ClinicManagementSoftware.Web.Api
                     EmailAddress = request.EmailAddress,
                     Gender = request.Gender,
                     FullName = request.FullName,
-                    Occupation = request.Occupation,
                     PhoneNumber = request.PhoneNumber,
-                    Address = request.Address,
+                    AddressDetail = request.AddressDetail,
+                    MedicalInsuranceCode = request.MedicalInsuranceCode,
+                    AddressCity = request.AddressCity,
+                    AddressDistrict = request.AddressDistrict,
+                    AddressStreet = request.AddressStreet,
                     DateOfBirth = request.DateOfBirth
                 };
                 var result = await _patientService.UpdateAsync(updatePatientDto);
