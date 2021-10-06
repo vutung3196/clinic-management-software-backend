@@ -14,6 +14,7 @@ namespace ClinicManagementSoftware.Core.Entities
 
         [Column("description")] public string Description { get; set; }
         [Column("visiting_status")] public byte VisitingStatus { get; set; }
+        [Column("code")] public string Code { get; set; }
 
         public Patient Patient { get; set; }
         public Receipt Receipt { get; set; }

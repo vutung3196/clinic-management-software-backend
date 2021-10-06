@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.MedicalService;
+using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Entities;
+using ClinicManagementSoftware.Core.Exceptions.MedicalService;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -14,18 +16,37 @@ namespace ClinicManagementSoftware.Core.Services
     {
         private readonly IUserContext _userContext;
         private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupSpecification;
-        private readonly IRepository<MedicalService> _medicalServiceSpecification;
+        private readonly IRepository<MedicalService> _medicalServiceRepository;
 
 
         public MedicalServiceService(IUserContext userContext,
             IRepository<MedicalServiceGroup> medicalServiceGroupSpecification,
-            IRepository<MedicalService> medicalServiceSpecification)
+            IRepository<MedicalService> medicalServiceRepository)
         {
             _userContext = userContext;
             _medicalServiceGroupSpecification = medicalServiceGroupSpecification;
-            _medicalServiceSpecification = medicalServiceSpecification;
+            _medicalServiceRepository = medicalServiceRepository;
         }
 
+
+        public async Task<ReceiptMedicalServiceDto> GetDoctorVisitingFormMedicalService()
+        {
+            var currentContext = await _userContext.GetCurrentContext();
+            var @spec = new GetPatientDoctorVisitingMedicalServiceSpec(currentContext.ClinicId);
+            var medicalService = await _medicalServiceRepository.GetBySpecAsync(@spec);
+            if (medicalService == null)
+            {
+                throw new VisitingDoctorMedicalServiceNotFoundException(
+                    "Visiting doctor medical service is not created");
+            }
+
+            return new ReceiptMedicalServiceDto()
+            {
+                BasePrice = medicalService.Price,
+                Name = medicalService.Name,
+                Quantity = 1,
+            };
+        }
 
         public async Task<IEnumerable<MedicalServiceDto>> GetAllMedicalServices()
         {
@@ -55,7 +76,7 @@ namespace ClinicManagementSoftware.Core.Services
                 Price = request.Price,
             };
 
-            medicalService = await _medicalServiceSpecification.AddAsync(medicalService);
+            medicalService = await _medicalServiceRepository.AddAsync(medicalService);
             return new MedicalServiceDto(medicalService.Id, medicalService.Name,
                 medicalService.Description, medicalService.Price, medicalServiceGroup.Name, medicalServiceGroup.Id,
                 medicalService.CreatedAt);
@@ -69,7 +90,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find service group with id: {request.GroupId}");
             }
 
-            var medicalService = await _medicalServiceSpecification.GetByIdAsync(id);
+            var medicalService = await _medicalServiceRepository.GetByIdAsync(id);
 
             if (medicalService == null)
             {
@@ -82,7 +103,7 @@ namespace ClinicManagementSoftware.Core.Services
             medicalService.Name = request.Name;
             medicalService.Price = request.Price;
 
-            await _medicalServiceSpecification.UpdateAsync(medicalService);
+            await _medicalServiceRepository.UpdateAsync(medicalService);
             return new MedicalServiceDto(medicalService.Id, medicalService.Name,
                 medicalService.Description, medicalService.Price, medicalServiceGroup.Name, medicalServiceGroup.Id,
                 medicalService.CreatedAt);
@@ -90,14 +111,14 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task DeleteMedicalService(long id)
         {
-            var medicalService = await _medicalServiceSpecification.GetByIdAsync(id);
+            var medicalService = await _medicalServiceRepository.GetByIdAsync(id);
 
             if (medicalService == null)
             {
                 throw new ArgumentException($"Cannot find medication service with id: {id}");
             }
 
-            await _medicalServiceSpecification.DeleteAsync(medicalService);
+            await _medicalServiceRepository.DeleteAsync(medicalService);
         }
     }
 }

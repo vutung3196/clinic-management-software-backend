@@ -67,6 +67,7 @@ namespace ClinicManagementSoftware.Core.Services
             var currentContext = await _userContext.GetCurrentContext();
             var visitingForm = new PatientDoctorVisitForm
             {
+                Code = request.VisitingFormCode,
                 CreatedAt = DateTime.UtcNow,
                 Description = request.Description,
                 PatientId = request.PatientId,
@@ -92,7 +93,7 @@ namespace ClinicManagementSoftware.Core.Services
                 DoctorId = x.DoctorId,
                 DoctorName = x.Doctor.FullName,
                 PatientNumber = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(x.Queue).Data.Count,
-            });
+            }).OrderBy(x => x.PatientNumber);
         }
 
         private async Task<CreateReceiptDto> GetDoctorVisitingFormMedicalServiceReceiptRequest(
