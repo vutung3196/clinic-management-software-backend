@@ -34,5 +34,6 @@ namespace ClinicManagementSoftware.Core.Entities
         public Clinic Clinic { get; set; }
         public ICollection<PatientHospitalizedProfile> PatientHospitalizedProfiles { get; set; }
         public ICollection<Receipt> Receipts { get; set; }
+        public ICollection<PatientDoctorVisitForm> PatientDoctorVisitForms { get; set; }
     }
 }

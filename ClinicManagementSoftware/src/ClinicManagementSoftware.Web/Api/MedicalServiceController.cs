@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.MedicalService;
+using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Accountant")]
+    [Authorize(Roles = "Admin,Receptionist")]
     public class MedicalServiceController : ControllerBase
     {
         private readonly IMedicalServiceService _medicalService;
@@ -37,6 +38,22 @@ namespace ClinicManagementSoftware.Web.Api
             {
                 var result = await _medicalService.GetAllMedicalServices();
                 var response = new Response<IEnumerable<MedicalServiceDto>>(result);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("doctorvisitingformmedicalservice")]
+        public async Task<IActionResult> GetDoctorVisitingFormMedicalService()
+        {
+            try
+            {
+                var result = await _medicalService.GetDoctorVisitingFormMedicalService();
+                var response = new Response<ReceiptMedicalServiceDto>(result);
                 return Ok(response);
             }
             catch (Exception exception)

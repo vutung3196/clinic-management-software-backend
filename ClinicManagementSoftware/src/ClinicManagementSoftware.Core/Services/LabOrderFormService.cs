@@ -98,7 +98,7 @@ namespace ClinicManagementSoftware.Core.Services
                 CreatedAt = DateTime.UtcNow,
                 DoctorId = currentUser.UserId,
                 Code = request.Code,
-                Status = (byte) EnumDoctorVisitingFormStatus.NotPaid,
+                Status = (byte) EnumLabOrderFormStatus.NotPaid,
                 PatientDoctorVisitingFormId = request.PatientDoctorVisitingFormId,
                 PatientHospitalizedProfileId = request.PatientHospitalizedProfileId,
                 Description = request.Description

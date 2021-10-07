@@ -2,22 +2,13 @@
 {
     public enum EnumDoctorVisitingFormStatus
     {
-        // Chưa thanh toán
-        NotPaid = 0,
-
-        // đã thanh toán
-        Paid = 1,
-
         // đang chờ khám
-        WaitingForDoctor = 2,
+        WaitingForDoctor = 1,
 
-        // đang khám
-        VisitingDoctor = 3,
-        
         // đang đi xét nghiệm
-        HavingTesting = 4,
+        HavingTesting = 2,
 
         // khám xong
-        Done = 5,
+        Done = 3,
     }
 }

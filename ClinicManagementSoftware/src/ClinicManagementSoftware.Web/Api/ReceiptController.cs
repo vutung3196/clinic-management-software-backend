@@ -15,7 +15,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles="Accountant")]
+    [Authorize(Roles = "Receptionist")]
     public class ReceiptController : ControllerBase
     {
         private readonly IReceiptService _receiptService;
@@ -50,6 +50,11 @@ namespace ClinicManagementSoftware.Web.Api
             {
                 var result = await _receiptService.GetReceiptById(id);
                 return Ok(new Response<ReceiptResponse>(result));
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
             catch (Exception exception)
             {

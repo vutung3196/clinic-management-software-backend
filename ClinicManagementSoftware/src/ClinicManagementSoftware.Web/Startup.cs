@@ -108,6 +108,7 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<IPrescriptionService, PrescriptionService>();
             services.AddScoped<ILabOrderFormService, LabOrderFormService>();
             services.AddScoped<IReceiptService, ReceiptService>();
+            services.AddScoped<IDoctorQueueService, DoctorQueueService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
