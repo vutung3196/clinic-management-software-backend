@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
@@ -28,7 +27,6 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IReceiptService _receiptService;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
-
 
         public PatientDoctorVisitingFormService(
             IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository,
@@ -131,6 +129,9 @@ namespace ClinicManagementSoftware.Core.Services
                     Name = patientDoctorVisitForm.Patient.Clinic.Name,
                     PhoneNumber = patientDoctorVisitForm.Patient.Clinic.PhoneNumber
                 },
+                UpdatedAt = patientDoctorVisitForm.UpdatedAt.HasValue
+                    ? patientDoctorVisitForm.UpdatedAt.Value.ToString("MM/dd/yyyy hh:mm tt")
+                    : "",
                 VisitingStatusDisplayed = GetDoctorVisitingFormStatus(patientDoctorVisitForm.VisitingStatus)
             };
             return result;
@@ -157,6 +158,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 Code = request.VisitingFormCode,
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 Description = request.Description,
                 PatientId = request.PatientId,
                 DoctorId = request.DoctorId,
@@ -184,6 +186,12 @@ namespace ClinicManagementSoftware.Core.Services
                 DoctorName = x.Doctor.FullName,
                 PatientNumber = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(x.Queue).Data.Count,
             }).OrderBy(x => x.PatientNumber);
+        }
+
+        public async Task MoveATopPatientToTheEndOfADoctorQueue()
+        {
+            var currentContext = await _userContext.GetCurrentContext();
+            await _doctorQueueService.MoveAFirstPatientToTheEndOfTheQueue(currentContext.UserId);
         }
 
         private async Task<CreateReceiptDto> GetDoctorVisitingFormMedicalServiceReceiptRequest(

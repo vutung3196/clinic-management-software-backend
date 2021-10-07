@@ -10,5 +10,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<PatientDoctorVisitingFormDto> GetById(long id);
         Task<CreateVisitingFormResponse> CreateVisitingForm(CreateOrUpdatePatientDoctorVisitingFormDto request);
         Task<IEnumerable<DoctorAvailabilityDto>> GetCurrentDoctorAvailabilities();
+        Task MoveATopPatientToTheEndOfADoctorQueue();
     }
 }

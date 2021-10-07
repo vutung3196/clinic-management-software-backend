@@ -79,6 +79,22 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpPut("movetoend")]
+        public async Task<IActionResult> MoveATopPatientToTheEndOfADoctorQueue()
+        {
+            try
+            {
+                await _patientDoctorVisitingFormService.MoveATopPatientToTheEndOfADoctorQueue();
+                var response = new Response<string>("success");
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<PatientController>
         [HttpPost]
         [ValidateModel]
