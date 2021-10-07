@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
+using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Filters;
@@ -27,12 +28,13 @@ namespace ClinicManagementSoftware.Web.Api
             _patientDoctorVisitingFormService = patientDoctorVisitingFormService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string role)
+        [HttpGet("byrole")]
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(role);
+                var result = await _patientDoctorVisitingFormService.GetAllByRole();
+                return Ok(new Response<IEnumerable<PatientDoctorVisitingFormDto>>(result));
             }
             catch (Exception exception)
             {
@@ -57,6 +59,26 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            try
+            {
+                var result = await _patientDoctorVisitingFormService.GetById(id);
+                return Ok(new Response<PatientDoctorVisitingFormDto>(result));
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<PatientController>
         [HttpPost]
         [ValidateModel]
@@ -64,8 +86,8 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _patientDoctorVisitingFormService.CreateVisitingForm(request);
-                var response = new Response<string>("Success");
+                var result = await _patientDoctorVisitingFormService.CreateVisitingForm(request);
+                var response = new Response<CreateVisitingFormResponse>(result);
                 return Ok(response);
             }
             catch (Exception exception)

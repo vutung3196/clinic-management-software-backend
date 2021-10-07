@@ -36,7 +36,7 @@ namespace ClinicManagementSoftware.Web.Api
         //{
         //    try
         //    {
-        //        var result = await _labOrderFormService.GetAll();
+        //        var result = await _labOrderFormService.GetAllByRole();
         //        var response = new Response<IEnumerable<PatientPrescriptionResponse>>(result);
 
         //        return Ok(response);

@@ -6,8 +6,9 @@ namespace ClinicManagementSoftware.Core.Interfaces
 {
     public interface IPatientDoctorVisitingFormService
     {
-        Task<PatientDoctorVisitingFormDto> GetAll(string byRole);
-        Task CreateVisitingForm(CreateOrUpdatePatientDoctorVisitingFormDto request);
+        Task<IEnumerable<PatientDoctorVisitingFormDto>> GetAllByRole();
+        Task<PatientDoctorVisitingFormDto> GetById(long id);
+        Task<CreateVisitingFormResponse> CreateVisitingForm(CreateOrUpdatePatientDoctorVisitingFormDto request);
         Task<IEnumerable<DoctorAvailabilityDto>> GetCurrentDoctorAvailabilities();
     }
 }

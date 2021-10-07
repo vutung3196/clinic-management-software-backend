@@ -19,6 +19,7 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public string AddressDistrict { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string DateOfBirthDetail => DateOfBirth != null ? DateOfBirth.Format() : string.Empty;
+        public int? Age => DateOfBirth != null ? DateTime.Now.Year - DateOfBirth.Value.Year : null;
 
         public string MedicalInsuranceCode { get; set; }
         //public int? Age => DateOfBirth.HasValue ? DateTime.Now.Year - DateOfBirth : null;

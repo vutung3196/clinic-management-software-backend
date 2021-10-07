@@ -35,6 +35,19 @@ namespace ClinicManagementSoftware.Core.Services
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }
 
+        public async Task<Queue<long>> GetCurrentDoctorQueue(long doctorId)
+        {
+            var @spec = new GetDoctorQueueByDoctorIdSpec(doctorId);
+            var currentDoctorQueue = await _visitingDoctorQueueRepository.GetBySpecAsync(@spec);
+            if (currentDoctorQueue == null)
+            {
+                throw new ArgumentException($"Cannot find current queue with {doctorId}");
+            }
+
+            var currentQueue = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(currentDoctorQueue.Queue);
+            return currentQueue.Data;
+        }
+
         public async Task<IEnumerable<VisitingDoctorQueue>> GetAllDoctorQueues(long clinicId)
         {
             var spec = new GetAllDoctorQueuesByClinicIdSpec(clinicId);

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Dto.Clinic;
+using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Entities;
+using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -27,16 +30,37 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task<ReceiptResponse> GetReceiptById(long id)
         {
-            var receipt = await _receiptRepository.GetByIdAsync(id);
+            var @spec = new GetReceiptAndPatientAndClinicByReceiptIdSpec(id);
+            var receipt = await _receiptRepository.GetBySpecAsync(@spec);
             if (receipt == null)
             {
                 throw new ArgumentException($"Receipt is not found with id: {id}");
             }
 
-            return _mapper.Map<ReceiptResponse>(receipt);
+            var result = new ReceiptResponse
+            {
+                Id = receipt.Id,
+                CreatedAt = receipt.CreatedAt.Format(),
+                Description = receipt.Description,
+                Total = receipt.Total,
+                Code = receipt.Code,
+                PatientInformation = _mapper.Map<PatientDto>(receipt.Patient),
+                MedicalServices = !string.IsNullOrWhiteSpace(receipt.Services)
+                    ? JsonConvert.DeserializeObject<ICollection<ReceiptMedicalServiceDto>>(receipt.Services)
+                    : null,
+                ClinicInformation = new ClinicInformationResponse
+                {
+                    Address = receipt.Patient.Clinic.Address,
+                    Name = receipt.Patient.Clinic.Name,
+                    PhoneNumber = receipt.Patient.Clinic.PhoneNumber
+                }
+            };
+
+            result.TotalInText = result.Total.ConvertToText();
+            return result;
         }
 
-        public async Task CreateReceipt(CreateReceiptDto createReceiptDto)
+        public async Task<long> CreateReceipt(CreateReceiptDto createReceiptDto)
         {
             var receipt = new Receipt
             {
@@ -48,7 +72,8 @@ namespace ClinicManagementSoftware.Core.Services
                 Total = createReceiptDto.Total,
                 Services = JsonConvert.SerializeObject(createReceiptDto.MedicalServices),
             };
-            await _receiptRepository.AddAsync(receipt);
+            receipt = await _receiptRepository.AddAsync(receipt);
+            return receipt.Id;
         }
 
         public async Task Delete(long id)
