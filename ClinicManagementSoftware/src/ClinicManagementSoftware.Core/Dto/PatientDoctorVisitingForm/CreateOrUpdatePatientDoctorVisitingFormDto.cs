@@ -10,5 +10,6 @@ namespace ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm
         public string PaymentDescription { get; set; }
         public long PatientId { get; set; }
         public string PaymentCode { get; set; }
+        public bool ChangeStatusFromWaitingForDoctorToVisitingDoctor { get; set; }
     }
 }

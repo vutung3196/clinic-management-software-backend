@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
@@ -28,7 +27,6 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IReceiptService _receiptService;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
-
 
         public PatientDoctorVisitingFormService(
             IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository,
@@ -112,6 +110,20 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
+        public async Task DeleteById(long id)
+        {
+            var @spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(id);
+            var patientDoctorVisitForm = await _patientDoctorVisitingFormRepository.GetBySpecAsync(@spec);
+            if (patientDoctorVisitForm == null)
+            {
+                throw new ArgumentException($"Visiting form is not found with id: {id}");
+            }
+
+            patientDoctorVisitForm.IsDeleted = true;
+            patientDoctorVisitForm.DeletedAt = DateTime.UtcNow;
+            await _patientDoctorVisitingFormRepository.UpdateAsync(patientDoctorVisitForm);
+        }
+
         private PatientDoctorVisitingFormDto ConvertToPatientDoctorVisitingFormDto(
             PatientDoctorVisitForm patientDoctorVisitForm)
         {
@@ -131,6 +143,9 @@ namespace ClinicManagementSoftware.Core.Services
                     Name = patientDoctorVisitForm.Patient.Clinic.Name,
                     PhoneNumber = patientDoctorVisitForm.Patient.Clinic.PhoneNumber
                 },
+                UpdatedAt = patientDoctorVisitForm.UpdatedAt.HasValue
+                    ? patientDoctorVisitForm.UpdatedAt.Value.ToString("MM/dd/yyyy hh:mm tt")
+                    : "",
                 VisitingStatusDisplayed = GetDoctorVisitingFormStatus(patientDoctorVisitForm.VisitingStatus)
             };
             return result;
@@ -141,6 +156,7 @@ namespace ClinicManagementSoftware.Core.Services
             var result = status switch
             {
                 (byte) EnumDoctorVisitingFormStatus.WaitingForDoctor => "Đang chờ khám",
+                (byte) EnumDoctorVisitingFormStatus.VisitingDoctor => "Đang khám",
                 (byte) EnumDoctorVisitingFormStatus.Done => "Đã khám xong",
                 (byte) EnumDoctorVisitingFormStatus.HavingTesting => "Đang làm xét nghiệm",
                 _ => ""
@@ -157,6 +173,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 Code = request.VisitingFormCode,
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 Description = request.Description,
                 PatientId = request.PatientId,
                 DoctorId = request.DoctorId,
@@ -174,6 +191,28 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
+        public async Task<PatientDoctorVisitingFormDto> EditVisitingForm(long id,
+            CreateOrUpdatePatientDoctorVisitingFormDto request)
+        {
+            var @spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(id);
+            var patientDoctorVisitForm = await _patientDoctorVisitingFormRepository.GetBySpecAsync(@spec);
+            if (patientDoctorVisitForm == null)
+            {
+                throw new ArgumentException($"Visiting form is not found with id: {id}");
+            }
+
+            patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;
+            patientDoctorVisitForm.Description = request.Description;
+            patientDoctorVisitForm.DoctorId = request.DoctorId;
+            if (request.ChangeStatusFromWaitingForDoctorToVisitingDoctor)
+            {
+                patientDoctorVisitForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.VisitingDoctor;
+            }
+
+            await _patientDoctorVisitingFormRepository.UpdateAsync(patientDoctorVisitForm);
+            return ConvertToPatientDoctorVisitingFormDto(patientDoctorVisitForm);
+        }
+
         public async Task<IEnumerable<DoctorAvailabilityDto>> GetCurrentDoctorAvailabilities()
         {
             var currentContext = await _userContext.GetCurrentContext();
@@ -184,6 +223,21 @@ namespace ClinicManagementSoftware.Core.Services
                 DoctorName = x.Doctor.FullName,
                 PatientNumber = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(x.Queue).Data.Count,
             }).OrderBy(x => x.PatientNumber);
+        }
+
+        public async Task<PatientDoctorVisitingFormDto> MoveATopPatientToTheEndOfADoctorQueue()
+        {
+            var currentContext = await _userContext.GetCurrentContext();
+            var id = await _doctorQueueService.MoveAFirstPatientToTheEndOfTheQueue(currentContext.UserId);
+            var spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(id);
+            var patientDoctorVisitForm = await _patientDoctorVisitingFormRepository.GetBySpecAsync(spec);
+            if (patientDoctorVisitForm == null)
+            {
+                throw new ArgumentException($"Visiting form is not found with id: {id}");
+            }
+
+            patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;
+            return ConvertToPatientDoctorVisitingFormDto(patientDoctorVisitForm);
         }
 
         private async Task<CreateReceiptDto> GetDoctorVisitingFormMedicalServiceReceiptRequest(
