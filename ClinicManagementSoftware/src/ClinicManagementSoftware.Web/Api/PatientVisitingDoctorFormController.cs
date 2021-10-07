@@ -84,8 +84,8 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _patientDoctorVisitingFormService.MoveATopPatientToTheEndOfADoctorQueue();
-                var response = new Response<string>("success");
+                var result = await _patientDoctorVisitingFormService.MoveATopPatientToTheEndOfADoctorQueue();
+                var response = new Response<PatientDoctorVisitingFormDto>(result);
                 return Ok(response);
             }
             catch (Exception exception)
@@ -114,64 +114,43 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         //// PUT api/<PatientController>/5
-        //[HttpPut("{id:long}")]
-        //[ValidateModel]
-        //public async Task<IActionResult> Put([FromRoute] long id, [FromBody] CreateOrUpdatePatientModel request)
-        //{
-        //    try
-        //    {
-        //        if (request == null)
-        //        {
-        //            _logger.LogError("Request is null");
-        //            return BadRequest("Create patient model should not be null");
-        //        }
+        [HttpPut("{id:long}")]
+        [ValidateModel]
+        public async Task<IActionResult> Put([FromRoute] long id,
+            [FromBody] CreateOrUpdatePatientDoctorVisitingFormDto request)
+        {
+            try
+            {
+                var result = await _patientDoctorVisitingFormService.EditVisitingForm(id, request);
+                var response = new Response<PatientDoctorVisitingFormDto>(result);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message + request);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
-        //        var updatePatientDto = new UpdatePatientDto
-        //        {
-        //            Id = id,
-        //            EmailAddress = request.EmailAddress,
-        //            Gender = request.Gender,
-        //            FullName = request.FullName,
-        //            Occupation = request.Occupation,
-        //            PhoneNumber = request.PhoneNumber,
-        //            AddressDetail = request.AddressDetail,
-        //            DateOfBirth = request.DateOfBirth
-        //        };
-        //        var result = await _patientDoctorVisitingFormService.UpdateAsync(updatePatientDto);
-        //        var response = new Response<PatientDto>(result);
-        //        return Ok(response);
-        //    }
-        //    catch (InvalidGenderException exception)
-        //    {
-        //        _logger.LogError(exception.Message + request);
-        //        return BadRequest("Invalid gender");
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError(exception.Message + request);
-        //        return StatusCode(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
-
-        //// DELETE api/<PatientController>/5
-        //[HttpDelete("{id:long}")]
-        //public async Task<IActionResult> Delete(long id)
-        //{
-        //    try
-        //    {
-        //        await _patientDoctorVisitingFormService.DeleteAsync(id);
-        //        return Ok($"Patient with id {id} has been deleted successfully");
-        //    }
-        //    catch (ArgumentNullException exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return BadRequest("id should not be null");
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return StatusCode(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        // DELETE api/<PatientController>/5
+        [HttpDelete("{id:long}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            try
+            {
+                await _patientDoctorVisitingFormService.DeleteById(id);
+                return Ok($"Visiting form with id {id} has been deleted successfully");
+            }
+            catch (ArgumentNullException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

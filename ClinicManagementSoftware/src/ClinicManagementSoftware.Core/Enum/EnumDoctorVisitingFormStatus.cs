@@ -5,10 +5,13 @@
         // đang chờ khám
         WaitingForDoctor = 1,
 
+        // đang khám
+        VisitingDoctor = 2,
+
         // đang đi xét nghiệm
-        HavingTesting = 2,
+        HavingTesting = 3,
 
         // khám xong
-        Done = 3,
+        Done = 4,
     }
 }
