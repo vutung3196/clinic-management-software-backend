@@ -10,7 +10,7 @@ namespace ClinicManagementSoftware.Core.Entities
     {
         [Column("patient_id")] public long PatientId { get; set; }
 
-        [Column("doctor_id")] public long? DoctorId { get; set; }
+        [Column("doctor_id")] public long DoctorId { get; set; }
 
         [Column("description")] public string Description { get; set; }
         [Column("visiting_status")] public byte VisitingStatus { get; set; }

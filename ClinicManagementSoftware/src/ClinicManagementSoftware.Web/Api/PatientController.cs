@@ -79,16 +79,16 @@ namespace ClinicManagementSoftware.Web.Api
             {
                 var createPatientDto = new CreatePatientDto
                 {
-                    EmailAddress = request.EmailAddress,
-                    Gender = request.Gender,
-                    FullName = request.FullName,
-                    PhoneNumber = request.PhoneNumber,
+                    EmailAddress = request.EmailAddress.Trim(),
+                    Gender = request.Gender.Trim(),
+                    FullName = request.FullName.Trim(),
+                    PhoneNumber = request.PhoneNumber.Trim(),
                     DateOfBirth = request.DateOfBirth,
-                    AddressDetail = request.AddressDetail,
-                    MedicalInsuranceCode = request.MedicalInsuranceCode,
-                    AddressCity = request.AddressCity,
-                    AddressDistrict = request.AddressDistrict,
-                    AddressStreet = request.AddressStreet
+                    AddressDetail = request.AddressDetail.Trim(),
+                    MedicalInsuranceCode = request.MedicalInsuranceCode.Trim(),
+                    AddressCity = request.AddressCity.Trim(),
+                    AddressDistrict = request.AddressDistrict.Trim(),
+                    AddressStreet = request.AddressStreet.Trim()
                 };
 
                 var result = await _patientService.AddAsync(createPatientDto);
@@ -128,16 +128,16 @@ namespace ClinicManagementSoftware.Web.Api
                 var updatePatientDto = new UpdatePatientDto
                 {
                     Id = id,
-                    EmailAddress = request.EmailAddress,
-                    Gender = request.Gender,
-                    FullName = request.FullName,
-                    PhoneNumber = request.PhoneNumber,
-                    AddressDetail = request.AddressDetail,
-                    MedicalInsuranceCode = request.MedicalInsuranceCode,
-                    AddressCity = request.AddressCity,
-                    AddressDistrict = request.AddressDistrict,
-                    AddressStreet = request.AddressStreet,
-                    DateOfBirth = request.DateOfBirth
+                    EmailAddress = request.EmailAddress.Trim(),
+                    Gender = request.Gender.Trim(),
+                    FullName = request.FullName.Trim(),
+                    PhoneNumber = request.PhoneNumber.Trim(),
+                    DateOfBirth = request.DateOfBirth,
+                    AddressDetail = request.AddressDetail.Trim(),
+                    MedicalInsuranceCode = request.MedicalInsuranceCode.Trim(),
+                    AddressCity = request.AddressCity.Trim(),
+                    AddressDistrict = request.AddressDistrict.Trim(),
+                    AddressStreet = request.AddressStreet.Trim()
                 };
                 var result = await _patientService.UpdateAsync(updatePatientDto);
                 var response = new Response<PatientDto>(result);
