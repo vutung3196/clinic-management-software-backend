@@ -12,5 +12,7 @@ namespace ClinicManagementSoftware.Core.Constants
         public static string JwtTokenAudience = "https://mywebapi.com";
         public static int JwtTokenAccessTokenExpiration = 3600000;
         public static int JwtTokenRefreshTokenExpiration = 3600;
+        public static string ReceptionistRole = "Receptionist";
+        public static string DoctorRole = "Doctor";
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
@@ -58,25 +59,20 @@ namespace ClinicManagementSoftware.Core.Services
         private async Task<IEnumerable<PatientDoctorVisitingFormDto>> GetDoctorVisitingFormByRole(
             CurrentUserContext currentContext)
         {
-            List<PatientDoctorVisitForm> doctorVisitForms;
-            switch (currentContext.Role.RoleName)
+            var doctorVisitForms = new List<PatientDoctorVisitForm>();
+            if (currentContext.Role.RoleName.Equals(ConfigurationConstant.ReceptionistRole))
             {
-                case "Receptionist":
-                {
-                    var @spec =
-                        new GetPatientDoctorVisitingFormsForReceptionistFromClinicIdSpec(currentContext.ClinicId);
-                    doctorVisitForms =
-                        (await _patientDoctorVisitingFormRepository.ListAsync(@spec)).OrderByDescending(
-                            x => x.UpdatedAt).ToList();
-                    break;
-                }
-                case "Doctor":
-                    // get from queue, order by id
-                    doctorVisitForms = await ProcessDoctorVisitForms(currentContext.UserId);
-                    break;
-                default:
-                    return new List<PatientDoctorVisitingFormDto>();
+                var @spec =
+                    new GetPatientDoctorVisitingFormsForReceptionistFromClinicIdSpec(currentContext.ClinicId);
+                doctorVisitForms =
+                    (await _patientDoctorVisitingFormRepository.ListAsync(@spec)).OrderByDescending(
+                        x => x.UpdatedAt).ToList();
             }
+            else if (currentContext.Role.RoleName.Equals(ConfigurationConstant.DoctorRole))
+            {
+                doctorVisitForms = await ProcessDoctorVisitForms(currentContext.UserId);
+            }
+
 
             return doctorVisitForms.Select(ConvertToPatientDoctorVisitingFormDto);
         }
@@ -119,6 +115,8 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Visiting form is not found with id: {id}");
             }
 
+            // update queue
+            await _doctorQueueService.DeleteAVisitingFormInDoctorQueue(id, patientDoctorVisitForm.DoctorId);
             patientDoctorVisitForm.IsDeleted = true;
             patientDoctorVisitForm.DeletedAt = DateTime.UtcNow;
             await _patientDoctorVisitingFormRepository.UpdateAsync(patientDoctorVisitForm);

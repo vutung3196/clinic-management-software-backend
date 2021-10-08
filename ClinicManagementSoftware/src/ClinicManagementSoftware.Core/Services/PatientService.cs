@@ -146,6 +146,9 @@ namespace ClinicManagementSoftware.Core.Services
             patient.IsDeleted = 1;
             patient.DeletedAt = DateTime.UtcNow;
             await _patientRepository.UpdateAsync(patient);
+
+
+
         }
     }
 }
