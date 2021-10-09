@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -20,6 +21,8 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
 
         public Patient Patient { get; set; }
+        public ICollection<Prescription> Prescriptions { get; set; }
+        public ICollection<LabOrderForm> LabOrderForms { get; set; }
         public Receipt Receipt { get; set; }
         public User Doctor { get; set; }
     }

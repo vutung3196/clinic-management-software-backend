@@ -96,6 +96,11 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(labOrderForm => labOrderForm.PatientHospitalizedProfile)
                 .WithMany(patientHospitalizedProfile => patientHospitalizedProfile.LabOrderForms);
 
+
+            modelBuilder.Entity<LabOrderForm>()
+                .HasOne(labOrderForm => labOrderForm.PatientDoctorVisitForm)
+                .WithMany(doctorVisitForm => doctorVisitForm.LabOrderForms);
+
             modelBuilder.Entity<LabTest>()
                 .HasOne(labTest => labTest.LabOrderForm)
                 .WithMany(labOrderForm => labOrderForm.LabTests);
@@ -132,6 +137,10 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<MedicalImageFile>()
                 .HasOne(medicalImageFile => medicalImageFile.CloudinaryFile)
                 .WithOne(hospitalizedProfile => hospitalizedProfile.MedicalImageFile);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(prescription => prescription.PatientDoctorVisitForm)
+                .WithMany(patientDoctorVisitForm => patientDoctorVisitForm.Prescriptions);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

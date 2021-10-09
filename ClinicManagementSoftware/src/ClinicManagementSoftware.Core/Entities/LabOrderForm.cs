@@ -16,7 +16,7 @@ namespace ClinicManagementSoftware.Core.Entities
         public PatientHospitalizedProfile PatientHospitalizedProfile { get; set; }
 
         [Column("patient_doctor_visit_form_id")]
-        public long PatientDoctorVisitingFormId { get; set; }
+        public long PatientDoctorVisitFormId { get; set; }
 
         public PatientDoctorVisitForm PatientDoctorVisitForm { get; set; }
         [Column("doctor_id")] public long DoctorId { get; set; }

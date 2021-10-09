@@ -57,7 +57,7 @@ namespace ClinicManagementSoftware.Core.Services
                 DoctorSuggestion = request.DoctorSuggestion,
                 MedicationInformation = medicationInformation,
                 MedicalInsuranceCode = request.MedicalInsuranceCode,
-                PatientDoctorVisitingFormId = request.PatientDoctorVisitingFormId,
+                PatientDoctorVisitFormId = request.PatientDoctorVisitingFormId,
                 DoctorId = currentUser.UserId,
                 RevisitDate = request.RevisitDate
             };
@@ -72,7 +72,7 @@ namespace ClinicManagementSoftware.Core.Services
             var currentUser = await _userContext.GetCurrentContext();
             if (currentPrescription == null)
                 throw new PrescriptionNotFoundException(
-                    $"Prescription not found with Id: {prescriptionRequest.PatientId}");
+                    $"Prescriptions not found with Id: {prescriptionRequest.PatientId}");
             string medicineInformation = null;
             if (prescriptionRequest.MedicationInformation != null && prescriptionRequest.MedicationInformation.Any())
                 medicineInformation = JsonConvert.SerializeObject(prescriptionRequest.MedicationInformation);

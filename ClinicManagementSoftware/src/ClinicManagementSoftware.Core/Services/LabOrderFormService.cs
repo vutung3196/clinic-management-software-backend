@@ -99,7 +99,7 @@ namespace ClinicManagementSoftware.Core.Services
                 DoctorId = currentUser.UserId,
                 Code = request.Code,
                 Status = (byte) EnumLabOrderFormStatus.NotPaid,
-                PatientDoctorVisitingFormId = request.PatientDoctorVisitingFormId,
+                PatientDoctorVisitFormId = request.PatientDoctorVisitingFormId,
                 PatientHospitalizedProfileId = request.PatientHospitalizedProfileId,
                 Description = request.Description
             };

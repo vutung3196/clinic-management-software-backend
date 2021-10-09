@@ -130,7 +130,7 @@ namespace ClinicManagementSoftware.Core.Services
                     CreatedAt = x.CreatedAt.Format(),
                     Description = x.Description,
                     DoctorVisitingFormCode = x.PatientDoctorVisitForm?.Code,
-                    DoctorVisitingFormId = x.PatientDoctorVisitingFormId,
+                    DoctorVisitingFormId = x.PatientDoctorVisitFormId,
                 }),
                 LabTests = detailedProfile.LabOrderForms.SelectMany(x => x.LabTests).Select(x =>
                     new LabTestInformation
