@@ -5,6 +5,8 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
     public class PrescriptionInformation
     {
         public long Id { get; set; }
+        public string DoctorVisitingFormCode { get; set; }
+        public long DoctorVisitingFormId { get; set; }
         public string VisitReason { get; set; }
         public string DiagnosedDescription { get; set; }
         public string RevisitDate { get; set; }

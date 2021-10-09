@@ -1,6 +1,6 @@
 ﻿namespace ClinicManagementSoftware.Core.Dto.Prescription
 {
-    public class MedicalImageFile
+    public class MedicalImageFileResponse
     {
         public string MedicalImageFileBase64 { get; set; }
         public string Name { get; set; }

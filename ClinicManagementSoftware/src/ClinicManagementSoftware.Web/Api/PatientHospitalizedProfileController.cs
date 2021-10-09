@@ -32,13 +32,30 @@ namespace ClinicManagementSoftware.Web.Api
 
         // GET api/<ClinicServiceController>/5
         [HttpGet("getbypatient")]
-        public async Task<IActionResult> Get(long patientId)
+        public async Task<IActionResult> GetByPatientId(long patientId)
         {
             try
             {
                 var result =
                     await _patientHospitalizedProfileService.GetPatientHospitalizedProfilesForPatient(patientId);
                 var response = new Response<IEnumerable<PatientHospitalizedProfileResponseDto>>(result);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            try
+            {
+                var result =
+                    await _patientHospitalizedProfileService.GetDetailedPatientHospitalizedProfile(id);
+                var response = new Response<DetailedPatientHospitalizedProfileResponseDto>(result);
                 return Ok(response);
             }
             catch (Exception exception)

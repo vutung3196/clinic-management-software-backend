@@ -61,6 +61,15 @@ namespace ClinicManagementSoftware.Core.Helpers
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.MedicalServices, opt
                     => opt.MapFrom(src => JsonConvert.DeserializeObject<ReceiptMedicalServiceDto>(src.Services)));
+
+            CreateMap<Prescription, PrescriptionInformation>()
+                .ForMember(dest => dest.RevisitDate,
+                    opt => opt.MapFrom(src => src.RevisitDate == null ? string.Empty : src.RevisitDate.Format()))
+                .ForMember(dest => dest.CreatedAt, opt
+                    => opt.MapFrom(src => src.CreatedAt.Format()))
+                .ForMember(dest => dest.MedicationInformation,
+                    opt => opt.MapFrom(src => JsonConvert
+                        .DeserializeObject<List<MedicationInformation>>(src.MedicationInformation)));
         }
     }
 }
