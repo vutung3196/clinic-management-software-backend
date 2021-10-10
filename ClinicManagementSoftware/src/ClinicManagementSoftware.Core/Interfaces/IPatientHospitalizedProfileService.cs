@@ -12,7 +12,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task DeletePatientProfile(long id);
         Task<IEnumerable<PatientHospitalizedProfileResponseDto>> GetPatientHospitalizedProfilesForPatient(long patientId);
         Task<DetailedPatientHospitalizedProfileResponseDto> GetDetailedPatientHospitalizedProfile(long id);
-
-        
+        Task DeletePatientProfilesByPatientId(long patientId);
     }
 }

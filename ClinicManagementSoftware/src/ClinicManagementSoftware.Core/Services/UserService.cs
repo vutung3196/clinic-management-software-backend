@@ -20,16 +20,18 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<Role> _roleRepository;
         private readonly IUserContext _userContext;
+        private readonly IDoctorQueueService _doctorQueueService;
         private readonly IMapper _mapper;
 
         public UserService(IMapper mapper,
             IRepository<User> userRepository, IUserContext userContext,
-            IRepository<Role> roleRepository)
+            IRepository<Role> roleRepository, IDoctorQueueService doctorQueueService)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _userContext = userContext;
             _roleRepository = roleRepository;
+            _doctorQueueService = doctorQueueService;
         }
 
         public async Task<UserDto> CreateAsync(UserDto input)
@@ -94,6 +96,9 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find a role having name: {input.Role}");
             }
 
+            // TODO Create new doctor queue here for doctor
+
+
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
             var user = new User
             {
@@ -107,6 +112,11 @@ namespace ClinicManagementSoftware.Core.Services
                 RoleId = role.Id
             };
             user = await _userRepository.AddAsync(user);
+            if (role.RoleName == "Doctor")
+            {
+                await _doctorQueueService.CreateNewDoctorQueue(user.Id);
+            }
+
             return _mapper.Map<UserResultResponse>(user);
         }
 
@@ -132,7 +142,7 @@ namespace ClinicManagementSoftware.Core.Services
                 CreatedAt = DateTime.UtcNow,
                 Username = input.UserName.Trim(),
                 ClinicId = clinicId,
-                Enabled = input.Enabled ? (byte)EnumEnabled.Active : (byte)EnumEnabled.InActive,
+                Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
                 Password = passwordHash,
                 PhoneNumber = input.PhoneNumber,
                 FullName = input.FullName,

@@ -37,6 +37,7 @@ namespace ClinicManagementSoftware.Core.Services
             var patientHospitalizedProfile = new PatientHospitalizedProfile
             {
                 CreatedAt = DateTime.UtcNow,
+                IsDeleted = false,
                 Description = request.Description,
                 DiseaseName = request.DiseaseName,
                 PatientId = request.PatientId,
@@ -153,6 +154,18 @@ namespace ClinicManagementSoftware.Core.Services
                     }),
             };
             return result;
+        }
+
+        public async Task DeletePatientProfilesByPatientId(long patientId)
+        {
+            var @spec = new GetPatientHospitalizedProfilesByPatientId(patientId);
+            var patientHospitalizedProfiles = await _patientHospitalizedProfileRepository.ListAsync(@spec);
+            foreach (var profile in patientHospitalizedProfiles)
+            {
+                profile.IsDeleted = true;
+                profile.DeletedAt = DateTime.UtcNow;
+                await _patientHospitalizedProfileRepository.UpdateAsync(profile);
+            }
         }
     }
 }

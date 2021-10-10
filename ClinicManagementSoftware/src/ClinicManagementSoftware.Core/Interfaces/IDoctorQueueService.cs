@@ -11,5 +11,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<Queue<long>> GetCurrentDoctorQueue(long doctorId);
         Task<IEnumerable<VisitingDoctorQueue>> GetAllDoctorQueues(long clinicId);
         Task DeleteAVisitingFormInDoctorQueue(long visitingFormId, long doctorId);
+        Task CreateNewDoctorQueue(long userId);
     }
 }

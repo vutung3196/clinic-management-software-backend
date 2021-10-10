@@ -17,7 +17,7 @@ namespace ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm
         public string UpdatedAt { get; set; }
         public PatientDto PatientInformation { get; set; }
         public string DoctorName { get; set; }
-        public long DoctorId { get; set; }
+        public long? DoctorId { get; set; }
         public ClinicInformationResponse ClinicInformation { get; set; }
     }
 }

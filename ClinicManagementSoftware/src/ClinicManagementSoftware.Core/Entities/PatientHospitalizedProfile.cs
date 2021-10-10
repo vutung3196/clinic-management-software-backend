@@ -21,6 +21,8 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
         [Column("code")] public string Code { get; set; }
 
+        [Column("is_deleted")] public bool IsDeleted { get; set; }
+
         // 1 to many
         public ICollection<Prescription> Prescriptions { get; set; }
         public ICollection<LabOrderForm> LabOrderForms { get; set; }

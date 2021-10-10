@@ -19,13 +19,18 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<Patient> _patientRepository;
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
+        private readonly IPatientDoctorVisitingFormService _doctorVisitingFormService;
+        private readonly IPatientHospitalizedProfileService _patientHospitalizedProfileService;
 
         public PatientService(IRepository<Patient> patientRepository,
-            IMapper mapper, IUserContext userContext)
+            IMapper mapper, IUserContext userContext, IPatientDoctorVisitingFormService doctorVisitingFormService,
+            IPatientHospitalizedProfileService patientHospitalizedProfileService)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
             _userContext = userContext;
+            _doctorVisitingFormService = doctorVisitingFormService;
+            _patientHospitalizedProfileService = patientHospitalizedProfileService;
         }
 
         public async Task<PatientDto> GetByIdAsync(long? id)
@@ -130,25 +135,23 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
-        public async Task DeleteAsync(long? id)
+        public async Task DeleteAsync(long id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            var patient = await _patientRepository.GetByIdAsync(id.Value);
+            var patient = await _patientRepository.GetByIdAsync(id);
             if (patient == null)
             {
                 throw new PatientNotFoundException($"Cannot find a patientRequest with id: {id}");
             }
 
+            // delete all patient's hospitalized profiles, 
+            await _patientHospitalizedProfileService.DeletePatientProfilesByPatientId(id);
+
+            // delete all patient's doctor visiting form
+            await _doctorVisitingFormService.DeleteVisitingFormsByPatientId(id);
+
             patient.IsDeleted = 1;
             patient.DeletedAt = DateTime.UtcNow;
             await _patientRepository.UpdateAsync(patient);
-
-
-
         }
     }
 }
