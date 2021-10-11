@@ -41,7 +41,9 @@ namespace ClinicManagementSoftware.Core.Helpers
                 .ForMember(dest => dest.CreatedAt, opt
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.UpdatedAt, opt
-                    => opt.MapFrom(src => src.UpdatedAt.Format()));
+                    => opt.MapFrom(src => src.UpdatedAt.Format()))
+                .ForMember(dest => dest.FullName, opt
+                    => opt.MapFrom(src => src.FullName));
 
             CreateMap<Prescription, PrescriptionInformation>()
                 .ForMember(dest => dest.RevisitDate,

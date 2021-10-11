@@ -14,6 +14,10 @@ namespace ClinicManagementSoftware.Core.Dto.LabOrderForm
         public string DoctorVisitingFormCode { get; set; }
         public string Status { get; set; }
         public long DoctorVisitingFormId { get; set; }
+
+        public string PatientDetailedInformation => PatientInformation.FullName + "-" + PatientInformation.Gender +
+                                                    "-" + PatientInformation.Age + " tuổi";
+
         public IEnumerable<LabTestInformation> LabTests { get; set; }
         public PatientDto PatientInformation { get; set; }
         public ClinicInformationResponse ClinicInformation { get; set; }

@@ -138,13 +138,13 @@ namespace ClinicManagementSoftware.Core.Services
 
             return doctorVisitForms.Select(labOrderForm => new LabOrderFormDto
             {
+                Id = labOrderForm.Id,
                 PatientInformation = _mapper.Map<PatientDto>(labOrderForm.PatientHospitalizedProfile.Patient),
                 Code = labOrderForm.Code,
                 DoctorName = labOrderForm.Doctor.FullName,
                 CreatedAt = labOrderForm.CreatedAt.Format(),
                 Description = labOrderForm.Description,
                 Status = GetLabOrderFormStatus(labOrderForm.Status),
-                //DoctorVisitingFormCode = labOrderForm.PatientDoctorVisitForm.Code,
                 LabTests = labOrderForm.LabTests.Select(x => new LabTestInformation
                 {
                     Id = x.Id,
