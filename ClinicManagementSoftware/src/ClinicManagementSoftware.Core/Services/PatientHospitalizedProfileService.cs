@@ -7,6 +7,7 @@ using ClinicManagementSoftware.Core.Dto.Files;
 using ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile;
 using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Entities;
+using ClinicManagementSoftware.Core.Enum;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
@@ -121,6 +122,8 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find detailed profile with id: {id}");
             }
 
+            var labTests = detailedProfile.LabOrderForms.SelectMany(x => x.LabTests);
+
             var result = new DetailedPatientHospitalizedProfileResponseDto()
             {
                 Prescriptions = detailedProfile.Prescriptions.Select(x => _mapper.Map<PrescriptionInformation>(x)),
@@ -133,7 +136,7 @@ namespace ClinicManagementSoftware.Core.Services
                     DoctorVisitingFormCode = x.PatientDoctorVisitForm?.Code,
                     DoctorVisitingFormId = x.PatientDoctorVisitFormId,
                 }),
-                LabTests = detailedProfile.LabOrderForms.SelectMany(x => x.LabTests).Select(x =>
+                LabTests = labTests.Select(x =>
                     new LabTestInformation
                     {
                         Id = x.Id,
@@ -141,7 +144,8 @@ namespace ClinicManagementSoftware.Core.Services
                         Name = x.MedicalService.Name,
                         CreatedAt = x.CreatedAt.Format(),
                         Description = x.Description,
-                        ImageFiles = x.MedicalImageFiles.Select(medicalImageFile => new ImageFileResponse
+                        Status = GetLabTestStatus(x.Status),
+                        ImageFiles = x.MedicalImageFiles?.Select(medicalImageFile => new ImageFileResponse
                         {
                             Id = medicalImageFile?.Id,
                             PublicId = medicalImageFile?.CloudinaryFile?.PublicId,
@@ -154,6 +158,11 @@ namespace ClinicManagementSoftware.Core.Services
                     }),
             };
             return result;
+        }
+
+        private static string GetLabTestStatus(byte status)
+        {
+            return status == (byte) EnumLabTestStatus.Done ? "Đã có kết quả" : "Chưa có kết quả";
         }
 
         public async Task DeletePatientProfilesByPatientId(long patientId)

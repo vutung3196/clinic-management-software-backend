@@ -14,5 +14,6 @@ namespace ClinicManagementSoftware.Core.Constants
         public static int JwtTokenRefreshTokenExpiration = 3600;
         public static string ReceptionistRole = "Receptionist";
         public static string DoctorRole = "Doctor";
+        public static string TestSpecialistRole = "TestSpecialist";
     }
 }

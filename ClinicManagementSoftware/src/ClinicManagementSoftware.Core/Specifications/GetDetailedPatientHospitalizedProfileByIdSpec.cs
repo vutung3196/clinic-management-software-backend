@@ -11,6 +11,8 @@ namespace ClinicManagementSoftware.Core.Specifications
             Query.Include(profile => profile.Patient)
                 .Include(profile => profile.Prescriptions)
                 .Include(profile => profile.LabOrderForms)
+                .ThenInclude(x => x.PatientDoctorVisitForm)
+                .Include(x => x.LabOrderForms)
                 .ThenInclude(labOrderForm => labOrderForm.LabTests)
                 .ThenInclude(x => x.MedicalService)
                 .Include(labTest => labTest.MedicalImageFiles)

@@ -10,6 +10,8 @@ namespace ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile
         public string Name { get; set; }
         public string Description { get; set; }
         public string Result { get; set; }
+        public string Status { get; set; }
         public IEnumerable<ImageFileResponse> ImageFiles { get; set; }
+        public double Price { get; set; }
     }
 }

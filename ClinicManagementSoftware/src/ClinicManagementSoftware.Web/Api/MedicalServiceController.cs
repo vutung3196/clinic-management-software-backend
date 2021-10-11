@@ -16,7 +16,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Receptionist")]
+    [Authorize(Roles = "Admin,Receptionist,Doctor")]
     public class MedicalServiceController : ControllerBase
     {
         private readonly IMedicalServiceService _medicalService;
@@ -38,6 +38,22 @@ namespace ClinicManagementSoftware.Web.Api
             {
                 var result = await _medicalService.GetAllMedicalServices();
                 var response = new Response<IEnumerable<MedicalServiceDto>>(result);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("bygroup")]
+        public async Task<IActionResult> GetByGroup()
+        {
+            try
+            {
+                var result = await _medicalService.GetAllMedicalServiceByGroup();
+                var response = new Response<IEnumerable<MedicalServiceGroupDto>>(result);
                 return Ok(response);
             }
             catch (Exception exception)

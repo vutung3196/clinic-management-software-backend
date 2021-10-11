@@ -1,18 +1,10 @@
-﻿namespace ClinicManagementSoftware.Core.Dto.MedicalService
+﻿using System.Collections.Generic;
+
+namespace ClinicManagementSoftware.Core.Dto.MedicalService
 {
     public class MedicalServiceGroupDto
     {
-        public MedicalServiceGroupDto(long id, string name, string description, string createdAt)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            CreatedAt = createdAt;
-        }
-
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string CreatedAt { get; set; }
+        public string GroupName { get; set; }
+        public IEnumerable<MedicalServiceForLabTest> MedicalServices { get; set; }
     }
 }

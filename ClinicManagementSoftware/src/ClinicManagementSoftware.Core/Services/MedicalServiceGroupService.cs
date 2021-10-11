@@ -1,85 +1,130 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.MedicalService;
-using ClinicManagementSoftware.Core.Entities;
-using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
-using ClinicManagementSoftware.Core.Specifications;
-using ClinicManagementSoftware.SharedKernel.Interfaces;
 
 namespace ClinicManagementSoftware.Core.Services
 {
     public class MedicalServiceGroupService : IMedicalServiceGroupService
     {
-        private readonly IUserContext _userContext;
-        private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupSpecification;
-        private readonly IRepository<MedicalService> _medicalServiceSpecification;
+        //private readonly IUserContext _userContext;
+        //private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupSpecification;
+        //private readonly IRepository<MedicalService> _medicalServiceSpecification;
 
 
-        public MedicalServiceGroupService(IUserContext userContext,
-            IRepository<MedicalServiceGroup> medicalServiceGroupSpecification,
-            IRepository<MedicalService> medicalServiceSpecification)
+        //public MedicalServiceGroupService(IUserContext userContext,
+        //    IRepository<MedicalServiceGroup> medicalServiceGroupSpecification,
+        //    IRepository<MedicalService> medicalServiceSpecification)
+        //{
+        //    _userContext = userContext;
+        //    _medicalServiceGroupSpecification = medicalServiceGroupSpecification;
+        //    _medicalServiceSpecification = medicalServiceSpecification;
+        //}
+
+
+        //public Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceGroups()
+        //{
+        //    throw new ArgumentException();
+        //    //var currentUser = await _userContext.GetCurrentContext();
+        //    //var @spec = new GetAllMedicalServicesByClinicIdSpec(currentUser.ClinicId);
+        //    //var medicalGroups = await _medicalServiceSpecification.ListAsync(@spec);
+        //    //var result = medicalGroups.SelectMany(x => x.MedicalServices).OrderByDescending(x => x.CreatedAt);
+        //    //return result.Select(x =>
+        //    //    new MedicalServiceGroupDto(x.Id, x.Name, x.Description, x.CreatedAt.Format()));
+        //}
+
+        //public Task<MedicalServiceGroupDto> CreateMedicalServiceGroup(MedicalServiceGroupDto request)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<MedicalServiceGroupDto> EditMedicalServiceGroup(long id, MedicalServiceGroupDto request)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public async Task<MedicalServiceGroupResponseDto> CreateMedicalServiceGroup(MedicalServiceGroupResponseDto request)
+        //{
+        //    var medicalServiceGroup = new MedicalServiceGroup
+        //    {
+        //        CreatedAt = DateTime.UtcNow,
+        //        Description = request.Description,
+        //        Name = request.Name,
+        //    };
+
+        //    medicalServiceGroup = await _medicalServiceGroupSpecification.AddAsync(medicalServiceGroup);
+        //    return new MedicalServiceGroupResponseDto(medicalServiceGroup.Id, medicalServiceGroup.Name,
+        //        medicalServiceGroup.Description, medicalServiceGroup.CreatedAt.Format());
+        //}
+
+        //public async Task<MedicalServiceGroupResponseDto> EditMedicalServiceGroup(long id, MedicalServiceGroupResponseDto request)
+        //{
+        //    var medicalServiceGroup = await _medicalServiceGroupSpecification.GetByIdAsync(id);
+        //    if (medicalServiceGroup == null)
+        //    {
+        //        throw new ArgumentException($"Cannot find service group with id: {id}");
+        //    }
+
+        //    medicalServiceGroup.UpdatedAt = DateTime.UtcNow;
+        //    medicalServiceGroup.Description = request.Description;
+        //    medicalServiceGroup.Name = request.Name;
+
+        //    await _medicalServiceGroupSpecification.UpdateAsync(medicalServiceGroup);
+        //    return new MedicalServiceGroupResponseDto(medicalServiceGroup.Id, medicalServiceGroup.Name,
+        //        medicalServiceGroup.Description,
+        //        medicalServiceGroup.CreatedAt.Format());
+        //}
+
+        //public async Task DeleteMedicalServiceGroup(long id)
+        //{
+        //    var medicalService = await _medicalServiceGroupSpecification.GetByIdAsync(id);
+
+        //    if (medicalService == null)
+        //    {
+        //        throw new ArgumentException($"Cannot find medication service group with id: {id}");
+        //    }
+
+        //    await _medicalServiceGroupSpecification.DeleteAsync(medicalService);
+        //}
+
+        //Task<IEnumerable<MedicalServiceGroupResponseDto>> IMedicalServiceGroupService.GetAllMedicalServiceGroups()
+        //{
+        //    throw new NotImplementedException();
+        //}
+        public Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceGroups()
         {
-            _userContext = userContext;
-            _medicalServiceGroupSpecification = medicalServiceGroupSpecification;
-            _medicalServiceSpecification = medicalServiceSpecification;
+            throw new NotImplementedException();
         }
 
-
-        public async Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceGroups()
+        public Task<MedicalServiceGroupResponseDto> CreateMedicalServiceGroup(MedicalServiceGroupResponseDto request)
         {
-            var currentUser = await _userContext.GetCurrentContext();
-            var @spec = new GetAllMedicalServiceGroupByClinicIdSpec(currentUser.ClinicId);
-            var medicalGroups = await _medicalServiceGroupSpecification.ListAsync(@spec);
-            var result = medicalGroups.SelectMany(x => x.MedicalServices).OrderByDescending(x => x.CreatedAt);
-            return result.Select(x =>
-                new MedicalServiceGroupDto(x.Id, x.Name, x.Description, x.CreatedAt.Format()));
+            throw new NotImplementedException();
         }
 
-        public async Task<MedicalServiceGroupDto> CreateMedicalServiceGroup(MedicalServiceGroupDto request)
+        public Task<MedicalServiceGroupResponseDto> EditMedicalServiceGroup(long id, MedicalServiceGroupResponseDto request)
         {
-            var medicalServiceGroup = new MedicalServiceGroup
-            {
-                CreatedAt = DateTime.UtcNow,
-                Description = request.Description,
-                Name = request.Name,
-            };
-
-            medicalServiceGroup = await _medicalServiceGroupSpecification.AddAsync(medicalServiceGroup);
-            return new MedicalServiceGroupDto(medicalServiceGroup.Id, medicalServiceGroup.Name,
-                medicalServiceGroup.Description, medicalServiceGroup.CreatedAt.Format());
+            throw new NotImplementedException();
         }
 
-        public async Task<MedicalServiceGroupDto> EditMedicalServiceGroup(long id, MedicalServiceGroupDto request)
+        public Task<MedicalServiceGroupDto> CreateMedicalServiceGroup(MedicalServiceGroupDto request)
         {
-            var medicalServiceGroup = await _medicalServiceGroupSpecification.GetByIdAsync(id);
-            if (medicalServiceGroup == null)
-            {
-                throw new ArgumentException($"Cannot find service group with id: {id}");
-            }
-
-            medicalServiceGroup.UpdatedAt = DateTime.UtcNow;
-            medicalServiceGroup.Description = request.Description;
-            medicalServiceGroup.Name = request.Name;
-
-            await _medicalServiceGroupSpecification.UpdateAsync(medicalServiceGroup);
-            return new MedicalServiceGroupDto(medicalServiceGroup.Id, medicalServiceGroup.Name,
-                medicalServiceGroup.Description,
-                medicalServiceGroup.CreatedAt.Format());
+            throw new NotImplementedException();
         }
 
-        public async Task DeleteMedicalServiceGroup(long id)
+        public Task<MedicalServiceGroupDto> EditMedicalServiceGroup(long id, MedicalServiceGroupDto request)
         {
-            var medicalService = await _medicalServiceGroupSpecification.GetByIdAsync(id);
+            throw new NotImplementedException();
+        }
 
-            if (medicalService == null)
-            {
-                throw new ArgumentException($"Cannot find medication service group with id: {id}");
-            }
+        Task<IEnumerable<MedicalServiceGroupResponseDto>> IMedicalServiceGroupService.GetAllMedicalServiceGroups()
+        {
+            throw new NotImplementedException();
+        }
 
-            await _medicalServiceGroupSpecification.DeleteAsync(medicalService);
+        public Task DeleteMedicalServiceGroup(long id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

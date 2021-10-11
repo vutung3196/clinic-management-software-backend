@@ -10,7 +10,6 @@ namespace ClinicManagementSoftware.Core.Entities
     {
         [Column("name")] public string Name { get; set; }
         [Column("description")] public string Description { get; set; }
-        [Column("clinic_id")]  public long ClinicId { get; set; }
         public ICollection<MedicalService> MedicalServices { get; set; }
     }
 }

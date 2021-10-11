@@ -15,7 +15,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Accountant")]
+    [Authorize(Roles = "Admin,Receptionist")]
     public class MedicalServiceGroupController : ControllerBase
     {
         private readonly IMedicalServiceGroupService _medicalGroupService;
@@ -35,7 +35,7 @@ namespace ClinicManagementSoftware.Web.Api
             try
             {
                 var result = await _medicalGroupService.GetAllMedicalServiceGroups();
-                var response = new Response<IEnumerable<MedicalServiceGroupDto>>(result);
+                var response = new Response<IEnumerable<MedicalServiceGroupResponseDto>>(result);
                 return Ok(response);
             }
             catch (Exception exception)
@@ -47,12 +47,12 @@ namespace ClinicManagementSoftware.Web.Api
 
         // POST api/<ClinicServiceController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MedicalServiceGroupDto request)
+        public async Task<IActionResult> Post([FromBody] MedicalServiceGroupResponseDto request)
         {
             try
             {
                 var result = await _medicalGroupService.CreateMedicalServiceGroup(request);
-                var response = new Response<MedicalServiceGroupDto>(result);
+                var response = new Response<MedicalServiceGroupResponseDto>(result);
                 return Ok(response);
             }
             catch (ArgumentException exception)
@@ -69,12 +69,12 @@ namespace ClinicManagementSoftware.Web.Api
 
         // PUT api/<ClinicServiceController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] MedicalServiceGroupDto request)
+        public async Task<IActionResult> Put(long id, [FromBody] MedicalServiceGroupResponseDto request)
         {
             try
             {
                 var result = await _medicalGroupService.EditMedicalServiceGroup(id, request);
-                var response = new Response<MedicalServiceGroupDto>(result);
+                var response = new Response<MedicalServiceGroupResponseDto>(result);
                 return Ok(response);
             }
             catch (ArgumentException exception)

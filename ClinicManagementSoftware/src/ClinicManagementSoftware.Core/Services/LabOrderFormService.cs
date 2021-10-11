@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.LabOrderForm;
+using ClinicManagementSoftware.Core.Dto.Patient;
+using ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile;
+using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
+using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -14,21 +22,27 @@ namespace ClinicManagementSoftware.Core.Services
     {
         private readonly IRepository<LabOrderForm> _labOrderFormRepository;
         private readonly IRepository<LabTest> _labTestRepository;
+        private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
         private readonly IUserContext _userContext;
+        private readonly IMapper _mapper;
 
         public LabOrderFormService(IRepository<LabOrderForm> labOrderFormRepository,
-            IRepository<LabTest> labTestRepository, IUserContext userContext)
+            IRepository<LabTest> labTestRepository, IUserContext userContext,
+            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository, IMapper mapper)
         {
             _labOrderFormRepository = labOrderFormRepository;
             _labTestRepository = labTestRepository;
             _userContext = userContext;
+            _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
+            _mapper = mapper;
         }
 
         // edit
         // new api for payment
+        // maybe not needed
         public async Task EditLabOrderForm(long id, CreateOrEditLabOrderFormDto request)
         {
-            var @spec = new GetLabOrderFormAndLabTestsSpec(id);
+            var @spec = new GetLabOrderFormAndLabTestsAndPatientInformationSpec(id);
             var labOrderForm = await _labOrderFormRepository.GetBySpecAsync(@spec);
             if (labOrderForm == null)
             {
@@ -36,7 +50,6 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             labOrderForm.CreatedAt = DateTime.UtcNow;
-            labOrderForm.Status = request.Status;
             labOrderForm.Description = request.Description;
             labOrderForm = await _labOrderFormRepository.AddAsync(labOrderForm);
             foreach (var test in labOrderForm.LabTests)
@@ -60,7 +73,7 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task PayLabOrderForm(long id)
         {
-            var @spec = new GetLabOrderFormAndLabTestsSpec(id);
+            var @spec = new GetLabOrderFormAndLabTestsAndPatientInformationSpec(id);
             var labOrderForm = await _labOrderFormRepository.GetBySpecAsync(@spec);
             if (labOrderForm == null)
             {
@@ -80,9 +93,111 @@ namespace ClinicManagementSoftware.Core.Services
             }
         }
 
-        public Task<ClinicInformationResponse> GetLabOrderForm(long id)
+        public async Task<IEnumerable<LabOrderFormDto>> GetAllByRole()
         {
-            throw new NotImplementedException();
+            // validate role
+            var currentContext = await _userContext.GetCurrentContext();
+            if (currentContext.Role == null)
+            {
+                throw new ArgumentException("Current context should not be null");
+            }
+
+            var result = await GetLabOrderFormsByRole(currentContext);
+            return result;
+        }
+
+        private async Task<IEnumerable<LabOrderFormDto>> GetLabOrderFormsByRole(
+            CurrentUserContext currentContext)
+        {
+            var doctorVisitForms = new List<LabOrderForm>();
+            if (currentContext.Role.RoleName.Equals(ConfigurationConstant.ReceptionistRole))
+            {
+                var @spec =
+                    new GetLabOrderFormsForReceptionistSpec(currentContext.ClinicId);
+                doctorVisitForms =
+                    (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
+                        x => x.CreatedAt).ToList();
+            }
+            else if (currentContext.Role.RoleName.Equals(ConfigurationConstant.DoctorRole))
+            {
+                var @spec =
+                    new GetLabOrderFormsForDoctorSpec(currentContext.ClinicId);
+                doctorVisitForms =
+                    (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
+                        x => x.CreatedAt).ToList();
+            }
+            else if (currentContext.Role.RoleName.Equals(ConfigurationConstant.TestSpecialistRole))
+            {
+                var @spec =
+                    new GetLabOrderFormsForTestSpecialistSpec(currentContext.ClinicId);
+                doctorVisitForms =
+                    (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
+                        x => x.CreatedAt).ToList();
+            }
+
+
+            return doctorVisitForms.Select(labOrderForm => new LabOrderFormDto
+            {
+                PatientInformation = _mapper.Map<PatientDto>(labOrderForm.PatientHospitalizedProfile.Patient),
+                Code = labOrderForm.Code,
+                DoctorName = labOrderForm.Doctor.FullName,
+                CreatedAt = labOrderForm.CreatedAt.Format(),
+                Description = labOrderForm.Description,
+                Status = GetLabOrderFormStatus(labOrderForm.Status),
+                //DoctorVisitingFormCode = labOrderForm.PatientDoctorVisitForm.Code,
+                LabTests = labOrderForm.LabTests.Select(x => new LabTestInformation
+                {
+                    Id = x.Id,
+                    Result = x.Result,
+                    Name = x.MedicalService.Name,
+                    Price = x.MedicalService.Price,
+                    Description = x.Description,
+                }),
+            });
+        }
+
+        public async Task<LabOrderFormDto> GetLabOrderFormById(long id)
+        {
+            var @spec = new GetLabOrderFormAndLabTestsAndPatientInformationSpec(id);
+            var labOrderForm = await _labOrderFormRepository.GetBySpecAsync(@spec);
+            if (labOrderForm == null)
+            {
+                throw new ArgumentException($"Cannot find lab order form with id: {id}");
+            }
+
+            return new LabOrderFormDto
+            {
+                PatientInformation = _mapper.Map<PatientDto>(labOrderForm.PatientHospitalizedProfile.Patient),
+                Code = labOrderForm.Code,
+                CreatedAt = labOrderForm.CreatedAt.Format(),
+                Description = labOrderForm.Description,
+                DoctorName = labOrderForm.Doctor.FullName,
+                Status = GetLabOrderFormStatus(labOrderForm.Status),
+                DoctorVisitingFormCode = labOrderForm.PatientDoctorVisitForm.Code,
+                LabTests = labOrderForm.LabTests.Select(x => new LabTestInformation
+                {
+                    Id = x.Id,
+                    Result = x.Result,
+                    Name = x.MedicalService.Name,
+                    Description = x.Description,
+                }),
+                ClinicInformation = new ClinicInformationResponse
+                {
+                    Address = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.Address,
+                    Name = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.Name,
+                    PhoneNumber = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.PhoneNumber
+                }
+            };
+        }
+
+        private static string GetLabOrderFormStatus(byte status)
+        {
+            return status switch
+            {
+                (byte) EnumLabOrderFormStatus.NotPaid => "Chưa thanh toán",
+                (byte) EnumLabOrderFormStatus.Paid => "Đã thanh toán",
+                _ => "Hoàn thành"
+            };
         }
 
         public Task<ClinicInformationResponse> GetAll()
@@ -116,6 +231,18 @@ namespace ClinicManagementSoftware.Core.Services
                 };
                 await _labTestRepository.AddAsync(labTest);
             }
+
+            // doctor visiting form status
+            var doctorVisitingForm =
+                await _patientDoctorVisitingFormRepository.GetByIdAsync(request.PatientDoctorVisitingFormId);
+            if (doctorVisitingForm == null)
+            {
+                throw new ArgumentException(
+                    $"Cannot find doctor visiting form with id: {request.PatientDoctorVisitingFormId}");
+            }
+
+            doctorVisitingForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.HavingTesting;
+            await _patientDoctorVisitingFormRepository.UpdateAsync(doctorVisitingForm);
         }
 
         public async Task DeleteLabOrderForm(long id)

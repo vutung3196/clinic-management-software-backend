@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
 
@@ -19,6 +19,10 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("status")] public byte Status { get; set; }
         [Column("result", TypeName = "json")] public string Result { get; set; }
         [Column("description")] public string Description { get; set; }
+
+        [Column("is_deleted")] public bool IsDeleted { get; set; }
+
+        [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
 
         public ICollection<MedicalImageFile> MedicalImageFiles { get; set; }
     }
