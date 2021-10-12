@@ -234,7 +234,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 DoctorId = x.DoctorId,
                 DoctorName = x.Doctor.FullName,
-                PatientNumber = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(x.Queue).Data.Count,
+                PatientNumber = JsonConvert.DeserializeObject<QueueData>(x.Queue).Data.Count,
             }).OrderBy(x => x.PatientNumber);
         }
 

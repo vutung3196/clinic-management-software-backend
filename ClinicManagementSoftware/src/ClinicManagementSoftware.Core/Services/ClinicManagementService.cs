@@ -16,13 +16,15 @@ namespace ClinicManagementSoftware.Core.Services
     public class ClinicManagementService : IClinicManagementService
     {
         private readonly IRepository<Clinic> _clinicSpecificationRepository;
+        private readonly ILabTestQueueService _labTestQueueService;
         private readonly IUserService _userService;
 
         public ClinicManagementService(IRepository<Clinic> clinicSpecificationRepository,
-            IUserService userService)
+            IUserService userService, ILabTestQueueService labTestQueueService)
         {
             _clinicSpecificationRepository = clinicSpecificationRepository;
             _userService = userService;
+            _labTestQueueService = labTestQueueService;
         }
 
         public async Task UpdateClinicInformation(long id, CreateUpdateClinicRequestDto request)
@@ -89,6 +91,10 @@ namespace ClinicManagementSoftware.Core.Services
             };
 
             await _userService.CreateUserWithClinic(createUserDto, clinic.Id);
+
+            // create new lab test queue
+            await _labTestQueueService.CreateNewLabTestQueue(clinic.Id);
+
             return new ClinicInformationForAdminResponse
             {
                 Name = request.Name,

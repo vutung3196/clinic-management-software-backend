@@ -24,6 +24,7 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<LabOrderForm> _labOrderFormRepository;
         private readonly IRepository<LabTest> _labTestRepository;
         private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
+        private readonly ILabTestQueueService _labTestQueueService;
         private readonly IReceiptService _receiptService;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
@@ -31,7 +32,7 @@ namespace ClinicManagementSoftware.Core.Services
         public LabOrderFormService(IRepository<LabOrderForm> labOrderFormRepository,
             IRepository<LabTest> labTestRepository, IUserContext userContext,
             IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository, IMapper mapper,
-            IReceiptService receiptService)
+            IReceiptService receiptService, ILabTestQueueService labTestQueueService)
         {
             _labOrderFormRepository = labOrderFormRepository;
             _labTestRepository = labTestRepository;
@@ -39,6 +40,7 @@ namespace ClinicManagementSoftware.Core.Services
             _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
             _mapper = mapper;
             _receiptService = receiptService;
+            _labTestQueueService = labTestQueueService;
         }
 
         // edit
@@ -107,6 +109,10 @@ namespace ClinicManagementSoftware.Core.Services
                 await _labTestRepository.UpdateAsync(labTest);
             }
 
+            // update queue
+            var currentContext = await _userContext.GetCurrentContext();
+            var labTestIds = labOrderForm.LabTests.Select(x => x.Id).ToArray();
+            await _labTestQueueService.EnqueueNewLabTests(labTestIds, currentContext.ClinicId);
             return receiptId;
         }
 
@@ -148,12 +154,12 @@ namespace ClinicManagementSoftware.Core.Services
         private async Task<IEnumerable<LabOrderFormDto>> GetLabOrderFormsByRole(
             CurrentUserContext currentContext)
         {
-            var doctorVisitForms = new List<LabOrderForm>();
+            var labOrderForms = new List<LabOrderForm>();
             if (currentContext.Role.RoleName.Equals(ConfigurationConstant.ReceptionistRole))
             {
                 var @spec =
                     new GetLabOrderFormsForReceptionistSpec(currentContext.ClinicId);
-                doctorVisitForms =
+                labOrderForms =
                     (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
                         x => x.CreatedAt).ToList();
             }
@@ -161,7 +167,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 var @spec =
                     new GetLabOrderFormsForDoctorSpec(currentContext.ClinicId);
-                doctorVisitForms =
+                labOrderForms =
                     (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
                         x => x.CreatedAt).ToList();
             }
@@ -169,13 +175,13 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 var @spec =
                     new GetLabOrderFormsForTestSpecialistSpec(currentContext.ClinicId);
-                doctorVisitForms =
+                labOrderForms =
                     (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
                         x => x.CreatedAt).ToList();
             }
 
 
-            return doctorVisitForms.Select(labOrderForm => new LabOrderFormDto
+            return labOrderForms.Select(labOrderForm => new LabOrderFormDto
             {
                 Id = labOrderForm.Id,
                 PatientInformation = _mapper.Map<PatientDto>(labOrderForm.PatientHospitalizedProfile.Patient),
