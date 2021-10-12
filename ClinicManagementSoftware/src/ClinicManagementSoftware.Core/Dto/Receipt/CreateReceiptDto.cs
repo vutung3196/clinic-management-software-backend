@@ -9,6 +9,7 @@ namespace ClinicManagementSoftware.Core.Dto.Receipt
         public string Code { get; set; }
         public long PatientId { get; set; }
         public long? PatientDoctorVisitingFormId { get; set; }
+        public long? LabOrderFormId { get; set; }
         public double Total { get; set; }
         public IEnumerable<ReceiptMedicalServiceDto> MedicalServices { get; set; }
     }

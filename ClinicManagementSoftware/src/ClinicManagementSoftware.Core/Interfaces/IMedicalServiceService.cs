@@ -12,5 +12,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<MedicalServiceDto> CreateMedicalService(MedicalServiceDto request);
         Task<MedicalServiceDto> EditMedicalService(long id, MedicalServiceDto request);
         Task DeleteMedicalService(long id);
+        Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceByGroup();
     }
 }

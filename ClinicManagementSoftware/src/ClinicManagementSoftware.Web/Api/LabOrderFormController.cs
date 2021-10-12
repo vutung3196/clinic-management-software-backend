@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.LabOrderForm;
+using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
+using ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
 using ClinicManagementSoftware.Core.Exceptions.Prescription;
 using ClinicManagementSoftware.Core.Interfaces;
@@ -18,7 +21,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Doctor")]
+    [Authorize]
     public class LabOrderFormController : ControllerBase
     {
         private readonly ILabOrderFormService _labOrderFormService;
@@ -53,10 +56,10 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                var result = await _labOrderFormService.GetLabOrderForm(id);
-                return Ok(new Response<ClinicInformationResponse>(result));
+                var result = await _labOrderFormService.GetLabOrderFormById(id);
+                return Ok(new Response<LabOrderFormDto>(result));
             }
-            catch (PrescriptionNotFoundException exception)
+            catch (ArgumentException exception)
             {
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);
@@ -68,9 +71,25 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpGet("byrole")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var result = await _labOrderFormService.GetAllByRole();
+                return Ok(new Response<IEnumerable<LabOrderFormDto>>(result));
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<PrescriptionController>
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Post([FromBody] CreateOrEditLabOrderFormDto request)
         {
             try
@@ -95,6 +114,34 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpPost("pay/{id}")]
+        [ValidateModel]
+        [Authorize(Roles = "Receptionist")]
+        public async Task<IActionResult> CreatePayment(long id, [FromBody] CreatePaymentForLabOrderFormDto request)
+        {
+            try
+            {
+                var result = await _labOrderFormService.PayLabOrderForm(id, request);
+                return Ok(new Response<long>(result));
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (PatientNotFoundException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
         // PUT api/<PrescriptionController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(long id, [FromBody] CreateOrEditLabOrderFormDto request)
@@ -118,6 +165,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // DELETE api/<PrescriptionController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Delete(long id)
         {
             try

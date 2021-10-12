@@ -37,6 +37,8 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<LabOrderForm> LabOrderForms { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<VisitingDoctorQueue> VisitingDoctorQueues { get; set; }
+        public DbSet<MedicalImageFile> PatientMedicalImageFiles { get; set; }
+        public DbSet<CloudinaryFile> CloudinaryFiles { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -90,6 +92,15 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(prescription => prescription.Doctor)
                 .WithMany(user => user.Prescriptions);
 
+            modelBuilder.Entity<LabOrderForm>()
+                .HasOne(labOrderForm => labOrderForm.PatientHospitalizedProfile)
+                .WithMany(patientHospitalizedProfile => patientHospitalizedProfile.LabOrderForms);
+
+
+            modelBuilder.Entity<LabOrderForm>()
+                .HasOne(labOrderForm => labOrderForm.PatientDoctorVisitForm)
+                .WithMany(doctorVisitForm => doctorVisitForm.LabOrderForms);
+
             modelBuilder.Entity<LabTest>()
                 .HasOne(labTest => labTest.LabOrderForm)
                 .WithMany(labOrderForm => labOrderForm.LabTests);
@@ -113,6 +124,23 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<PatientDoctorVisitForm>()
                 .HasOne(patientDoctorVisitForm => patientDoctorVisitForm.Patient)
                 .WithMany(patient => patient.PatientDoctorVisitForms);
+
+
+            modelBuilder.Entity<MedicalImageFile>()
+                .HasOne(medicalImageFile => medicalImageFile.PatientHospitalizedProfile)
+                .WithMany(hospitalizedProfile => hospitalizedProfile.MedicalImageFiles);
+
+            modelBuilder.Entity<MedicalImageFile>()
+                .HasOne(medicalImageFile => medicalImageFile.LabTest)
+                .WithMany(hospitalizedProfile => hospitalizedProfile.MedicalImageFiles);
+
+            modelBuilder.Entity<MedicalImageFile>()
+                .HasOne(medicalImageFile => medicalImageFile.CloudinaryFile)
+                .WithOne(hospitalizedProfile => hospitalizedProfile.MedicalImageFile);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(prescription => prescription.PatientDoctorVisitForm)
+                .WithMany(patientDoctorVisitForm => patientDoctorVisitForm.Prescriptions);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

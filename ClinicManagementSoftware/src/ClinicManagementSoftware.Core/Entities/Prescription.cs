@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
+using JetBrains.Annotations;
 
 namespace ClinicManagementSoftware.Core.Entities
 {
@@ -14,8 +15,7 @@ namespace ClinicManagementSoftware.Core.Entities
 
         public PatientHospitalizedProfile PatientHospitalizedProfile { get; set; }
 
-        [Column("patient_doctor_visit_form_id")]
-        public long PatientDoctorVisitingFormId { get; set; }
+        [Column("patient_doctor_visit_form_id")] public long PatientDoctorVisitFormId { get; set; }
 
         public PatientDoctorVisitForm PatientDoctorVisitForm { get; set; }
         [Column("doctor_id")] public long DoctorId { get; set; }

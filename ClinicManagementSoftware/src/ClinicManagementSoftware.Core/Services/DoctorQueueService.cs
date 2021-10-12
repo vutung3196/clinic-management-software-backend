@@ -89,10 +89,27 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 newQueue.Enqueue(id);
             }
+
             currentQueue.Data = newQueue;
             currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
+        }
+
+        public async Task CreateNewDoctorQueue(long userId)
+        {
+            var visitingDoctorQueueData = new VisitingDoctorQueueData()
+            {
+                Data = new Queue<long>(),
+            };
+            var doctorQueue = new VisitingDoctorQueue()
+            {
+                DoctorId = userId,
+                CreatedAt = DateTime.UtcNow,
+                Queue = JsonConvert.SerializeObject(visitingDoctorQueueData)
+            };
+
+            await _visitingDoctorQueueRepository.AddAsync(doctorQueue);
         }
     }
 }

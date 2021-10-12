@@ -41,7 +41,9 @@ namespace ClinicManagementSoftware.Core.Helpers
                 .ForMember(dest => dest.CreatedAt, opt
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.UpdatedAt, opt
-                    => opt.MapFrom(src => src.UpdatedAt.Format()));
+                    => opt.MapFrom(src => src.UpdatedAt.Format()))
+                .ForMember(dest => dest.FullName, opt
+                    => opt.MapFrom(src => src.FullName));
 
             CreateMap<Prescription, PrescriptionInformation>()
                 .ForMember(dest => dest.RevisitDate,
@@ -61,6 +63,15 @@ namespace ClinicManagementSoftware.Core.Helpers
                     => opt.MapFrom(src => src.CreatedAt.Format()))
                 .ForMember(dest => dest.MedicalServices, opt
                     => opt.MapFrom(src => JsonConvert.DeserializeObject<ReceiptMedicalServiceDto>(src.Services)));
+
+            CreateMap<Prescription, PrescriptionInformation>()
+                .ForMember(dest => dest.RevisitDate,
+                    opt => opt.MapFrom(src => src.RevisitDate == null ? string.Empty : src.RevisitDate.Format()))
+                .ForMember(dest => dest.CreatedAt, opt
+                    => opt.MapFrom(src => src.CreatedAt.Format()))
+                .ForMember(dest => dest.MedicationInformation,
+                    opt => opt.MapFrom(src => JsonConvert
+                        .DeserializeObject<List<MedicationInformation>>(src.MedicationInformation)));
         }
     }
 }

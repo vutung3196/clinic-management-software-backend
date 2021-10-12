@@ -40,7 +40,7 @@ namespace ClinicManagementSoftware.Core.Services
                     "Visiting doctor medical service is not created");
             }
 
-            return new ReceiptMedicalServiceDto()
+            return new ReceiptMedicalServiceDto
             {
                 BasePrice = medicalService.Price,
                 Name = medicalService.Name,
@@ -51,12 +51,32 @@ namespace ClinicManagementSoftware.Core.Services
         public async Task<IEnumerable<MedicalServiceDto>> GetAllMedicalServices()
         {
             var currentUser = await _userContext.GetCurrentContext();
-            var @spec = new GetAllMedicalServiceGroupByClinicIdSpec(currentUser.ClinicId);
-            var medicalGroups = await _medicalServiceGroupSpecification.ListAsync(@spec);
-            var result = medicalGroups.SelectMany(x => x.MedicalServices).OrderByDescending(x => x.CreatedAt);
+            var @spec = new GetAllMedicalServicesByClinicIdSpec(currentUser.ClinicId);
+            var medicalGroups = await _medicalServiceRepository.ListAsync(@spec);
+            var result = medicalGroups.OrderByDescending(x => x.CreatedAt);
             return result.Select(x =>
                 new MedicalServiceDto(x.Id, x.Name, x.Description, x.Price, x.MedicalServiceGroup.Name,
                     x.MedicalServiceGroupId, x.CreatedAt));
+        }
+
+        public async Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceByGroup()
+        {
+            var currentUser = await _userContext.GetCurrentContext();
+            var @spec = new GetAllMedicalServicesByClinicIdSpec(currentUser.ClinicId);
+            var medicalGroups = await _medicalServiceRepository.ListAsync(@spec);
+            var result = medicalGroups.GroupBy(x => x.MedicalServiceGroup)
+                .Select(x => new MedicalServiceGroupDto()
+                {
+                    GroupName = x.Key.Name,
+                    MedicalServices = x.Select(medicalService => new MedicalServiceForLabTest
+                    {
+                        Description = "",
+                        Name = medicalService.Name,
+                        Id = medicalService.Id,
+                        Quantity = 1
+                    }),
+                });
+            return result;
         }
 
         public async Task<MedicalServiceDto> CreateMedicalService(MedicalServiceDto request)

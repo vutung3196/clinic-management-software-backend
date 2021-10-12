@@ -10,6 +10,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<IEnumerable<PatientDto>> GetAllAsync();
         Task<PatientDto> AddAsync(CreatePatientDto request);
         Task<PatientDto> UpdateAsync(UpdatePatientDto patientRequest);
-        Task DeleteAsync(long? id);
+        Task DeleteAsync(long id);
     }
 }

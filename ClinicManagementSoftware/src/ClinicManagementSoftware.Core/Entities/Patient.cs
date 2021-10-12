@@ -29,8 +29,6 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("address_street")] public string AddressStreet { get; set; }
         [Column("address_district")] public string AddressDistrict { get; set; }
         [Column("address_city")] public string AddressCity { get; set; }
-
-
         public Clinic Clinic { get; set; }
         public ICollection<PatientHospitalizedProfile> PatientHospitalizedProfiles { get; set; }
         public ICollection<Receipt> Receipts { get; set; }

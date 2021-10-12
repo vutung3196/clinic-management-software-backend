@@ -13,6 +13,7 @@ namespace ClinicManagementSoftware.Core.Specifications
                 .Include(x => x.Doctor)
                 .Where(x => x.DoctorId == doctorId)
                 .Where(x => ids.Contains(x.Id))
+                .Where(x => x.IsDeleted == false)
                 .Where(x => x.VisitingStatus != (byte) EnumDoctorVisitingFormStatus.Done);
         }
     }

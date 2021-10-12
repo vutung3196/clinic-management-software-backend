@@ -53,6 +53,8 @@ namespace ClinicManagementSoftware.Web.Api
                     AccessTokenExpiredAt = jwtResult.AccessTokenExpireAt,
                     UserName = request.UserName,
                     ClinicId = userContext.ClinicId,
+                    Id = userContext.UserId,
+                    FullName = userContext.FullName,
                     Role = loginResult.Role.RoleName
                 }));
             }

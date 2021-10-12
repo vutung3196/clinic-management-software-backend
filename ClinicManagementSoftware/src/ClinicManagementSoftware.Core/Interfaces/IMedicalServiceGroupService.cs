@@ -6,9 +6,9 @@ namespace ClinicManagementSoftware.Core.Interfaces
 {
     public interface IMedicalServiceGroupService
     {
-        Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceGroups();
-        Task<MedicalServiceGroupDto> CreateMedicalServiceGroup(MedicalServiceGroupDto request);
-        Task<MedicalServiceGroupDto> EditMedicalServiceGroup(long id, MedicalServiceGroupDto request);
+        Task<IEnumerable<MedicalServiceGroupResponseDto>> GetAllMedicalServiceGroups();
+        Task<MedicalServiceGroupResponseDto> CreateMedicalServiceGroup(MedicalServiceGroupResponseDto request);
+        Task<MedicalServiceGroupResponseDto> EditMedicalServiceGroup(long id, MedicalServiceGroupResponseDto request);
         Task DeleteMedicalServiceGroup(long id);
     }
 }

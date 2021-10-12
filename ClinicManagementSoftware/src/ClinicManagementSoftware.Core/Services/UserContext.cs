@@ -31,7 +31,7 @@ namespace ClinicManagementSoftware.Core.Services
             if (currentUser == null)
                 throw new UserNotFoundException($"Cannot find current user with username is: {userName}");
             var currentUserContext = new CurrentUserContext(currentUser.Id, currentUser.ClinicId,
-                currentUser.Username, currentUser.Role);
+                currentUser.Username, currentUser.FullName, currentUser.Role);
             return currentUserContext;
         }
 
@@ -42,7 +42,7 @@ namespace ClinicManagementSoftware.Core.Services
             if (currentUser == null)
                 throw new UserNotFoundException($"Cannot find current user with username is: {username}");
             var currentUserContext = new CurrentUserContext(currentUser.Id, currentUser.ClinicId,
-                currentUser.Username, currentUser.Role);
+                currentUser.Username, currentUser.FullName, currentUser.Role);
             return currentUserContext;
         }
     }

@@ -69,6 +69,7 @@ namespace ClinicManagementSoftware.Core.Services
                 Code = createReceiptDto.Code,
                 PatientId = createReceiptDto.PatientId,
                 PatientDoctorVisitFormId = createReceiptDto.PatientDoctorVisitingFormId,
+                LabOrderFormId = createReceiptDto.LabOrderFormId,
                 Total = createReceiptDto.Total,
                 Services = JsonConvert.SerializeObject(createReceiptDto.MedicalServices),
             };
