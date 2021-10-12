@@ -114,6 +114,34 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpPost("pay/{id}")]
+        [ValidateModel]
+        [Authorize(Roles = "Receptionist")]
+        public async Task<IActionResult> CreatePayment(long id, [FromBody] CreatePaymentForLabOrderFormDto request)
+        {
+            try
+            {
+                var result = await _labOrderFormService.PayLabOrderForm(id, request);
+                return Ok(new Response<long>(result));
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (PatientNotFoundException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
         // PUT api/<PrescriptionController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(long id, [FromBody] CreateOrEditLabOrderFormDto request)

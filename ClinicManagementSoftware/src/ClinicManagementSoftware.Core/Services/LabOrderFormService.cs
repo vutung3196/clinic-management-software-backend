@@ -8,6 +8,7 @@ using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.LabOrderForm;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile;
+using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
@@ -23,18 +24,21 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<LabOrderForm> _labOrderFormRepository;
         private readonly IRepository<LabTest> _labTestRepository;
         private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
+        private readonly IReceiptService _receiptService;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
 
         public LabOrderFormService(IRepository<LabOrderForm> labOrderFormRepository,
             IRepository<LabTest> labTestRepository, IUserContext userContext,
-            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository, IMapper mapper)
+            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository, IMapper mapper,
+            IReceiptService receiptService)
         {
             _labOrderFormRepository = labOrderFormRepository;
             _labTestRepository = labTestRepository;
             _userContext = userContext;
             _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
             _mapper = mapper;
+            _receiptService = receiptService;
         }
 
         // edit
@@ -69,6 +73,41 @@ namespace ClinicManagementSoftware.Core.Services
                 };
                 await _labTestRepository.AddAsync(labTest);
             }
+        }
+
+        public async Task<long> PayLabOrderForm(long id, CreatePaymentForLabOrderFormDto request)
+        {
+            var @spec = new GetLabOrderFormAndLabTestsAndPatientInformationSpec(id);
+            var labOrderForm = await _labOrderFormRepository.GetBySpecAsync(@spec);
+            if (labOrderForm == null)
+            {
+                throw new ArgumentException($"Cannot find lab order form with id: {id}");
+            }
+
+            var receiptRequest = new CreateReceiptDto
+            {
+                Code = request.PaymentCode,
+                Description = request.PaymentDescription,
+                MedicalServices = request.LabTests.Select(x => new ReceiptMedicalServiceDto
+                {
+                    BasePrice = x.BasePrice,
+                    Name = x.Name,
+                    Quantity = x.Quantity
+                }),
+                Total = request.Total,
+                PatientId = labOrderForm.PatientHospitalizedProfile.PatientId,
+                LabOrderFormId = id
+            };
+
+            var receiptId = await _receiptService.CreateReceipt(receiptRequest);
+            labOrderForm.Status = (byte) EnumLabOrderFormStatus.Paid;
+            foreach (var labTest in labOrderForm.LabTests)
+            {
+                labTest.Status = (byte) EnumLabTestStatus.WaitingForTesting;
+                await _labTestRepository.UpdateAsync(labTest);
+            }
+
+            return receiptId;
         }
 
         public async Task PayLabOrderForm(long id)

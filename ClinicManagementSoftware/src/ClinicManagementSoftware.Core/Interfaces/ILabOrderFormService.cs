@@ -9,11 +9,11 @@ namespace ClinicManagementSoftware.Core.Interfaces
     public interface ILabOrderFormService
     {
         Task EditLabOrderForm(long id, CreateOrEditLabOrderFormDto request);
+        Task<long> PayLabOrderForm(long id, CreatePaymentForLabOrderFormDto request);
         Task<LabOrderFormDto> GetLabOrderFormById(long id);
         Task<ClinicInformationResponse> GetAll();
         Task CreateLabOrderForm(CreateOrEditLabOrderFormDto request);
         Task DeleteLabOrderForm(long id);
-        Task PayLabOrderForm(long id);
         Task<IEnumerable<LabOrderFormDto>> GetAllByRole();
     }
 }
