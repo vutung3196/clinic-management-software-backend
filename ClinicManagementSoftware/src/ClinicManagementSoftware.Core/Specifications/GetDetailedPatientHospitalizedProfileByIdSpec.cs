@@ -15,7 +15,9 @@ namespace ClinicManagementSoftware.Core.Specifications
                 .Include(x => x.LabOrderForms)
                 .ThenInclude(labOrderForm => labOrderForm.LabTests)
                 .ThenInclude(x => x.MedicalService)
-                .Include(labTest => labTest.MedicalImageFiles)
+                .Include(labTest => labTest.LabOrderForms)
+                .ThenInclude(x => x.LabTests)
+                .ThenInclude(x => x.MedicalImageFiles)
                 .ThenInclude(file => file.CloudinaryFile)
                 .Where(profile => profile.Id == id);
         }

@@ -12,20 +12,24 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Cloudinary;
 using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Services;
 using ClinicManagementSoftware.Web.Authentication.Model;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using CloudinaryConfiguration = ClinicManagementSoftware.Core.Cloudinary.CloudinaryConfiguration;
 
 namespace ClinicManagementSoftware.Web
 {
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+        private string CloudinaryConfigName = "cloudinaryConfig";
 
         public Startup(IConfiguration config, IWebHostEnvironment env)
         {
@@ -70,6 +74,12 @@ namespace ClinicManagementSoftware.Web
                 };
             });
 
+            // add cloudinary
+            var cloudinaryConfig = Configuration.GetSection(CloudinaryConfigName).Get<CloudinaryConfiguration>();
+            var account = new Account(cloudinaryConfig.CloudName, cloudinaryConfig.ApiKey, cloudinaryConfig.ApiSecret);
+            var cloudinaryClient = new CloudinaryClient { Instance = new Cloudinary(account) };
+            services.AddSingleton(cloudinaryClient);
+
             var connectionString =
                 Configuration.GetConnectionString(ConfigurationConstant
                     .ClinicManagementSoftwareDatabase); //Configuration.GetConnectionString("DefaultConnection");
@@ -112,8 +122,8 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<ILabTestService, LabTestService>();
             services.AddScoped<ILabTestQueueService, LabTestQueueService>();
             services.AddScoped<IMedicalImageService, MedicalImageService>();
-
-            
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IDiseaseService, DiseaseService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

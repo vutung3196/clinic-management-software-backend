@@ -69,6 +69,10 @@
               "target": "Package",
               "version": "[0.1.109, )"
             },
+            "CloudinaryDotNet": {
+              "target": "Package",
+              "version": "[1.15.2, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[9.0.0, )"

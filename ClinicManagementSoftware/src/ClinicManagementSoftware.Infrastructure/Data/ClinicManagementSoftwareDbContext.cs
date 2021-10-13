@@ -40,6 +40,7 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<MedicalImageFile> PatientMedicalImageFiles { get; set; }
         public DbSet<CloudinaryFile> CloudinaryFiles { get; set; }
         public DbSet<LabTestQueue> LabTestQueues { get; set; }
+        public DbSet<Disease> Diseases { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -126,11 +127,6 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<PatientDoctorVisitForm>()
                 .HasOne(patientDoctorVisitForm => patientDoctorVisitForm.Patient)
                 .WithMany(patient => patient.PatientDoctorVisitForms);
-
-
-            modelBuilder.Entity<MedicalImageFile>()
-                .HasOne(medicalImageFile => medicalImageFile.PatientHospitalizedProfile)
-                .WithMany(hospitalizedProfile => hospitalizedProfile.MedicalImageFiles);
 
             modelBuilder.Entity<MedicalImageFile>()
                 .HasOne(medicalImageFile => medicalImageFile.LabTest)

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using ClinicManagementSoftware.Core.Cloudinary;
 using ClinicManagementSoftware.Core.Dto.Cloudinary;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Interfaces;
+using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
 
 namespace ClinicManagementSoftware.Core.Services
@@ -13,62 +16,28 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<MedicalImageFile> _medicalImageFileRepository;
         private readonly IRepository<CloudinaryFile> _cloudinaryFileRepository;
         private readonly IRepository<LabTest> _labTestRepository;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public MedicalImageService(IRepository<CloudinaryFile> cloudinaryFileRepository,
-            IRepository<MedicalImageFile> medicalImageFileRepository, IRepository<LabTest> labTestRepository)
+            IRepository<MedicalImageFile> medicalImageFileRepository, IRepository<LabTest> labTestRepository,
+            ICloudinaryService cloudinaryService)
         {
             _cloudinaryFileRepository = cloudinaryFileRepository;
             _medicalImageFileRepository = medicalImageFileRepository;
             _labTestRepository = labTestRepository;
+            _cloudinaryService = cloudinaryService;
         }
 
-
-        //public async Task ProcessMedicalImageFile(long patientId,
-        //    IList<MedicalImageFile> medicalImageFiles)
-        //{
-        //    var spec = new GetPatientHospitalizedProfileBasedOnPatientIdSpec(patientId);
-        //    var patientHospitalizedProfile =
-        //        await _patientHospitalizedProfileService.GetPatientHospitalizedProfile(patientId);
-        //    if (patientHospitalizedProfile == null)
-        //    {
-        //        throw new PatientHospitalizedProfileNotFoundException(
-        //            $"Cannot find hospitalized profile with {patientId}");
-        //    }
-
-        //    // save to local dish
-        //    var paths = medicalImageFiles
-        //        .Select(image => SaveFileToLocalDish(image.MedicalImageFileBase64)).ToList();
-
-        //    // send paths and patient prescription id to rabbit mq
-        //    var data = new CloudinaryFileData
-        //    {
-        //        PatientHospitalizedProfileId = patientHospitalizedProfile.Id,
-        //        FilePaths = paths,
-        //        ClinicName = "hapham"
-        //    };
-
-        //    // create event
-        //    var @event = new CreateCloudinaryFileEvent(data);
-        //    // publish event
-        //    _eventBus.Publish(@event);
-        //}
-
-        public async Task<List<CloudinaryFile>> GetMedicalImageFiles(long patientId)
+        public async Task<IEnumerable<CloudinaryFile>> GetMedicalImageFiles(long labTestId)
         {
-            throw new NotImplementedException();
-            //var patientHospitalizedProfile =
-            //    await _patientHospitalizedProfileService.GetPatientHospitalizedProfile(patientId);
-            //if (patientHospitalizedProfile == null)
-            //{
-            //    throw new PatientHospitalizedProfileNotFoundException(
-            //        $"Cannot find hospitalized profile with {patientId}");
-            //}
+            var @spec = new GetDetailedLabTestByIdSpec(labTestId);
+            var labTest = await _labTestRepository.GetBySpecAsync(@spec);
+            if (labTest == null)
+            {
+                throw new ArgumentException($"Cannot find lab test with id: {labTestId}");
+            }
 
-            //return patientHospitalizedProfile.PatientMedicalImageFiles
-            //    .Select(x => x.CloudinaryFile)
-            //    .OrderByDescending(x => x.UpdatedAt)
-            //    .ThenByDescending(x => x.CreatedAt)
-            //    .ToList();
+            return labTest.MedicalImageFiles.Select(x => x.CloudinaryFile);
         }
 
         public async Task<List<CloudinaryFile>> SaveChanges(long labTestId, IList<CloudinaryFieldDto> cloudinaryFields)
@@ -106,7 +75,7 @@ namespace ClinicManagementSoftware.Core.Services
                     FileName = cloudinaryField.OriginalFilename,
                     CreatedAt = DateTime.UtcNow,
                     FilePath = string.Empty,
-                    PatientHospitalizedProfileId = labTest.Id
+                    LabTestId = labTest.Id,
                 };
                 // save to medical image file in database
                 await _medicalImageFileRepository.AddAsync(medicalImageFile);
@@ -132,23 +101,15 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task Delete(long id)
         {
-            throw new NotImplementedException();
-            //var spec = new GetImageAndCloudinaryFileSpec(id);
-            //var currentMedicalImageFile = await _medicalImageFileRepository.GetBySpecAsync(spec);
-            //if (currentMedicalImageFile == null)
-            //{
-            //    throw new PatientMedicalImageFileNotFoundException("Cannot find medical image file with id: {id}");
-            //}
+            var spec = new GetImageAndCloudinaryFileSpec(id);
+            var currentMedicalImageFile = await _medicalImageFileRepository.GetBySpecAsync(spec);
+            if (currentMedicalImageFile == null)
+            {
+                throw new ArgumentException($"Cannot find medical image file with id: {id}");
+            }
 
-            //await _medicalImageFileRepository.DeleteAsync(currentMedicalImageFile);
-            //if (currentMedicalImageFile.CloudinaryFile != null)
-            //{
-            //    var @event = new DeleteCloudinaryFileEvent(new DeleteCloudinaryFileData()
-            //    {
-            //        PublicId = currentMedicalImageFile.CloudinaryFile.PublicId
-            //    });
-            //    _eventBus.Publish(@event);
-            //}
+            await _medicalImageFileRepository.DeleteAsync(currentMedicalImageFile);
+            await _cloudinaryService.DeleteImage(currentMedicalImageFile.CloudinaryFile.PublicId);
         }
     }
 }

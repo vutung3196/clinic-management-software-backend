@@ -13,10 +13,10 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
         public string DiagnosedDescription { get; set; }
         public DateTime RevisitDate { get; set; }
         public string DoctorSuggestion { get; set; }
-        public string PatientPrescriptionCode { get; set; }
         public IList<MedicationInformation> MedicationInformation { get; set; }
         public long PatientHospitalizedProfileId { get; set; }
         public string MedicalInsuranceCode { get; set; }
+        public string Code { get; set; }
         public string PrescriptionCode { get; set; }
         public long PatientDoctorVisitingFormId { get; set; }
     }

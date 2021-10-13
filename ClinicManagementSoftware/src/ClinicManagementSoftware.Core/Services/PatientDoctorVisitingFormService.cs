@@ -219,6 +219,8 @@ namespace ClinicManagementSoftware.Core.Services
             if (request.ChangeStatusFromWaitingForDoctorToVisitingDoctor)
             {
                 patientDoctorVisitForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.VisitingDoctor;
+                await _doctorQueueService.MoveAVisitingFormToTheBeginningOfTheQueue(id,
+                    patientDoctorVisitForm.DoctorId);
             }
 
 
@@ -238,15 +240,16 @@ namespace ClinicManagementSoftware.Core.Services
             }).OrderBy(x => x.PatientNumber);
         }
 
-        public async Task<PatientDoctorVisitingFormDto> MoveATopPatientToTheEndOfADoctorQueue()
+        public async Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheEndOfADoctorQueue(
+            long doctorVisitingFormId)
         {
             var currentContext = await _userContext.GetCurrentContext();
-            var id = await _doctorQueueService.MoveAFirstPatientToTheEndOfTheQueue(currentContext.UserId);
-            var spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(id);
+            await _doctorQueueService.MoveAVisitingFormToTheEndOfTheQueue(doctorVisitingFormId, currentContext.UserId);
+            var spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(doctorVisitingFormId);
             var patientDoctorVisitForm = await _patientDoctorVisitingFormRepository.GetBySpecAsync(spec);
             if (patientDoctorVisitForm == null)
             {
-                throw new ArgumentException($"Visiting form is not found with patientId: {id}");
+                throw new ArgumentException($"Visiting form is not found with patientId: {doctorVisitingFormId}");
             }
 
             patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;

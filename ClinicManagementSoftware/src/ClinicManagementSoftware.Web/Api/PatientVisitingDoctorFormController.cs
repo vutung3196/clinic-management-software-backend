@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
-using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Filters;
@@ -80,11 +79,12 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpPut("movetoend")]
-        public async Task<IActionResult> MoveATopPatientToTheEndOfADoctorQueue()
+        public async Task<IActionResult> MoveAPatientToTheEndOfADoctorQueue(long doctorVisitingFormId)
         {
             try
             {
-                var result = await _patientDoctorVisitingFormService.MoveATopPatientToTheEndOfADoctorQueue();
+                var result =
+                    await _patientDoctorVisitingFormService.MoveAVisitingFormToTheEndOfADoctorQueue(doctorVisitingFormId);
                 var response = new Response<PatientDoctorVisitingFormDto>(result);
                 return Ok(response);
             }

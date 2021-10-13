@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.LabOrderForm;
 using ClinicManagementSoftware.Core.Dto.LabTest;
+using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -71,8 +72,8 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _labTestService.Edit(id, request);
-                return Ok("Update successfully");
+                var result = await _labTestService.Edit(id, request);
+                return Ok(new Response<UpdateLabTestResponse>(result));
             }
             catch (ArgumentException exception)
             {
@@ -85,5 +86,43 @@ namespace ClinicManagementSoftware.Web.Api
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+
+        [HttpPut("movetoend")]
+        public async Task<IActionResult> MoveALabTestToTheEndOfAQueue([FromBody] QueueMoveToElementDto request)
+        {
+            try
+            {
+                await _labTestService.MoveALabTestToTheEndOfAQueue(request.Id);
+                var result = new Response<string>("Move a lab test to the end successfully");
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut("movetobeginning")]
+        public async Task<IActionResult> MoveALabTestToTheBeginningOfAQueue([FromBody] QueueMoveToElementDto request)
+        {
+            try
+            {
+                await _labTestService.MoveALabTestToTheBeginningOfAQueue(request.Id);
+                var result = new Response<string>("Move a lab test to the beginning successfully");
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+    }
+
+    public class QueueMoveToElementDto
+    {
+        public long Id { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using AutoMapper;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Entities;
+using ClinicManagementSoftware.Core.Enum;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
 using ClinicManagementSoftware.Core.Exceptions.Prescription;
 using ClinicManagementSoftware.Core.Interfaces;
@@ -20,17 +21,23 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<Patient> _patientRepository;
         private readonly IRepository<PatientHospitalizedProfile> _patientHospitalizedProfileRepository;
         private readonly IRepository<Prescription> _prescriptionRepository;
+        private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
         private readonly IUserContext _userContext;
+        private readonly IDoctorQueueService _doctorQueueService;
         private readonly IMapper _mapper;
 
         public PrescriptionService(IRepository<Patient> patientPrescriptionRepository,
             IRepository<PatientHospitalizedProfile> patientHospitalizedProfileRepository,
             IMapper mapper,
-            IRepository<Prescription> prescriptionSpecificationRepository, IUserContext userContext)
+            IRepository<Prescription> prescriptionSpecificationRepository, IUserContext userContext,
+            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository,
+            IDoctorQueueService doctorQueueService)
         {
             _patientRepository = patientPrescriptionRepository;
             _prescriptionRepository = prescriptionSpecificationRepository;
             _userContext = userContext;
+            _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
+            _doctorQueueService = doctorQueueService;
             _patientHospitalizedProfileRepository = patientHospitalizedProfileRepository;
             _mapper = mapper;
         }
@@ -44,25 +51,39 @@ namespace ClinicManagementSoftware.Core.Services
             string medicationInformation = null;
             if (request.MedicationInformation != null && request.MedicationInformation.Any())
                 medicationInformation = JsonConvert.SerializeObject(request.MedicationInformation);
-            //var prescriptionCode = ConfigurationConstant.BasePrescriptionName + DateTime.Now.ToString("yyyyMdHHmmss");
 
             var currentUser = await _userContext.GetCurrentContext();
             var currentPrescription = new Prescription
             {
                 PatientHospitalizedProfileId = request.PatientHospitalizedProfileId,
                 VisitReason = request.VisitReason,
+                MedicalInsuranceCode = request.MedicalInsuranceCode,
                 PatientPrescriptionCode = request.PrescriptionCode,
                 CreatedAt = DateTime.UtcNow,
                 DiagnosedDescription = request.DiagnosedDescription,
                 DoctorSuggestion = request.DoctorSuggestion,
                 MedicationInformation = medicationInformation,
-                MedicalInsuranceCode = request.MedicalInsuranceCode,
+                Code = request.Code,
                 PatientDoctorVisitFormId = request.PatientDoctorVisitingFormId,
                 DoctorId = currentUser.UserId,
                 RevisitDate = request.RevisitDate
             };
 
+            // update status of doctor visiting form
             await _prescriptionRepository.AddAsync(currentPrescription);
+            var visitingForm =
+                await _patientDoctorVisitingFormRepository.GetByIdAsync(request.PatientDoctorVisitingFormId);
+            if (visitingForm == null)
+            {
+                throw new ArgumentException(
+                    $"Cannot find doctor visiting form with id : {request.PatientDoctorVisitingFormId}");
+            }
+
+            visitingForm.UpdatedAt = DateTime.UtcNow;
+            visitingForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.Done;
+
+            // update queue
+            await _doctorQueueService.DeleteAVisitingFormInDoctorQueue(visitingForm.Id, currentUser.UserId);
         }
 
         public async Task<PrescriptionInformation> EditPrescription(long prescriptionId,

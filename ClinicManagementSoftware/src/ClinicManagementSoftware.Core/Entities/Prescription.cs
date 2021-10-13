@@ -35,5 +35,6 @@ namespace ClinicManagementSoftware.Core.Entities
 
         [Column("revisit_date")] public DateTime? RevisitDate { get; set; }
         [Column("medical_insurance_code")] public string MedicalInsuranceCode { get; set; }
+        [Column("code")] public string Code { get; set; }
     }
 }

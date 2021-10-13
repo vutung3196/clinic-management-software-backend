@@ -11,5 +11,7 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<Queue<long>> GetCurrentLabTestQueue(long clinicId);
         Task DeleteALabTestInQueue(long labTestId, long clinicId);
         Task CreateNewLabTestQueue(long clinicId);
+        Task MoveALabTestToTheEndOfTheQueue(long labTestId, long clinicId);
+        Task MoveALabTestToTheBeginningOfTheQueue(long labTestId, long clinicId);
     }
 }

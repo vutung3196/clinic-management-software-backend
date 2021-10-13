@@ -75,13 +75,13 @@ namespace ClinicManagementSoftware.Core.Services
         public async Task DeleteALabTestInQueue(long labTestId, long clinicId)
         {
             var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
-            var currentDoctorQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
-            if (currentDoctorQueue == null)
+            var testQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
+            if (testQueue == null)
             {
                 throw new ArgumentException($"Cannot find current queue with {clinicId}");
             }
 
-            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(testQueue.Queue);
             var newQueue = new Queue<long>();
             foreach (var id in currentQueue.Data.Where(id => labTestId != id))
             {
@@ -89,9 +89,9 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             currentQueue.Data = newQueue;
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
-            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
-            await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
+            testQueue.UpdatedAt = DateTime.UtcNow;
+            testQueue.Queue = JsonConvert.SerializeObject(currentQueue);
+            await _labTestQueueRepository.UpdateAsync(testQueue);
         }
 
         public async Task CreateNewLabTestQueue(long clinicId)
@@ -108,6 +108,52 @@ namespace ClinicManagementSoftware.Core.Services
             };
 
             await _labTestQueueRepository.AddAsync(labTestQueue);
+        }
+
+        public async Task MoveALabTestToTheEndOfTheQueue(long labTestId, long clinicId)
+        {
+            var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
+            var currentDoctorQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
+            if (currentDoctorQueue == null)
+            {
+                throw new ArgumentException($"Cannot find current queue with {clinicId}");
+            }
+
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            var newQueue = new Queue<long>();
+            foreach (var element in currentQueue.Data.Where(element => element != labTestId))
+            {
+                newQueue.Enqueue(element);
+            }
+
+            newQueue.Enqueue(labTestId);
+            currentQueue.Data = newQueue;
+            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
+            await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
+        }
+
+        public async Task MoveALabTestToTheBeginningOfTheQueue(long labTestId, long clinicId)
+        {
+            var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
+            var currentDoctorQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
+            if (currentDoctorQueue == null)
+            {
+                throw new ArgumentException($"Cannot find current queue with {clinicId}");
+            }
+
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            var newQueue = new Queue<long>();
+            newQueue.Enqueue(labTestId);
+            foreach (var element in currentQueue.Data.Where(element => element != labTestId))
+            {
+                newQueue.Enqueue(element);
+            }
+
+            currentQueue.Data = newQueue;
+            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
+            await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
         }
     }
 }

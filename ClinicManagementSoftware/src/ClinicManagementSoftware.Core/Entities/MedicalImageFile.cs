@@ -14,9 +14,6 @@ namespace ClinicManagementSoftware.Core.Entities
 
         [Column("file_path")] public string FilePath { get; set; }
 
-        [Column("patient_hospitalized_profile_id")] public long PatientHospitalizedProfileId { get; set; }
-        public PatientHospitalizedProfile PatientHospitalizedProfile { get; set; }
-
         [Column("lab_test_id")] public long LabTestId { get; set; }
         public LabTest LabTest { get; set; }
 

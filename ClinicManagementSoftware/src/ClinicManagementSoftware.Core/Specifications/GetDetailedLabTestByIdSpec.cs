@@ -10,9 +10,12 @@ namespace ClinicManagementSoftware.Core.Specifications
             Query.Where(x => x.Id == id)
                 .Where(x => x.IsDeleted == false)
                 .Include(x => x.MedicalService)
+                .Include(x => x.LabOrderForm.Doctor)
                 .Include(x => x.MedicalImageFiles)
                 .ThenInclude(x => x.CloudinaryFile)
-                .Include(x => x.LabOrderForm);
+                .Include(x => x.LabOrderForm)
+                .Include(x => x.LabOrderForm.PatientHospitalizedProfile.Patient)
+                .ThenInclude(x => x.Clinic);
         }
     }
 }

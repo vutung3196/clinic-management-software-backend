@@ -29,36 +29,35 @@ namespace ClinicManagementSoftware.Web.Api
             _logger = logger;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(long patientId)
-        //{
-        //    try
-        //    {
-        //        var result = await _patientMedicalImageService.GetMedicalImageFiles(patientId);
-        //        var response = result.Select(x => new ImageFileResponse
-        //        {
-        //            Id = x.PatientMedicalImageFile.Id,
-        //            PublicId = x.PublicId,
-        //            FilePath = x.PatientMedicalImageFile.FilePath,
-        //            CreatedAt = x.CreatedAt.Format(),
-        //            Name = x.PatientMedicalImageFile.FileName,
-        //            Url = x.Url,
-        //            SecureUrl = x.SecureUrl,
-        //            Description = x.PatientMedicalImageFile.Description
-        //        }).ToList();
-        //        return Ok(new Response<List<ImageFileResponse>>(response));
-        //    }
-        //    catch (PatientHospitalizedProfileNotFoundException exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return BadRequest(exception.Message);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return StatusCode(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Get(long labTestId)
+        {
+            try
+            {
+                var result = await _patientMedicalImageService.GetMedicalImageFiles(labTestId);
+                var response = result.Select(x => new ImageFileResponse
+                {
+                    Id = x.MedicalImageFile.Id,
+                    PublicId = x.PublicId,
+                    CreatedAt = x.CreatedAt.Format(),
+                    Name = x.MedicalImageFile.FileName,
+                    Url = x.Url,
+                    SecureUrl = x.SecureUrl,
+                    Description = x.MedicalImageFile.Description
+                }).ToList();
+                return Ok(new Response<List<ImageFileResponse>>(response));
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
 
         [HttpPost]
