@@ -59,6 +59,36 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpGet("byvisitingform")]
+        public async Task<IActionResult> GetByVisitingForm(long visitingFormId)
+        {
+            try
+            {
+                var result = await _patientMedicalImageService.GetMedicalImageFilesByVisitingFormId(visitingFormId);
+                var response = result.Select(x => new ImageFileResponse
+                {
+                    Id = x.MedicalImageFile.Id,
+                    PublicId = x.PublicId,
+                    CreatedAt = x.CreatedAt.Format(),
+                    Name = x.MedicalImageFile.FileName,
+                    Url = x.Url,
+                    SecureUrl = x.SecureUrl,
+                    Description = x.MedicalImageFile.Description
+                }).ToList();
+                return Ok(new Response<List<ImageFileResponse>>(response));
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateFileRequest request)

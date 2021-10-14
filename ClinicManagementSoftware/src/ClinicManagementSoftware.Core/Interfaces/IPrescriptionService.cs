@@ -6,7 +6,7 @@ namespace ClinicManagementSoftware.Core.Interfaces
 {
     public interface IPrescriptionService
     {
-        Task CreatePrescription(CreatePrescriptionDto request);
+        Task<long> CreatePrescription(CreatePrescriptionDto request);
         Task<PrescriptionInformation> EditPrescription(long prescriptionId, CreatePrescriptionDto prescriptionRequest);
         Task<ICollection<PrescriptionInformation>> GetPrescriptionsByPatientId(long patientId);
         Task<IEnumerable<PatientPrescriptionResponse>> GetPrescriptionsByClinicId();

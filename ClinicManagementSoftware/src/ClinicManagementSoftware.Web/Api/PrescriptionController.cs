@@ -97,8 +97,8 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _prescriptionService.CreatePrescription(request);
-                return Ok("Create prescription successfully");
+                var result = await _prescriptionService.CreatePrescription(request);
+                return Ok(new Response<long>(result));
             }
             catch (ArgumentException exception)
             {

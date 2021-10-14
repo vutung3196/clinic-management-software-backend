@@ -17,15 +17,17 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<CloudinaryFile> _cloudinaryFileRepository;
         private readonly IRepository<LabTest> _labTestRepository;
         private readonly ICloudinaryService _cloudinaryService;
+        private readonly IRepository<PatientDoctorVisitForm> _visitingFormRepository;
 
         public MedicalImageService(IRepository<CloudinaryFile> cloudinaryFileRepository,
             IRepository<MedicalImageFile> medicalImageFileRepository, IRepository<LabTest> labTestRepository,
-            ICloudinaryService cloudinaryService)
+            ICloudinaryService cloudinaryService, IRepository<PatientDoctorVisitForm> visitingFormRepository)
         {
             _cloudinaryFileRepository = cloudinaryFileRepository;
             _medicalImageFileRepository = medicalImageFileRepository;
             _labTestRepository = labTestRepository;
             _cloudinaryService = cloudinaryService;
+            _visitingFormRepository = visitingFormRepository;
         }
 
         public async Task<IEnumerable<CloudinaryFile>> GetMedicalImageFiles(long labTestId)
@@ -38,6 +40,20 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             return labTest.MedicalImageFiles.Select(x => x.CloudinaryFile);
+        }
+
+        public async Task<IEnumerable<CloudinaryFile>> GetMedicalImageFilesByVisitingFormId(long visitingFormId)
+        {
+            var @spec = new GetMedicalImageFilesByVisitingFormIdSpec(visitingFormId);
+            var visitingForm = await _visitingFormRepository.GetBySpecAsync(@spec);
+            if (visitingForm == null)
+            {
+                throw new ArgumentException($"Cannot find lab test with id: {visitingFormId}");
+            }
+
+            var medicalImageFiles = visitingForm.LabOrderForms.SelectMany(x => x.LabTests)
+                .SelectMany(x => x.MedicalImageFiles);
+            return medicalImageFiles.Select(imageFile => imageFile.CloudinaryFile);
         }
 
         public async Task<List<CloudinaryFile>> SaveChanges(long labTestId, IList<CloudinaryFieldDto> cloudinaryFields)

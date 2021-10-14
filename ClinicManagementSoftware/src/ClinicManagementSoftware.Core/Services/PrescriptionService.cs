@@ -51,7 +51,7 @@ namespace ClinicManagementSoftware.Core.Services
             _mapper = mapper;
         }
 
-        public async Task CreatePrescription(CreatePrescriptionDto request)
+        public async Task<long> CreatePrescription(CreatePrescriptionDto request)
         {
             string medicationInformation = null;
             if (request.MedicationInformation != null && request.MedicationInformation.Any())
@@ -96,6 +96,8 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 await SendPrescriptionEmail(prescription, prescription.PatientInformation);
             }
+
+            return currentPrescription.Id;
         }
 
         private async Task SendPrescriptionEmail(PrescriptionInformation prescription, PatientDto patientInformation)
