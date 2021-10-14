@@ -11,4 +11,12 @@ namespace ClinicManagementSoftware.Core.Specifications
                 .Include(x => x.MedicalServiceGroup);
         }
     }
+
+    public sealed class GetAllMedicationsSpec : Specification<Medication>
+    {
+        public GetAllMedicationsSpec()
+        {
+            Query.Include(x => x.MedicationGroup);
+        }
+    }
 }

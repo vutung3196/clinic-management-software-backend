@@ -29,7 +29,7 @@ namespace ClinicManagementSoftware.Core.Services
         //    //var currentUser = await _userContext.GetCurrentContext();
         //    //var @spec = new GetAllMedicalServicesByClinicIdSpec(currentUser.ClinicId);
         //    //var medicalGroups = await _medicalServiceSpecification.ListAsync(@spec);
-        //    //var result = medicalGroups.SelectMany(x => x.MedicalServices).OrderByDescending(x => x.CreatedAt);
+        //    //var result = medicalGroups.SelectMany(x => x.Medications).OrderByDescending(x => x.CreatedAt);
         //    //return result.Select(x =>
         //    //    new MedicalServiceGroupDto(x.Id, x.Name, x.Description, x.CreatedAt.Format()));
         //}

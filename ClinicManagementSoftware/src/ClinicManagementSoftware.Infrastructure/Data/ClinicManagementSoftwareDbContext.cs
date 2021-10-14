@@ -41,6 +41,7 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<CloudinaryFile> CloudinaryFiles { get; set; }
         public DbSet<LabTestQueue> LabTestQueues { get; set; }
         public DbSet<Disease> Diseases { get; set; }
+        public DbSet<MailTemplate> MailTemplates { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -18,6 +18,7 @@
           "CloudinaryDotNet": "1.15.2",
           "MediatR": "9.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "SendGrid": "9.24.3",
           "System.IdentityModel.Tokens.Jwt": "5.6.0"
         },
         "runtime": {
@@ -231,6 +232,26 @@
           }
         }
       },
+      "SendGrid/9.24.3": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
+          "starkbank-ecdsa": "1.3.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SendGrid.dll": {
+            "assemblyVersion": "9.24.3.0",
+            "fileVersion": "9.24.3.0"
+          }
+        }
+      },
+      "starkbank-ecdsa/1.3.1": {
+        "runtime": {
+          "lib/netstandard2.1/StarkbankEcdsa.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "System.Diagnostics.DiagnosticSource/4.7.1": {},
       "System.IdentityModel.Tokens.Jwt/5.6.0": {
         "dependencies": {
@@ -411,6 +432,20 @@
       "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "path": "newtonsoft.json/12.0.3",
       "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
+    },
+    "SendGrid/9.24.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hWi9dT/2geQ2G4EL1DWOBlhRcKFAKcJw0VvhzJ+uPp4akZJuQNwSbUt+OaHnpJNNFF4fSyX2n9kPi/8f5UxY5Q==",
+      "path": "sendgrid/9.24.3",
+      "hashPath": "sendgrid.9.24.3.nupkg.sha512"
+    },
+    "starkbank-ecdsa/1.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YV20cpN7WgEiaIuIv8ZQPgkDVximP6gHCMCTgy6+IwArDHmuDVQLJ15Qwwmgd5woETnogquD+gu4SXDZW/ffog==",
+      "path": "starkbank-ecdsa/1.3.1",
+      "hashPath": "starkbank-ecdsa.1.3.1.nupkg.sha512"
     },
     "System.Diagnostics.DiagnosticSource/4.7.1": {
       "type": "package",

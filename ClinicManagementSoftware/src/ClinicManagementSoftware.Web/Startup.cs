@@ -22,6 +22,7 @@ using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Extensions.DependencyInjection;
 using CloudinaryConfiguration = ClinicManagementSoftware.Core.Cloudinary.CloudinaryConfiguration;
 
 namespace ClinicManagementSoftware.Web
@@ -29,7 +30,8 @@ namespace ClinicManagementSoftware.Web
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
-        private string CloudinaryConfigName = "cloudinaryConfig";
+        private readonly string _cloudinaryConfigName = "cloudinaryConfig";
+        private readonly string _sendGridConfigName = "sendGridConfig";
 
         public Startup(IConfiguration config, IWebHostEnvironment env)
         {
@@ -75,10 +77,14 @@ namespace ClinicManagementSoftware.Web
             });
 
             // add cloudinary
-            var cloudinaryConfig = Configuration.GetSection(CloudinaryConfigName).Get<CloudinaryConfiguration>();
+            var cloudinaryConfig = Configuration.GetSection(_cloudinaryConfigName).Get<CloudinaryConfiguration>();
             var account = new Account(cloudinaryConfig.CloudName, cloudinaryConfig.ApiKey, cloudinaryConfig.ApiSecret);
-            var cloudinaryClient = new CloudinaryClient { Instance = new Cloudinary(account) };
+            var cloudinaryClient = new CloudinaryClient {Instance = new Cloudinary(account)};
             services.AddSingleton(cloudinaryClient);
+
+            // add sendgrid
+            var sendGridConfig = Configuration.GetSection(_sendGridConfigName).Get<SendGridConfig>();
+            services.AddSendGrid(options => { options.ApiKey = sendGridConfig.ApiKey; });
 
             var connectionString =
                 Configuration.GetConnectionString(ConfigurationConstant
@@ -124,6 +130,7 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<IMedicalImageService, MedicalImageService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IDiseaseService, DiseaseService>();
+            services.AddScoped<ISendGridService, SendGridService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

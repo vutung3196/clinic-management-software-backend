@@ -6,9 +6,6 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
 {
     public class CreatePrescriptionDto
     {
-        [Required]
-        public long PatientId { get; set; }
-        public string VisitReason { get; set; }
         [Required(ErrorMessage = "Cần điền thông tin chẩn đoán")]
         public string DiagnosedDescription { get; set; }
         public DateTime RevisitDate { get; set; }

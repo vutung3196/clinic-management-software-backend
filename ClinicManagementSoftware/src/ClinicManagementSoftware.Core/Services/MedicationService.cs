@@ -1,26 +1,42 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClinicManagementSoftware.Core.Dto.MedicalService;
 using ClinicManagementSoftware.Core.Dto.Medication;
+using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Interfaces;
+using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
 
 namespace ClinicManagementSoftware.Core.Services
 {
     public class MedicationService : IMedicationService
     {
-        private readonly IRepository<Medication> _medicationSpecification;
+        private readonly IRepository<Medication> _medicationRepository;
 
-        public MedicationService(IRepository<Medication> medicationSpecification)
+        public MedicationService(IRepository<Medication> medicationRepository)
         {
-            _medicationSpecification = medicationSpecification;
+            _medicationRepository = medicationRepository;
         }
 
-        public async Task<IEnumerable<MedicationDto>> GetAllMedications()
+        public async Task<IEnumerable<MedicationGroupDto>> GetAllMedications()
         {
-            var medications =  await _medicationSpecification.ListAsync();
-            return medications.Select(x => new MedicationDto(x.Id, x.Name, x.Description, x.Usage));
+            var @spec = new GetAllMedicationsSpec();
+            var medications = await _medicationRepository.ListAsync(@spec);
+            var result = medications.GroupBy(x => x.MedicationGroup)
+                .Select(x => new MedicationGroupDto
+                {
+                    GroupName = x.Key.Name,
+                    Medications = x.Select(medication => new MedicationInformation()
+                    {
+                        Name = medication.Name,
+                        Id = medication.Id,
+                        Quantity = 1,
+                        Usage = medication.Usage
+                    }),
+                });
+            return result;
         }
     }
 }

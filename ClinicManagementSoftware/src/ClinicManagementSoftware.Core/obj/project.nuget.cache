@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "0yE8syPxj2Zckez5m0qI4diIB2jW667t4CKg0MfzSn9otZDr1Te1cooNaqpkhEOWcwsmd/iG+nnFS7A/KSGjgQ==",
+  "dgSpecHash": "r4Cw2AgLJx+TkryLV2AIBkaJhSVWyhgfU7gLSjpdLg6r2HwFdPibPp9osm5nQzzF7PnX65hqiZMJljUmio5I1A==",
   "success": true,
   "projectFilePath": "D:\\VuTung\\Funix\\Certificate 8\\Codes\\backend\\clinic-management-software-backend\\ClinicManagementSoftware\\src\\ClinicManagementSoftware.Core\\ClinicManagementSoftware.Core.csproj",
   "expectedPackageFiles": [
@@ -25,6 +25,8 @@
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.identitymodel.logging\\5.6.0\\microsoft.identitymodel.logging.5.6.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.identitymodel.tokens\\5.6.0\\microsoft.identitymodel.tokens.5.6.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\sendgrid\\9.24.3\\sendgrid.9.24.3.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\starkbank-ecdsa\\1.3.1\\starkbank-ecdsa.1.3.1.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.7.1\\system.diagnostics.diagnosticsource.4.7.1.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.identitymodel.tokens.jwt\\5.6.0\\system.identitymodel.tokens.jwt.5.6.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",

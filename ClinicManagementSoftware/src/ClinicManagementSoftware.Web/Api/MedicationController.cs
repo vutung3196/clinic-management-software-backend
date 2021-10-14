@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClinicManagementSoftware.Core.Dto.MedicalService;
 using ClinicManagementSoftware.Core.Dto.Medication;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
@@ -36,7 +36,7 @@ namespace ClinicManagementSoftware.Web.Api
             try
             {
                 var result = await _medicationService.GetAllMedications();
-                var response = new Response<IEnumerable<MedicationDto>>(result);
+                var response = new Response<IEnumerable<MedicationGroupDto>>(result);
                 return Ok(response);
             }
             catch (Exception exception)
@@ -45,7 +45,5 @@ namespace ClinicManagementSoftware.Web.Api
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
-      
     }
 }

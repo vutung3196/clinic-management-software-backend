@@ -13,4 +13,12 @@ namespace ClinicManagementSoftware.Core.Cloudinary
         [JsonPropertyName("apiSecret")] 
         public string ApiSecret { get; set; }
     }
+
+    public class SendGridConfig
+    {
+
+        [JsonPropertyName("apiKey")]
+        public string ApiKey { get; set; }
+
+    }
 }

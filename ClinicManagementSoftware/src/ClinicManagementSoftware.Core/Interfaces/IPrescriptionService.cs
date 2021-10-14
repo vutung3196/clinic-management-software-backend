@@ -10,7 +10,7 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<PrescriptionInformation> EditPrescription(long prescriptionId, CreatePrescriptionDto prescriptionRequest);
         Task<ICollection<PrescriptionInformation>> GetPrescriptionsByPatientId(long patientId);
         Task<IEnumerable<PatientPrescriptionResponse>> GetPrescriptionsByClinicId();
-        Task<PrescriptionInformation> GetPatientPrescriptionById(long prescriptionId);
+        Task<PrescriptionInformation> GetPrescriptionById(long prescriptionId);
         Task DeleteAsync(long id);
     }
 }

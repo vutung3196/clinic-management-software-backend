@@ -22,6 +22,5 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public int? Age => DateOfBirth != null ? DateTime.Now.Year - DateOfBirth.Value.Year : null;
 
         public string MedicalInsuranceCode { get; set; }
-        //public int? Age => DateOfBirth.HasValue ? DateTime.Now.Year - DateOfBirth : null;
     }
 }

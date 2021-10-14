@@ -38,7 +38,7 @@ namespace ClinicManagementSoftware.Web.Api
             {
                 var result = await _prescriptionService.GetPrescriptionsByPatientId(patientId);
                 var response = new Response<ICollection<PrescriptionInformation>>(result);
-                
+
                 return Ok(response);
             }
             catch (PatientNotFoundException exception)
@@ -75,7 +75,7 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                var result = await _prescriptionService.GetPatientPrescriptionById(id);
+                var result = await _prescriptionService.GetPrescriptionById(id);
                 return Ok(new Response<PrescriptionInformation>(result));
             }
             catch (PrescriptionNotFoundException exception)
@@ -123,7 +123,7 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                var result =  await _prescriptionService.EditPrescription(id, request);
+                var result = await _prescriptionService.EditPrescription(id, request);
                 return Ok(new Response<PrescriptionInformation>(result));
             }
             catch (ArgumentException exception)
