@@ -65,6 +65,23 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var result =
+                    await _patientHospitalizedProfileService.GetAll();
+                var response = new Response<IEnumerable<PatientHospitalizedProfileResponseDto>>(result);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // POST api/<ClinicServiceController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreatePatientHospitalizedProfileDto request)

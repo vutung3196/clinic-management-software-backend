@@ -15,5 +15,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheEndOfADoctorQueue(long doctorVisitingFormId);
         //Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheEndOfADoctorQueue(long doctorVisitingFormId);
         Task DeleteVisitingFormsByPatientId(long patientId);
+        Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheBeginningOfADoctorQueue(long doctorVisitingFormId);
     }
 }

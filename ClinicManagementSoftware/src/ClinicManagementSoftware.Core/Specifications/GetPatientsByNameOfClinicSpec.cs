@@ -3,13 +3,12 @@ using ClinicManagementSoftware.Core.Entities;
 
 namespace ClinicManagementSoftware.Core.Specifications
 {
-    public sealed class GetPatientsOfClinicSpec : Specification<Patient>
+    public sealed class GetPatientsByNameOfClinicSpec : Specification<Patient>
     {
-        public GetPatientsOfClinicSpec(long clinicId)
+        public GetPatientsByNameOfClinicSpec(long clinicId, string searchName)
         {
             Query.Where(patient => patient.ClinicId == clinicId && patient.IsDeleted == 0)
-                .OrderByDescending(x => x.CreatedAt)
-                .Take(50);
+                .Where(x => x.FullName.Contains(searchName));
         }
     }
 }

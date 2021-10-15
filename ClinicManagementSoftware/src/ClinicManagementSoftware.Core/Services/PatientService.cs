@@ -50,15 +50,25 @@ namespace ClinicManagementSoftware.Core.Services
             return patientResult;
         }
 
-        public async Task<IEnumerable<PatientDto>> GetAllAsync()
+        public async Task<IEnumerable<PatientDto>> GetAllAsync(string searchName)
         {
             var currentUserContext = await _userContext.GetCurrentContext();
-            var @spec = new GetPatientsOfClinicSpec(currentUserContext.ClinicId);
-            var patients = await _patientRepository.ListAsync(@spec);
-            var result = patients.Where(x => x.IsDeleted == (byte) EnumIsDeleted.No)
-                .OrderByDescending(x => x.CreatedAt)
-                .Select(x => _mapper.Map<PatientDto>(x));
-            return result;
+            if (string.IsNullOrWhiteSpace(searchName))
+            {
+                var @spec = new GetPatientsOfClinicSpec(currentUserContext.ClinicId);
+                var patients = await _patientRepository.ListAsync(@spec);
+                var result = patients
+                    .OrderByDescending(x => x.CreatedAt)
+                    .Select(x => _mapper.Map<PatientDto>(x));
+                return result;
+            }
+            else
+            {
+                var @spec = new GetPatientsByNameOfClinicSpec(currentUserContext.ClinicId, searchName);
+                var patients = await _patientRepository.ListAsync(@spec);
+                var result = patients.OrderByDescending(x => x.CreatedAt).Select(x => _mapper.Map<PatientDto>(x));
+                return result;
+            }
         }
 
         public async Task<PatientDto> AddAsync(CreatePatientDto request)

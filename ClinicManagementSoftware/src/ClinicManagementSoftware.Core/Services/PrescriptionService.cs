@@ -26,11 +26,11 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<PatientHospitalizedProfile> _patientHospitalizedProfileRepository;
         private readonly IRepository<Prescription> _prescriptionRepository;
         private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
+        private readonly IRepository<MailTemplate> _mailTemplateRepository;
         private readonly IUserContext _userContext;
-        private readonly IDoctorQueueService _doctorQueueService;
         private readonly IMapper _mapper;
         private readonly ISendGridService _sendGridService;
-        private readonly IRepository<MailTemplate> _mailTemplateRepository;
+        private readonly IDoctorQueueService _doctorQueueService;
 
         public PrescriptionService(IRepository<Patient> patientPrescriptionRepository,
             IRepository<PatientHospitalizedProfile> patientHospitalizedProfileRepository,
@@ -96,6 +96,18 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 await SendPrescriptionEmail(prescription, prescription.PatientInformation);
             }
+
+            // update revisit date of hospitalized profile
+            var patientHospitalizedProfile = await _patientHospitalizedProfileRepository
+                .GetByIdAsync(request.PatientHospitalizedProfileId);
+            if (patientHospitalizedProfile == null)
+            {
+                throw new ArgumentException(
+                    $"Cannot find patient hospitalized profile with id: {request.PatientHospitalizedProfileId}");
+            }
+
+            patientHospitalizedProfile.RevisitDate = request.RevisitDate;
+            await _patientHospitalizedProfileRepository.UpdateAsync(patientHospitalizedProfile);
 
             return currentPrescription.Id;
         }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.Files;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
-using ClinicManagementSoftware.Core.Services;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

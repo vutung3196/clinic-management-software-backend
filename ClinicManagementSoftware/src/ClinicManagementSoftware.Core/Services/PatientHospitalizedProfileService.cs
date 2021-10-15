@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.Files;
+using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile;
 using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Entities;
@@ -19,12 +21,15 @@ namespace ClinicManagementSoftware.Core.Services
     {
         private readonly IRepository<PatientHospitalizedProfile> _patientHospitalizedProfileRepository;
         private readonly IMapper _mapper;
+        private readonly IUserContext _userContext;
 
         public PatientHospitalizedProfileService(
-            IRepository<PatientHospitalizedProfile> patientHospitalizedProfileRepository, IMapper mapper)
+            IRepository<PatientHospitalizedProfile> patientHospitalizedProfileRepository, IMapper mapper,
+            IUserContext userContext)
         {
             _patientHospitalizedProfileRepository = patientHospitalizedProfileRepository;
             _mapper = mapper;
+            _userContext = userContext;
         }
 
         public Task<PatientHospitalizedProfileResponseDto> GetPatientProfilesByPatientId(long patientId)
@@ -90,7 +95,10 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find patient hospitalized profile with id: {id}");
             }
 
-            await _patientHospitalizedProfileRepository.DeleteAsync(patientHospitalizedProfile);
+            patientHospitalizedProfile.IsDeleted = true;
+            patientHospitalizedProfile.DeletedAt = DateTime.UtcNow;
+
+            await _patientHospitalizedProfileRepository.UpdateAsync(patientHospitalizedProfile);
         }
 
         public async Task<IEnumerable<PatientHospitalizedProfileResponseDto>> GetPatientHospitalizedProfilesForPatient(
@@ -124,7 +132,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             var labTests = detailedProfile.LabOrderForms.SelectMany(x => x.LabTests);
 
-            var result = new DetailedPatientHospitalizedProfileResponseDto()
+            var result = new DetailedPatientHospitalizedProfileResponseDto
             {
                 Prescriptions = detailedProfile.Prescriptions.Select(x => _mapper.Map<PrescriptionInformation>(x)),
                 LabOrderForms = detailedProfile.LabOrderForms.Select(x => new LabOrderFormInformation
@@ -175,6 +183,33 @@ namespace ClinicManagementSoftware.Core.Services
                 profile.DeletedAt = DateTime.UtcNow;
                 await _patientHospitalizedProfileRepository.UpdateAsync(profile);
             }
+        }
+
+        public async Task<IEnumerable<PatientHospitalizedProfileResponseDto>> GetAll()
+        {
+            var currentContext = await _userContext.GetCurrentContext();
+            var @spec = new GetPatientHospitalizedProfilesByClinicIdSpec(currentContext.ClinicId);
+            var profiles = await _patientHospitalizedProfileRepository.ListAsync(@spec);
+            var result = profiles.Select(x => new PatientHospitalizedProfileResponseDto()
+            {
+                Description = x.Description,
+                Code = x.Code,
+                CreatedAt = x.CreatedAt.Format(),
+                DiseaseName = x.DiseaseName,
+                Id = x.Id,
+
+                PatientInformation = _mapper.Map<PatientDto>(x.Patient),
+                PatientDetailedInformation = x.Patient.FullName,
+                RevisitDateDisplayed = x.RevisitDate.HasValue ? x.RevisitDate.Value.Format() : string.Empty,
+                RevisitDate = x.RevisitDate,
+                ClinicInformation = new ClinicInformationResponse
+                {
+                    Address = x.Patient.Clinic.Address,
+                    Name = x.Patient.Clinic.Name,
+                    PhoneNumber = x.Patient.Clinic.PhoneNumber
+                }
+            });
+            return result;
         }
     }
 }

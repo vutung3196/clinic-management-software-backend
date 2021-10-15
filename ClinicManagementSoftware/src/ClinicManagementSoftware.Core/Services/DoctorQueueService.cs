@@ -107,6 +107,11 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            if (!currentQueue.Data.Contains(visitingFormId))
+            {
+                return;
+            }
+
             var newQueue = new Queue<long>();
             foreach (var id in currentQueue.Data.Where(id => visitingFormId != id))
             {

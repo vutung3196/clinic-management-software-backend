@@ -269,6 +269,23 @@ namespace ClinicManagementSoftware.Core.Services
             }
         }
 
+        public async Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheBeginningOfADoctorQueue(
+            long doctorVisitingFormId)
+        {
+            var currentContext = await _userContext.GetCurrentContext();
+            await _doctorQueueService.MoveAVisitingFormToTheBeginningOfTheQueue(doctorVisitingFormId,
+                currentContext.UserId);
+            var spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(doctorVisitingFormId);
+            var patientDoctorVisitForm = await _patientDoctorVisitingFormRepository.GetBySpecAsync(spec);
+            if (patientDoctorVisitForm == null)
+            {
+                throw new ArgumentException($"Visiting form is not found with patientId: {doctorVisitingFormId}");
+            }
+
+            patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;
+            return ConvertToPatientDoctorVisitingFormDto(patientDoctorVisitForm);
+        }
+
         private async Task<CreateReceiptDto> GetDoctorVisitingFormMedicalServiceReceiptRequest(
             CreateOrUpdatePatientDoctorVisitingFormDto request,
             long patientDoctorVisitingFormId, long clinicId)
