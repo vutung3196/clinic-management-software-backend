@@ -12,7 +12,9 @@ namespace ClinicManagementSoftware.Core.Interfaces
         Task<CreateVisitingFormResponse> CreateVisitingForm(CreateOrUpdatePatientDoctorVisitingFormDto request);
         Task<PatientDoctorVisitingFormDto> EditVisitingForm(long id, CreateOrUpdatePatientDoctorVisitingFormDto request);
         Task<IEnumerable<DoctorAvailabilityDto>> GetCurrentDoctorAvailabilities();
-        Task<PatientDoctorVisitingFormDto> MoveATopPatientToTheEndOfADoctorQueue();
+        Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheEndOfADoctorQueue(long doctorVisitingFormId);
+        //Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheEndOfADoctorQueue(long doctorVisitingFormId);
         Task DeleteVisitingFormsByPatientId(long patientId);
+        Task<PatientDoctorVisitingFormDto> MoveAVisitingFormToTheBeginningOfADoctorQueue(long doctorVisitingFormId);
     }
 }

@@ -7,7 +7,9 @@ namespace ClinicManagementSoftware.Core.Specifications
     {
         public GetPatientsOfClinicSpec(long clinicId)
         {
-            Query.Where(patient => patient.ClinicId == clinicId && patient.IsDeleted == 0);
+            Query.Where(patient => patient.ClinicId == clinicId && patient.IsDeleted == 0)
+                .OrderByDescending(x => x.CreatedAt)
+                .Take(50);
         }
     }
 }

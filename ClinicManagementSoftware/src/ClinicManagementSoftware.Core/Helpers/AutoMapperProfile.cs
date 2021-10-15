@@ -54,6 +54,8 @@ namespace ClinicManagementSoftware.Core.Helpers
                     => opt.MapFrom(src => src.DoctorId))
                 .ForMember(dest => dest.DoctorName, opt
                     => opt.MapFrom(src => src.Doctor.FullName))
+                .ForMember(dest => dest.DoctorVisitingFormCode, opt
+                    => opt.MapFrom(src => src.PatientDoctorVisitForm.Code))
                 .ForMember(dest => dest.MedicationInformation,
                     opt => opt.MapFrom(src => JsonConvert
                         .DeserializeObject<List<MedicationInformation>>(src.MedicationInformation)));

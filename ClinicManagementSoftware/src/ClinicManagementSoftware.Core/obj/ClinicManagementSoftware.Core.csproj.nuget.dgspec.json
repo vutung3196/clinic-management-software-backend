@@ -69,6 +69,10 @@
               "target": "Package",
               "version": "[0.1.109, )"
             },
+            "CloudinaryDotNet": {
+              "target": "Package",
+              "version": "[1.15.2, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -76,6 +80,10 @@
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.24.3, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",

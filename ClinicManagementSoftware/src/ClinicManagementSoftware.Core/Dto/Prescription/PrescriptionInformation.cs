@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ClinicManagementSoftware.Core.Dto.Clinic;
+using ClinicManagementSoftware.Core.Dto.Patient;
 
 namespace ClinicManagementSoftware.Core.Dto.Prescription
 {
@@ -7,6 +9,7 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
         public long Id { get; set; }
         public string DoctorVisitingFormCode { get; set; }
         public long DoctorVisitingFormId { get; set; }
+        public string Code { get; set; }
         public string VisitReason { get; set; }
         public string DiagnosedDescription { get; set; }
         public string RevisitDate { get; set; }
@@ -16,5 +19,7 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
         public string DoctorName { get; set; }
         public long DoctorId { get; set; }
         public IEnumerable<MedicationInformation> MedicationInformation { get; set; }
+        public PatientDto PatientInformation { get; set; }
+        public ClinicInformationResponse ClinicInformation { get; set; }
     }
 }

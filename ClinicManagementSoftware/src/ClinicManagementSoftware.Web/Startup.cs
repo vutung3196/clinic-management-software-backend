@@ -12,20 +12,26 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
+using ClinicManagementSoftware.Core.Cloudinary;
 using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Services;
 using ClinicManagementSoftware.Web.Authentication.Model;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Extensions.DependencyInjection;
+using CloudinaryConfiguration = ClinicManagementSoftware.Core.Cloudinary.CloudinaryConfiguration;
 
 namespace ClinicManagementSoftware.Web
 {
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+        private readonly string _cloudinaryConfigName = "cloudinaryConfig";
+        private readonly string _sendGridConfigName = "sendGridConfig";
 
         public Startup(IConfiguration config, IWebHostEnvironment env)
         {
@@ -70,6 +76,16 @@ namespace ClinicManagementSoftware.Web
                 };
             });
 
+            // add cloudinary
+            var cloudinaryConfig = Configuration.GetSection(_cloudinaryConfigName).Get<CloudinaryConfiguration>();
+            var account = new Account(cloudinaryConfig.CloudName, cloudinaryConfig.ApiKey, cloudinaryConfig.ApiSecret);
+            var cloudinaryClient = new CloudinaryClient {Instance = new Cloudinary(account)};
+            services.AddSingleton(cloudinaryClient);
+
+            // add sendgrid
+            var sendGridConfig = Configuration.GetSection(_sendGridConfigName).Get<SendGridConfig>();
+            services.AddSendGrid(options => { options.ApiKey = sendGridConfig.ApiKey; });
+
             var connectionString =
                 Configuration.GetConnectionString(ConfigurationConstant
                     .ClinicManagementSoftwareDatabase); //Configuration.GetConnectionString("DefaultConnection");
@@ -109,6 +125,12 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<ILabOrderFormService, LabOrderFormService>();
             services.AddScoped<IReceiptService, ReceiptService>();
             services.AddScoped<IDoctorQueueService, DoctorQueueService>();
+            services.AddScoped<ILabTestService, LabTestService>();
+            services.AddScoped<ILabTestQueueService, LabTestQueueService>();
+            services.AddScoped<IMedicalImageService, MedicalImageService>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IDiseaseService, DiseaseService>();
+            services.AddScoped<ISendGridService, SendGridService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

@@ -2,7 +2,7 @@
 
 namespace ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm
 {
-    public class VisitingDoctorQueueData
+    public class QueueData
     {
         public Queue<long> Data;
     }

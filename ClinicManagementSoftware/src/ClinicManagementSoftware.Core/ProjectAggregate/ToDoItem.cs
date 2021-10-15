@@ -19,7 +19,7 @@ namespace ClinicManagementSoftware.Core.ProjectAggregate
         public override string ToString()
         {
             string status = IsDone ? "Done!" : "Not done.";
-            return $"{Id}: Status: {status} - {Title} - {Description}";
+            return $"{Id}: StatusDisplayed: {status} - {Title} - {Description}";
         }
     }
 }

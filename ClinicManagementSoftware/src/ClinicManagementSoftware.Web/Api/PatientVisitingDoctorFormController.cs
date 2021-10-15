@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
-using ClinicManagementSoftware.Core.Dto.Receipt;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Filters;
@@ -80,11 +79,29 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpPut("movetoend")]
-        public async Task<IActionResult> MoveATopPatientToTheEndOfADoctorQueue()
+        public async Task<IActionResult> MoveAPatientToTheEndOfADoctorQueue([FromBody] QueueMoveToElementDto dto)
         {
             try
             {
-                var result = await _patientDoctorVisitingFormService.MoveATopPatientToTheEndOfADoctorQueue();
+                var result =
+                    await _patientDoctorVisitingFormService.MoveAVisitingFormToTheEndOfADoctorQueue(dto.Id);
+                var response = new Response<PatientDoctorVisitingFormDto>(result);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut("movetobeginning")]
+        public async Task<IActionResult> MoveAPatientToTheBeginningOfADoctorQueue([FromBody] QueueMoveToElementDto dto)
+        {
+            try
+            {
+                var result =
+                    await _patientDoctorVisitingFormService.MoveAVisitingFormToTheBeginningOfADoctorQueue(dto.Id);
                 var response = new Response<PatientDoctorVisitingFormDto>(result);
                 return Ok(response);
             }

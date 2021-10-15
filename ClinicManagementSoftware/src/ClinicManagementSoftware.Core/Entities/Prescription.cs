@@ -21,7 +21,6 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("doctor_id")] public long DoctorId { get; set; }
         public User Doctor { get; set; }
 
-        [Column("patient_prescription_code")] public string PatientPrescriptionCode { get; set; }
 
         [Column("diagnosed_description")] public string DiagnosedDescription { get; set; }
 
@@ -30,10 +29,8 @@ namespace ClinicManagementSoftware.Core.Entities
         public string MedicationInformation { get; set; }
 
         [Column("doctor_suggestion")] public string DoctorSuggestion { get; set; }
-
-        [Column("visit_reason")] public string VisitReason { get; set; }
-
         [Column("revisit_date")] public DateTime? RevisitDate { get; set; }
         [Column("medical_insurance_code")] public string MedicalInsuranceCode { get; set; }
+        [Column("code")] public string Code { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find current queue with {doctorId}");
             }
 
-            var currentQueue = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(currentDoctorQueue.Queue);
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
             currentQueue.Data.Enqueue(visitingFormId);
             currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
@@ -45,13 +45,36 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find current queue with {doctorId}");
             }
 
-            var currentQueue = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(currentDoctorQueue.Queue);
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
             var currentVisitingFormId = currentQueue.Data.Dequeue();
             currentQueue.Data.Enqueue(currentVisitingFormId);
             currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
             return currentVisitingFormId;
+        }
+
+        public async Task MoveAVisitingFormToTheEndOfTheQueue(long visitingFormId, long doctorId)
+        {
+            var @spec = new GetDoctorQueueByDoctorIdSpec(doctorId);
+            var currentDoctorQueue = await _visitingDoctorQueueRepository.GetBySpecAsync(@spec);
+            if (currentDoctorQueue == null)
+            {
+                throw new ArgumentException($"Cannot find current queue with {doctorId}");
+            }
+
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            var newQueue = new Queue<long>();
+            foreach (var element in currentQueue.Data.Where(element => element != visitingFormId))
+            {
+                newQueue.Enqueue(element);
+            }
+
+            newQueue.Enqueue(visitingFormId);
+            currentQueue.Data = newQueue;
+            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
+            await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }
 
         public async Task<Queue<long>> GetCurrentDoctorQueue(long doctorId)
@@ -63,7 +86,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find current queue with {doctorId}");
             }
 
-            var currentQueue = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(currentDoctorQueue.Queue);
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
             return currentQueue.Data;
         }
 
@@ -83,7 +106,12 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find current queue with {doctorId}");
             }
 
-            var currentQueue = JsonConvert.DeserializeObject<VisitingDoctorQueueData>(currentDoctorQueue.Queue);
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            if (!currentQueue.Data.Contains(visitingFormId))
+            {
+                return;
+            }
+
             var newQueue = new Queue<long>();
             foreach (var id in currentQueue.Data.Where(id => visitingFormId != id))
             {
@@ -98,7 +126,7 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task CreateNewDoctorQueue(long userId)
         {
-            var visitingDoctorQueueData = new VisitingDoctorQueueData()
+            var visitingDoctorQueueData = new QueueData()
             {
                 Data = new Queue<long>(),
             };
@@ -110,6 +138,29 @@ namespace ClinicManagementSoftware.Core.Services
             };
 
             await _visitingDoctorQueueRepository.AddAsync(doctorQueue);
+        }
+
+        public async Task MoveAVisitingFormToTheBeginningOfTheQueue(long visitingFormId, long doctorId)
+        {
+            var @spec = new GetDoctorQueueByDoctorIdSpec(doctorId);
+            var currentDoctorQueue = await _visitingDoctorQueueRepository.GetBySpecAsync(@spec);
+            if (currentDoctorQueue == null)
+            {
+                throw new ArgumentException($"Cannot find current queue with {doctorId}");
+            }
+
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
+            var newQueue = new Queue<long>();
+            newQueue.Enqueue(visitingFormId);
+            foreach (var element in currentQueue.Data.Where(element => element != visitingFormId))
+            {
+                newQueue.Enqueue(element);
+            }
+
+            currentQueue.Data = newQueue;
+            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
+            await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }
     }
 }

@@ -63,8 +63,8 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var currentUser = await _userContext.GetCurrentContext();
             var @spec = new GetAllMedicalServicesByClinicIdSpec(currentUser.ClinicId);
-            var medicalGroups = await _medicalServiceRepository.ListAsync(@spec);
-            var result = medicalGroups.GroupBy(x => x.MedicalServiceGroup)
+            var medicalServices = await _medicalServiceRepository.ListAsync(@spec);
+            var result = medicalServices.GroupBy(x => x.MedicalServiceGroup)
                 .Select(x => new MedicalServiceGroupDto()
                 {
                     GroupName = x.Key.Name,

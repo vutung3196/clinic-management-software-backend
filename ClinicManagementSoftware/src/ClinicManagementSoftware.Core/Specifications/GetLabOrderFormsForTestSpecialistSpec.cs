@@ -13,7 +13,8 @@ namespace ClinicManagementSoftware.Core.Specifications
                 .Include(x => x.LabTests)
                 .ThenInclude(x => x.MedicalService)
                 .Where(x => x.PatientHospitalizedProfile.Patient.ClinicId == clinicId)
-                .Where(x => x.Status == (byte) EnumLabOrderFormStatus.Paid)
+                .Where(x => x.Status == (byte) EnumLabOrderFormStatus.Paid ||
+                            x.Status == (byte) EnumLabOrderFormStatus.Done)
                 .Where(x => x.IsDeleted == false);
         }
     }

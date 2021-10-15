@@ -223,3 +223,8 @@ D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\C
 D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\AutoMapper.dll
 D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\BCrypt.Net.dll
 D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\CloudinaryDotNet.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\Microsoft.Extensions.WebEncoders.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\SendGrid.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\SendGrid.Extensions.DependencyInjection.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Web\bin\Debug\net5.0\StarkbankEcdsa.dll

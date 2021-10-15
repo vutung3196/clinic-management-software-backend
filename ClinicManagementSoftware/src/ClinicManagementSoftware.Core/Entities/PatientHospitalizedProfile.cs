@@ -26,6 +26,5 @@ namespace ClinicManagementSoftware.Core.Entities
         // 1 to many
         public ICollection<Prescription> Prescriptions { get; set; }
         public ICollection<LabOrderForm> LabOrderForms { get; set; }
-        public ICollection<MedicalImageFile> MedicalImageFiles { get; set; }
     }
 }

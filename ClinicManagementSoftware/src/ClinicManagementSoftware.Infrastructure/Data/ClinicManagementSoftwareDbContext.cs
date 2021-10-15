@@ -39,6 +39,9 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<VisitingDoctorQueue> VisitingDoctorQueues { get; set; }
         public DbSet<MedicalImageFile> PatientMedicalImageFiles { get; set; }
         public DbSet<CloudinaryFile> CloudinaryFiles { get; set; }
+        public DbSet<LabTestQueue> LabTestQueues { get; set; }
+        public DbSet<Disease> Diseases { get; set; }
+        public DbSet<MailTemplate> MailTemplates { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,6 +58,7 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<User>()
                 .HasOne(user => user.Role)
                 .WithMany(role => role.Users);
+
 
             modelBuilder.Entity<RolePermission>()
                 .HasOne(rolePermission => rolePermission.Role)
@@ -125,11 +129,6 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(patientDoctorVisitForm => patientDoctorVisitForm.Patient)
                 .WithMany(patient => patient.PatientDoctorVisitForms);
 
-
-            modelBuilder.Entity<MedicalImageFile>()
-                .HasOne(medicalImageFile => medicalImageFile.PatientHospitalizedProfile)
-                .WithMany(hospitalizedProfile => hospitalizedProfile.MedicalImageFiles);
-
             modelBuilder.Entity<MedicalImageFile>()
                 .HasOne(medicalImageFile => medicalImageFile.LabTest)
                 .WithMany(hospitalizedProfile => hospitalizedProfile.MedicalImageFiles);
@@ -141,6 +140,10 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<Prescription>()
                 .HasOne(prescription => prescription.PatientDoctorVisitForm)
                 .WithMany(patientDoctorVisitForm => patientDoctorVisitForm.Prescriptions);
+
+            modelBuilder.Entity<LabTestQueue>()
+                .HasOne(labTestQueue => labTestQueue.Clinic)
+                .WithMany(clinic => clinic.LabTestQueues);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

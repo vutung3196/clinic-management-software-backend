@@ -30,11 +30,11 @@ namespace ClinicManagementSoftware.Web.Api
 
         //GET: api/<PatientController>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string searchName)
         {
             try
             {
-                var result = await _patientService.GetAllAsync();
+                var result = await _patientService.GetAllAsync(searchName);
                 return Ok(new Response<IEnumerable<PatientDto>>(result));
             }
             catch (Exception exception)

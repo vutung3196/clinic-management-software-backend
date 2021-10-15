@@ -8,9 +8,11 @@ namespace ClinicManagementSoftware.Core.Interfaces
     {
         Task EnqueueNewPatient(long visitingFormId, long doctorId);
         Task<long> MoveAFirstPatientToTheEndOfTheQueue(long doctorId);
+        Task MoveAVisitingFormToTheEndOfTheQueue(long visitingFormId, long doctorId);
         Task<Queue<long>> GetCurrentDoctorQueue(long doctorId);
         Task<IEnumerable<VisitingDoctorQueue>> GetAllDoctorQueues(long clinicId);
         Task DeleteAVisitingFormInDoctorQueue(long visitingFormId, long doctorId);
         Task CreateNewDoctorQueue(long userId);
+        Task MoveAVisitingFormToTheBeginningOfTheQueue(long visitingFormId, long doctorId);
     }
 }

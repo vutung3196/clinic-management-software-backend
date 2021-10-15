@@ -17,7 +17,7 @@ namespace ClinicManagementSoftware.Core.Entities
         public MedicalService MedicalService { get; set; }
 
         [Column("status")] public byte Status { get; set; }
-        [Column("result", TypeName = "json")] public string Result { get; set; }
+        [Column("result")] public string Result { get; set; }
         [Column("description")] public string Description { get; set; }
 
         [Column("is_deleted")] public bool IsDeleted { get; set; }
