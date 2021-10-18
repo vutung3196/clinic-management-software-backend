@@ -14,7 +14,6 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ClinicController : ControllerBase
     {
         private readonly IClinicManagementService _clinicService;
@@ -48,7 +47,6 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
-        [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
         [ValidateModel]
         public async Task<IActionResult> CreateClinic([FromBody] CreateUpdateClinicRequestDto request)

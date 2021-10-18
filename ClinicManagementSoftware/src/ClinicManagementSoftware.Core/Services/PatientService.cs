@@ -7,6 +7,7 @@ using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
+using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -55,7 +56,9 @@ namespace ClinicManagementSoftware.Core.Services
             var currentUserContext = await _userContext.GetCurrentContext();
             if (string.IsNullOrWhiteSpace(searchName))
             {
-                var @spec = new GetPatientsOfClinicSpec(currentUserContext.ClinicId);
+                var startDate = DateTime.Now.ResetTimeToStartOfDay();
+                var endDate = DateTime.Now.ResetTimeToEndOfDay();
+                var @spec = new GetPatientsOfClinicSpec(currentUserContext.ClinicId, startDate, endDate);
                 var patients = await _patientRepository.ListAsync(@spec);
                 var result = patients
                     .OrderByDescending(x => x.CreatedAt)
@@ -97,8 +100,8 @@ namespace ClinicManagementSoftware.Core.Services
                 Gender = Convert.ToByte(genderResult),
                 DateOfBirth = request.DateOfBirth,
                 MedicalInsuranceCode = request.MedicalInsuranceCode,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
                 IsDeleted = 0
             };
 
@@ -132,7 +135,7 @@ namespace ClinicManagementSoftware.Core.Services
             patientModel.FullName = patientRequest.FullName;
             patientModel.PhoneNumber = patientRequest.PhoneNumber;
             patientModel.Gender = Convert.ToByte(genderResult);
-            patientModel.UpdatedAt = DateTime.UtcNow;
+            patientModel.UpdatedAt = DateTime.Now;
             patientModel.AddressDetail = patientRequest.AddressDetail;
             patientModel.AddressCity = patientRequest.AddressCity;
             patientModel.AddressDistrict = patientRequest.AddressDistrict;
@@ -160,7 +163,7 @@ namespace ClinicManagementSoftware.Core.Services
             await _doctorVisitingFormService.DeleteVisitingFormsByPatientId(id);
 
             patient.IsDeleted = 1;
-            patient.DeletedAt = DateTime.UtcNow;
+            patient.DeletedAt = DateTime.Now;
             await _patientRepository.UpdateAsync(patient);
         }
     }

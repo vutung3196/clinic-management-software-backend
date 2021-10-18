@@ -62,13 +62,14 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 PatientHospitalizedProfileId = request.PatientHospitalizedProfileId,
                 MedicalInsuranceCode = request.MedicalInsuranceCode,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 DiagnosedDescription = request.DiagnosedDescription,
                 DoctorSuggestion = request.DoctorSuggestion,
                 MedicationInformation = medicationInformation,
                 Code = request.Code,
                 PatientDoctorVisitFormId = request.PatientDoctorVisitingFormId,
                 DoctorId = currentUser.UserId,
+                DiseaseNote = request.DiseaseNote,
                 RevisitDate = request.RevisitDate
             };
 
@@ -82,7 +83,7 @@ namespace ClinicManagementSoftware.Core.Services
                     $"Cannot find doctor visiting form with id : {request.PatientDoctorVisitingFormId}");
             }
 
-            visitingForm.UpdatedAt = DateTime.UtcNow;
+            visitingForm.UpdatedAt = DateTime.Now;
             visitingForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.Done;
             await _patientDoctorVisitingFormRepository.UpdateAsync(visitingForm);
 
@@ -166,6 +167,8 @@ namespace ClinicManagementSoftware.Core.Services
 
             mailTemplate = mailTemplate.Replace("{prescription.diagnosedDescription}",
                 prescriptionInformation.DiagnosedDescription);
+            mailTemplate = mailTemplate.Replace("{prescription.diseaseNote}",
+                prescriptionInformation.DiseaseNote);
             mailTemplate = mailTemplate.Replace("{prescription.patientInformation.age}",
                 patientInformation.DateOfBirth.Format());
             var gender = patientInformation.Age;
@@ -220,7 +223,7 @@ namespace ClinicManagementSoftware.Core.Services
             if (prescriptionRequest.MedicationInformation != null && prescriptionRequest.MedicationInformation.Any())
                 medicineInformation = JsonConvert.SerializeObject(prescriptionRequest.MedicationInformation);
 
-            currentPrescription.UpdatedAt = DateTime.UtcNow;
+            currentPrescription.UpdatedAt = DateTime.Now;
             currentPrescription.DiagnosedDescription = prescriptionRequest.DiagnosedDescription;
             currentPrescription.DoctorSuggestion = prescriptionRequest.DoctorSuggestion;
             currentPrescription.MedicationInformation = medicineInformation;

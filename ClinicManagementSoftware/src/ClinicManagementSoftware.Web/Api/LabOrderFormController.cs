@@ -94,8 +94,8 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _labOrderFormService.CreateLabOrderForm(request);
-                return Ok("Create prescription successfully");
+                var result = await _labOrderFormService.CreateLabOrderForm(request);
+                return Ok(new Response<long>(result));
             }
             catch (ArgumentException exception)
             {

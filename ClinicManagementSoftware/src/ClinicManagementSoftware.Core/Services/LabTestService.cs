@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using AutoMapper;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.Files;
 using ClinicManagementSoftware.Core.Dto.LabTest;
 using ClinicManagementSoftware.Core.Dto.Patient;
+using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
 using ClinicManagementSoftware.Core.Helpers;
@@ -87,10 +89,16 @@ namespace ClinicManagementSoftware.Core.Services
             throw new System.NotImplementedException();
         }
 
-        public async Task<IEnumerable<LabTestDto>> GetCurrentLabTestsNeedToBePerformed()
+        public async Task<IEnumerable<LabTestDto>> GetCurrentLabTestsNeedToBePerformed(
+            CurrentUserContext currentContext)
         {
-            var currentContext = await _userContext.GetCurrentContext();
-            var currentLabTestIds = await _labTestQueueService.GetCurrentLabTestQueue(currentContext.ClinicId);
+            if (!currentContext.MedicalServiceGroupForTestSpecialistId.HasValue)
+            {
+                throw new AuthenticationException("Test specialist should have medical service group");
+            }
+
+            var currentLabTestIds = await _labTestQueueService.GetCurrentLabTestQueue(currentContext.ClinicId,
+                currentContext.MedicalServiceGroupForTestSpecialistId.Value);
             var ids = currentLabTestIds.ToArray();
             var @spec = new GetDetailedLabTestsInIdsSpec(ids);
             var unOrderLabTests = await _labTestRepository.ListAsync(@spec);
@@ -141,16 +149,20 @@ namespace ClinicManagementSoftware.Core.Services
             var currentContext = await _userContext.GetCurrentContext();
             if (status == (byte) EnumLabTestStatus.WaitingForTesting)
             {
-                return await GetCurrentLabTestsNeedToBePerformed();
+                return await GetCurrentLabTestsNeedToBePerformed(currentContext);
             }
 
-            var @spec = new GetDetailedLabTestsByStatusAndClinicSpec(status, currentContext.ClinicId);
+            if (!currentContext.MedicalServiceGroupForTestSpecialistId.HasValue)
+            {
+                throw new AuthenticationException("Test specialist should have medical service group");
+            }
+
+            var @spec = new GetDetailedLabTestsByStatusAndClinicAndMedicalServiceGroupSpec(status,
+                currentContext.ClinicId, currentContext.MedicalServiceGroupForTestSpecialistId.Value);
             var labTests = await _labTestRepository.ListAsync(@spec);
-            int index = 1;
             var result = labTests.Select(x => new LabTestDto()
             {
                 Description = x.Description,
-                Index = index++,
                 LabOrderFormCode = x.LabOrderForm.Code,
                 CreatedAt = x.CreatedAt.Format(),
                 DoctorName = x.LabOrderForm.Doctor.FullName,
@@ -177,7 +189,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"lab test is not found with patientId: {labTestId}");
             }
 
-            labTest.UpdatedAt = DateTime.UtcNow;
+            labTest.UpdatedAt = DateTime.Now;
             await _labTestRepository.UpdateAsync(labTest);
         }
 
@@ -191,7 +203,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"lab test is not found with patientId: {labTestId}");
             }
 
-            labTest.UpdatedAt = DateTime.UtcNow;
+            labTest.UpdatedAt = DateTime.Now;
             await _labTestRepository.UpdateAsync(labTest);
         }
 
@@ -213,6 +225,11 @@ namespace ClinicManagementSoftware.Core.Services
             var @spec = new GetDetailedLabTestByIdSpec(id);
             var currentLabTest = await _labTestRepository.GetBySpecAsync(@spec);
             var currentContext = await _userContext.GetCurrentContext();
+
+            if (!currentContext.MedicalServiceGroupForTestSpecialistId.HasValue)
+            {
+                throw new AuthenticationException("Test specialist should have medical service group");
+            }
 
             if (currentLabTest == null)
             {
@@ -239,7 +256,8 @@ namespace ClinicManagementSoftware.Core.Services
             if (currentLabTest.Status == (byte) EnumLabTestStatus.WaitingForTesting
                 && request.Status != (byte) EnumLabTestStatus.WaitingForTesting)
             {
-                await _labTestQueueService.DeleteALabTestInQueue(id, currentContext.ClinicId);
+                await _labTestQueueService.DeleteALabTestInQueue(id, currentContext.ClinicId,
+                    currentContext.MedicalServiceGroupForTestSpecialistId.Value);
             }
 
             currentLabTest.Result = request.Result;

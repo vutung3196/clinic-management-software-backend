@@ -118,50 +118,6 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         // PUT api/<PrescriptionController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CreatePrescriptionDto request)
-        {
-            try
-            {
-                var result = await _prescriptionService.EditPrescription(id, request);
-                return Ok(new Response<PrescriptionInformation>(result));
-            }
-            catch (ArgumentException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (PrescriptionNotFoundException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        // DELETE api/<PrescriptionController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id)
-        {
-            try
-            {
-                await _prescriptionService.DeleteAsync(id);
-                return Ok("Delete successfully");
-            }
-            catch (PrescriptionNotFoundException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+ 
     }
 }

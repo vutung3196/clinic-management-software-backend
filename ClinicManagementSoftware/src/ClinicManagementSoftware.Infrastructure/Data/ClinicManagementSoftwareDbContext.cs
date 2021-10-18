@@ -144,6 +144,15 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<LabTestQueue>()
                 .HasOne(labTestQueue => labTestQueue.Clinic)
                 .WithMany(clinic => clinic.LabTestQueues);
+
+            modelBuilder.Entity<MedicalServiceGroup>()
+                .HasOne(medicalServiceGroup => medicalServiceGroup.Clinic)
+                .WithMany(clinic => clinic.MedicalServiceGroups);
+
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.MedicalServiceGroupForTestSpecialist)
+                .WithMany(medicalServiceGroup
+                => medicalServiceGroup.Users);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

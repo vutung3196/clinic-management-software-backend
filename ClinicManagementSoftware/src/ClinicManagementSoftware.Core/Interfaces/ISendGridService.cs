@@ -5,6 +5,6 @@ namespace ClinicManagementSoftware.Core.Interfaces
 {
     public interface ISendGridService
     {
-        public Task<Response> Send(string html, string subject, string type, string to, string name);
+        public Task<Response> Send(string content, string subject, string type, string to, string name);
     }
 }

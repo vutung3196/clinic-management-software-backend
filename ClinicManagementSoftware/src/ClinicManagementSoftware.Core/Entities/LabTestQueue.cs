@@ -12,6 +12,11 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("clinic_id")] public long ClinicId { get; set; }
         public Clinic Clinic { get; set; }
 
+        [Column("medical_service_group_for_test_specialist_id")]
+        public long? MedicalServiceGroupForTestSpecialistId { get; set; }
+
+        public MedicalServiceGroup MedicalServiceGroupForTestSpecialist { get; set; }
+
         [Column("queue")] public string Queue { get; set; }
     }
 }

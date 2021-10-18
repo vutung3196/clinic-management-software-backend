@@ -102,7 +102,7 @@ namespace ClinicManagementSoftware.Core.Services
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
             var user = new User
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Username = input.UserName.Trim(),
                 ClinicId = currentUserContext.ClinicId,
                 Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
@@ -139,7 +139,7 @@ namespace ClinicManagementSoftware.Core.Services
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
             var user = new User
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Username = input.UserName.Trim(),
                 ClinicId = clinicId,
                 Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,

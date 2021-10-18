@@ -9,12 +9,12 @@ namespace ClinicManagementSoftware.Core.Services
     public class MedicalServiceGroupService : IMedicalServiceGroupService
     {
         //private readonly IUserContext _userContext;
-        //private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupSpecification;
+        //private readonly IRepository<MedicalServiceGroupForTestSpecialist> _medicalServiceGroupSpecification;
         //private readonly IRepository<MedicalService> _medicalServiceSpecification;
 
 
         //public MedicalServiceGroupService(IUserContext userContext,
-        //    IRepository<MedicalServiceGroup> medicalServiceGroupSpecification,
+        //    IRepository<MedicalServiceGroupForTestSpecialist> medicalServiceGroupSpecification,
         //    IRepository<MedicalService> medicalServiceSpecification)
         //{
         //    _userContext = userContext;
@@ -46,9 +46,9 @@ namespace ClinicManagementSoftware.Core.Services
 
         //public async Task<MedicalServiceGroupResponseDto> CreateMedicalServiceGroup(MedicalServiceGroupResponseDto request)
         //{
-        //    var medicalServiceGroup = new MedicalServiceGroup
+        //    var medicalServiceGroup = new MedicalServiceGroupForTestSpecialist
         //    {
-        //        CreatedAt = DateTime.UtcNow,
+        //        CreatedAt = DateTime.Now,
         //        Description = request.Description,
         //        Name = request.Name,
         //    };
@@ -66,7 +66,7 @@ namespace ClinicManagementSoftware.Core.Services
         //        throw new ArgumentException($"Cannot find service group with id: {id}");
         //    }
 
-        //    medicalServiceGroup.UpdatedAt = DateTime.UtcNow;
+        //    medicalServiceGroup.UpdatedAt = DateTime.Now;
         //    medicalServiceGroup.Description = request.Description;
         //    medicalServiceGroup.Name = request.Name;
 

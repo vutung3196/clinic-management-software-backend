@@ -31,7 +31,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
             currentQueue.Data.Enqueue(visitingFormId);
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }
@@ -48,7 +48,7 @@ namespace ClinicManagementSoftware.Core.Services
             var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
             var currentVisitingFormId = currentQueue.Data.Dequeue();
             currentQueue.Data.Enqueue(currentVisitingFormId);
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
             return currentVisitingFormId;
@@ -72,7 +72,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             newQueue.Enqueue(visitingFormId);
             currentQueue.Data = newQueue;
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }
@@ -119,7 +119,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             currentQueue.Data = newQueue;
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }
@@ -133,7 +133,7 @@ namespace ClinicManagementSoftware.Core.Services
             var doctorQueue = new VisitingDoctorQueue()
             {
                 DoctorId = userId,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Queue = JsonConvert.SerializeObject(visitingDoctorQueueData)
             };
 
@@ -158,7 +158,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             currentQueue.Data = newQueue;
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _visitingDoctorQueueRepository.UpdateAsync(currentDoctorQueue);
         }

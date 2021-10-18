@@ -1,16 +1,17 @@
-﻿using System.Linq;
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 using ClinicManagementSoftware.Core.Entities;
 
 namespace ClinicManagementSoftware.Core.Specifications
 {
-    public sealed class GetDetailedLabTestsByStatusAndClinicSpec : Specification<LabTest>
+    public sealed class GetDetailedLabTestsByStatusAndClinicAndMedicalServiceGroupSpec : Specification<LabTest>
     {
-        public GetDetailedLabTestsByStatusAndClinicSpec(byte status, long clinicId)
+        public GetDetailedLabTestsByStatusAndClinicAndMedicalServiceGroupSpec(byte status, long clinicId,
+            long medicalServiceGroupForTestSpecialistId)
         {
             Query.Where(x => x.Status == status)
                 .Where(x => x.LabOrderForm.PatientHospitalizedProfile.Patient.ClinicId == clinicId)
                 .Where(x => x.IsDeleted == false)
+                .Where(x => x.MedicalService.MedicalServiceGroupId == medicalServiceGroupForTestSpecialistId)
                 .Include(x => x.MedicalService)
                 .Include(x => x.MedicalImageFiles)
                 .ThenInclude(x => x.CloudinaryFile)

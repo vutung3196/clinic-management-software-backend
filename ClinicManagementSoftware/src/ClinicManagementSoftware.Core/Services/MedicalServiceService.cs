@@ -89,7 +89,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             var medicalService = new MedicalService
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Description = request.Description,
                 MedicalServiceGroupId = request.GroupId,
                 Name = request.Name,
@@ -117,7 +117,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find medication service with id: {id}");
             }
 
-            medicalService.UpdatedAt = DateTime.UtcNow;
+            medicalService.UpdatedAt = DateTime.Now;
             medicalService.Description = request.Description;
             medicalService.MedicalServiceGroupId = request.GroupId;
             medicalService.Name = request.Name;

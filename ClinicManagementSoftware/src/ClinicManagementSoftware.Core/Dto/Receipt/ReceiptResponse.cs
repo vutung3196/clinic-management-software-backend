@@ -10,6 +10,10 @@ namespace ClinicManagementSoftware.Core.Dto.Receipt
         public long Id { get; set; }
         public PatientDto PatientInformation { get; set; }
         public ClinicInformationResponse ClinicInformation { get; set; }
+
+        public string PatientDetailedInformation => PatientInformation.FullName + "-" + PatientInformation.Gender +
+                                                    "-" + PatientInformation.Age + " tuổi";
+
         public string Code { get; set; }
         public double Total { get; set; }
         public string TotalDisplayed => $"{Total:n0}";

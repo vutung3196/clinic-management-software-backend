@@ -10,7 +10,7 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
         public string DoctorVisitingFormCode { get; set; }
         public long DoctorVisitingFormId { get; set; }
         public string Code { get; set; }
-        public string VisitReason { get; set; }
+        public string DiseaseNote { get; set; }
         public string DiagnosedDescription { get; set; }
         public string RevisitDate { get; set; }
         public string DoctorSuggestion { get; set; }
