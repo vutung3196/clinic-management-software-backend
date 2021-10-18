@@ -12,11 +12,12 @@ namespace ClinicManagementSoftware.Core.Dto.User
         public byte Enabled { get; set; }
         public long ClinicId { get; set; }
         public string Role { get; set; }
+        public long? MedicalServiceGroupForTestSpecialistId { get; set; }
 
         public string RoleDescription => Role switch
         {
             "Admin" => "Admin",
-            "Accountant" => "Kế toán",
+            "Receptionist" => "Lễ tân",
             "Doctor" => "Bác sĩ",
             "TestSpecialist" => "Nhân viên xét nghiệm",
             _ => ""

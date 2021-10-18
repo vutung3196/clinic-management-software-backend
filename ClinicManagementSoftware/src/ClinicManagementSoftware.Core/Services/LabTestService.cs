@@ -68,7 +68,10 @@ namespace ClinicManagementSoftware.Core.Services
                 Id = labTest.Id,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.Address,
+                    AddressCity = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressCity,
+                    AddressDistrict = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressDistrict,
+                    AddressStreet = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressStreet,
+                    AddressDetail = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressDetail,
                     Name = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.Name,
                     PhoneNumber = labTest.LabOrderForm.PatientHospitalizedProfile.Patient.Clinic.PhoneNumber
                 },

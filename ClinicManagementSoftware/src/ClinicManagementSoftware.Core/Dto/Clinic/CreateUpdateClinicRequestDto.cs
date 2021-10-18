@@ -21,5 +21,10 @@ namespace ClinicManagementSoftware.Core.Dto.Clinic
 
         public string Description { get; set; }
         public bool Enabled { get; set; }
+        public bool FirstTimeRegistration { get; set; }
+        public string AddressStreet { get; set; }
+        public string AddressDistrict { get; set; }
+        public string AddressCity { get; set; }
+        public string AddressDetail { get; set; }
     }
 }

@@ -145,7 +145,7 @@ namespace ClinicManagementSoftware.Core.Services
             mailTemplate = mailTemplate.Replace("{prescription.clinicInformation.name}",
                 prescriptionInformation.ClinicInformation.Name);
             mailTemplate = mailTemplate.Replace("{prescription.clinicInformation.address}",
-                prescriptionInformation.ClinicInformation.Address);
+                prescriptionInformation.ClinicInformation.AddressDetailInformation);
             mailTemplate = mailTemplate.Replace("{prescription.clinicInformation.phoneNumber}",
                 prescriptionInformation.ClinicInformation.PhoneNumber);
 
@@ -273,7 +273,10 @@ namespace ClinicManagementSoftware.Core.Services
             result.PatientInformation = _mapper.Map<PatientDto>(prescription.PatientHospitalizedProfile.Patient);
             result.ClinicInformation = new ClinicInformationResponse()
             {
-                Address = prescription.PatientHospitalizedProfile.Patient.Clinic.Address,
+                AddressCity = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressCity,
+                AddressDistrict = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressDistrict,
+                AddressStreet = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressStreet,
+                AddressDetail = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressDetail,
                 Name = prescription.PatientHospitalizedProfile.Patient.Clinic.Name,
                 PhoneNumber = prescription.PatientHospitalizedProfile.Patient.Clinic.PhoneNumber
             };

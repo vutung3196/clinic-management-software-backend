@@ -53,7 +53,10 @@ namespace ClinicManagementSoftware.Core.Services
                     : null,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = receipt.Patient.Clinic.Address,
+                    AddressCity = receipt.Patient.Clinic.AddressCity,
+                    AddressDistrict = receipt.Patient.Clinic.AddressDistrict,
+                    AddressStreet = receipt.Patient.Clinic.AddressStreet,
+                    AddressDetail = receipt.Patient.Clinic.AddressDetail,
                     Name = receipt.Patient.Clinic.Name,
                     PhoneNumber = receipt.Patient.Clinic.PhoneNumber
                 }
@@ -160,7 +163,10 @@ namespace ClinicManagementSoftware.Core.Services
                 ContainingPatientPhoneNumber = request.ContainingPatientPhoneNumber,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = clinic?.Address,
+                    AddressCity = clinic?.AddressCity,
+                    AddressDistrict = clinic?.AddressDistrict,
+                    AddressStreet = clinic?.AddressStreet,
+                    AddressDetail = clinic?.AddressDetail,
                     Name = clinic?.Name,
                     PhoneNumber = clinic?.PhoneNumber
                 },

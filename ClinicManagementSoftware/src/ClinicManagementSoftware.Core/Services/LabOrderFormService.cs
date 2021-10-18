@@ -249,7 +249,10 @@ namespace ClinicManagementSoftware.Core.Services
                 }),
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.Address,
+                    AddressCity = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressCity,
+                    AddressDistrict = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressDistrict,
+                    AddressStreet = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressStreet,
+                    AddressDetail = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressDetail,
                     Name = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.Name,
                     PhoneNumber = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.PhoneNumber
                 }

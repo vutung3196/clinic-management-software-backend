@@ -215,7 +215,10 @@ namespace ClinicManagementSoftware.Core.Services
                 RevisitDate = x.RevisitDate,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = x.Patient.Clinic.Address,
+                    AddressCity = x.Patient.Clinic.AddressCity,
+                    AddressDistrict = x.Patient.Clinic.AddressDistrict,
+                    AddressStreet = x.Patient.Clinic.AddressStreet,
+                    AddressDetail = x.Patient.Clinic.AddressDetail,
                     Name = x.Patient.Clinic.Name,
                     PhoneNumber = x.Patient.Clinic.PhoneNumber
                 }

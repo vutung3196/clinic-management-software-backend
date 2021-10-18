@@ -137,7 +137,10 @@ namespace ClinicManagementSoftware.Core.Services
                 Id = patientDoctorVisitForm.Id,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = patientDoctorVisitForm.Patient.Clinic.Address,
+                    AddressCity = patientDoctorVisitForm.Patient.Clinic.AddressCity,
+                    AddressDistrict = patientDoctorVisitForm.Patient.Clinic.AddressDistrict,
+                    AddressStreet = patientDoctorVisitForm.Patient.Clinic.AddressStreet,
+                    AddressDetail = patientDoctorVisitForm.Patient.Clinic.AddressDetail,
                     Name = patientDoctorVisitForm.Patient.Clinic.Name,
                     PhoneNumber = patientDoctorVisitForm.Patient.Clinic.PhoneNumber
                 },
