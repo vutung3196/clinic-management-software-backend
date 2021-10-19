@@ -113,6 +113,16 @@ namespace ClinicManagementSoftware.Core.Services
             return currentPrescription.Id;
         }
 
+        public async Task SendEmail(long prescriptionId)
+        {
+            var prescription = await GetPrescriptionById(prescriptionId);
+
+            if (!string.IsNullOrEmpty(prescription.PatientInformation.EmailAddress))
+            {
+                await SendPrescriptionEmail(prescription, prescription.PatientInformation);
+            }
+        }
+
         private async Task SendPrescriptionEmail(PrescriptionInformation prescription, PatientDto patientInformation)
         {
             var getPrescriptionMailTemplateSpec =
@@ -174,7 +184,7 @@ namespace ClinicManagementSoftware.Core.Services
             var gender = patientInformation.Age;
             mailTemplate = mailTemplate.Replace("{prescription.doctorSuggestion}",
                 prescriptionInformation.DoctorSuggestion);
-            mailTemplate = mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDate);
+            mailTemplate = mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDateDisplayed);
             var arrayTime = prescriptionInformation.CreatedAt.Split("/");
             if (arrayTime.Length == 3)
             {
@@ -238,13 +248,13 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var currentPatient = await _patientRepository.GetByIdAsync(patientId);
             if (currentPatient == null)
-                throw new PatientNotFoundException($"Patient not found with patientId {patientId}");
+                throw new PatientNotFoundException($"PatientInformation not found with patientId {patientId}");
 
             var currentPatientPrescriptions = await GetPrescriptionsFromPatientId(patientId);
             return currentPatientPrescriptions.Select(x => _mapper.Map<PrescriptionInformation>(x)).ToList();
         }
 
-        public async Task<IEnumerable<PatientPrescriptionResponse>> GetPrescriptionsByClinicId()
+        public async Task<IEnumerable<PatientPrescriptionResponse>> GetAllPrescriptions()
         {
             var currentUser = await _userContext.GetCurrentContext();
             var spec = new GetPrescriptionsByClinicIdSpec(currentUser.ClinicId);
@@ -255,9 +265,11 @@ namespace ClinicManagementSoftware.Core.Services
                 .ThenByDescending(x => x.CreatedAt);
             var result = prescriptions.Select(x => new PatientPrescriptionResponse
             {
-                Patient = _mapper.Map<PatientDto>(x.PatientHospitalizedProfile.Patient),
-                Prescription = _mapper.Map<PrescriptionInformation>(x)
+                PatientInformation = _mapper.Map<PatientDto>(x.PatientHospitalizedProfile.Patient),
+                Prescription = _mapper.Map<PrescriptionInformation>(x),
+                DoctorName = x.Doctor.FullName,
             }).ToList();
+
             return result;
         }
 

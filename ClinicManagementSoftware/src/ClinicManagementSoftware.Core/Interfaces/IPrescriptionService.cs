@@ -8,7 +8,8 @@ namespace ClinicManagementSoftware.Core.Interfaces
     {
         Task<long> CreatePrescription(CreatePrescriptionDto request);
         Task<ICollection<PrescriptionInformation>> GetPrescriptionsByPatientId(long patientId);
-        Task<IEnumerable<PatientPrescriptionResponse>> GetPrescriptionsByClinicId();
+        Task<IEnumerable<PatientPrescriptionResponse>> GetAllPrescriptions();
         Task<PrescriptionInformation> GetPrescriptionById(long prescriptionId);
+        Task SendEmail(long prescriptionId);
     }
 }

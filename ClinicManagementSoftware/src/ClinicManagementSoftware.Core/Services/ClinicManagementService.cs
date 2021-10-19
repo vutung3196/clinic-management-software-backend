@@ -50,8 +50,7 @@ namespace ClinicManagementSoftware.Core.Services
                     clinic.EmailAddress, "Clinic management software");
             }
 
-            //clinic.Address = request.Address;
-            //clinic.EmailAddress = request.EmailAddress;
+            clinic.EmailAddress = request.EmailAddress;
             clinic.PhoneNumber = request.PhoneNumber;
             clinic.Name = request.Name;
             clinic.AddressDetail = request.AddressDetail;

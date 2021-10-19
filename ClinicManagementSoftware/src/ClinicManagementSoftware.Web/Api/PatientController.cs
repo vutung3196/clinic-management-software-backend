@@ -162,7 +162,7 @@ namespace ClinicManagementSoftware.Web.Api
             try
             {
                 await _patientService.DeleteAsync(id);
-                return Ok($"Patient with id {id} has been deleted successfully");
+                return Ok($"PatientInformation with id {id} has been deleted successfully");
             }
             catch (ArgumentNullException exception)
             {

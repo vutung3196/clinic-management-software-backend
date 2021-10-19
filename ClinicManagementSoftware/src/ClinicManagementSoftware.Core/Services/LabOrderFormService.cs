@@ -318,16 +318,10 @@ namespace ClinicManagementSoftware.Core.Services
         public async Task DeleteLabOrderForm(long id)
         {
             var labOrderForm = await _labOrderFormRepository.GetByIdAsync(id);
-            if (labOrderForm == null)
-                throw new ArgumentException(
-                    $"Cannot find lab order form with id: {id}");
-            await _labOrderFormRepository.DeleteAsync(labOrderForm);
+            if (labOrderForm == null) throw new ArgumentException($"Cannot find lab order form with id: {id}");
+            labOrderForm.IsDeleted = true;
+            labOrderForm.DeletedAt = DateTime.Now;
+            await _labOrderFormRepository.UpdateAsync(labOrderForm);
         }
-    }
-
-    public class A
-    {
-        public long MedicalServiceGroupId { get; set; }
-        public long[] LabTestId { get; set; }
     }
 }

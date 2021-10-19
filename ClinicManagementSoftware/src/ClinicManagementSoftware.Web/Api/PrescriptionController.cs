@@ -54,11 +54,11 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByClinicId()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var result = await _prescriptionService.GetPrescriptionsByClinicId();
+                var result = await _prescriptionService.GetAllPrescriptions();
                 var response = new Response<IEnumerable<PatientPrescriptionResponse>>(result);
 
                 return Ok(response);
@@ -117,7 +117,30 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpPost("sendemail")]
+        public async Task<IActionResult> SendEmail([FromBody] SendPrescriptionEmailRequest request)
+        {
+            try
+            {
+                await _prescriptionService.SendEmail(request.Id);
+                return Ok("Send prescription email successfully");
+            }
+            catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (PatientNotFoundException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         // PUT api/<PrescriptionController>/5
- 
     }
 }
