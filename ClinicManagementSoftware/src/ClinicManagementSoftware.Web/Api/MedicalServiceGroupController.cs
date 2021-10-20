@@ -15,7 +15,7 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Receptionist")]
+    [Authorize(Roles = "Admin")]
     public class MedicalServiceGroupController : ControllerBase
     {
         private readonly IMedicalServiceGroupService _medicalGroupService;

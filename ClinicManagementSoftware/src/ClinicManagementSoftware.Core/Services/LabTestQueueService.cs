@@ -36,9 +36,31 @@ namespace ClinicManagementSoftware.Core.Services
                 currentQueue.Data.Enqueue(labTestId);
             }
 
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
+        }
+
+        public async Task EnqueueNewLabTestForMedicalServiceGroup(long[] labTestIds, long medicalServiceGroupId,
+            long clinicId)
+        {
+            var @spec = new GetLabTestQueueByClinicIdAndMedicalServiceGroupIdSpec(clinicId, medicalServiceGroupId);
+            var currentLabTestQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
+            if (currentLabTestQueue == null)
+            {
+                throw new ArgumentException(
+                    $"Cannot find current queue with clinic id: {clinicId} and medical service groupId: {medicalServiceGroupId}");
+            }
+
+            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentLabTestQueue.Queue);
+            foreach (var labTestId in labTestIds)
+            {
+                currentQueue.Data.Enqueue(labTestId);
+            }
+
+            currentLabTestQueue.UpdatedAt = DateTime.Now;
+            currentLabTestQueue.Queue = JsonConvert.SerializeObject(currentQueue);
+            await _labTestQueueRepository.UpdateAsync(currentLabTestQueue);
         }
 
         public async Task<long> MoveAFirstPatientToTheEndOfTheQueue(long clinicId)
@@ -53,15 +75,15 @@ namespace ClinicManagementSoftware.Core.Services
             var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
             var currentVisitingFormId = currentQueue.Data.Dequeue();
             currentQueue.Data.Enqueue(currentVisitingFormId);
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
             return currentVisitingFormId;
         }
 
-        public async Task<Queue<long>> GetCurrentLabTestQueue(long clinicId)
+        public async Task<Queue<long>> GetCurrentLabTestQueue(long clinicId, long medicalServiceGroupId)
         {
-            var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
+            var @spec = new GetLabTestQueueByClinicIdAndMedicalServiceGroupIdSpec(clinicId, medicalServiceGroupId);
             var currentDoctorQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
             if (currentDoctorQueue == null)
             {
@@ -72,9 +94,9 @@ namespace ClinicManagementSoftware.Core.Services
             return currentQueue.Data;
         }
 
-        public async Task DeleteALabTestInQueue(long labTestId, long clinicId)
+        public async Task DeleteALabTestInQueue(long labTestId, long clinicId, long medicalServiceGroupId)
         {
-            var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
+            var @spec = new GetLabTestQueueByClinicIdAndMedicalServiceGroupIdSpec(clinicId, medicalServiceGroupId);
             var testQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
             if (testQueue == null)
             {
@@ -89,7 +111,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             currentQueue.Data = newQueue;
-            testQueue.UpdatedAt = DateTime.UtcNow;
+            testQueue.UpdatedAt = DateTime.Now;
             testQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _labTestQueueRepository.UpdateAsync(testQueue);
         }
@@ -103,7 +125,7 @@ namespace ClinicManagementSoftware.Core.Services
             var labTestQueue = new LabTestQueue
             {
                 ClinicId = clinicId,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Queue = JsonConvert.SerializeObject(visitingDoctorQueueData)
             };
 
@@ -128,7 +150,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             newQueue.Enqueue(labTestId);
             currentQueue.Data = newQueue;
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
         }
@@ -151,7 +173,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             currentQueue.Data = newQueue;
-            currentDoctorQueue.UpdatedAt = DateTime.UtcNow;
+            currentDoctorQueue.UpdatedAt = DateTime.Now;
             currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
         }

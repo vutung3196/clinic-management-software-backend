@@ -55,7 +55,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find lab order form with id: {id}");
             }
 
-            labOrderForm.CreatedAt = DateTime.UtcNow;
+            labOrderForm.CreatedAt = DateTime.Now;
             labOrderForm.Description = request.Description;
             labOrderForm = await _labOrderFormRepository.AddAsync(labOrderForm);
             foreach (var test in labOrderForm.LabTests)
@@ -67,7 +67,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 var labTest = new LabTest
                 {
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     Description = test.Description,
                     LabOrderFormId = labOrderForm.Id,
                     MedicalServiceId = test.MedicalServiceId,
@@ -109,10 +109,31 @@ namespace ClinicManagementSoftware.Core.Services
                 await _labTestRepository.UpdateAsync(labTest);
             }
 
-            // update queue
+            var medicalServiceGroupIdToLabTestIds = new Dictionary<long, List<long>>();
+            foreach (var labTest in labOrderForm.LabTests)
+            {
+                var medicalServiceGroupId = labTest.MedicalService.MedicalServiceGroupId;
+                if (!medicalServiceGroupIdToLabTestIds.ContainsKey(medicalServiceGroupId))
+                {
+                    medicalServiceGroupIdToLabTestIds[medicalServiceGroupId] = new List<long>
+                        {labTest.Id};
+                }
+                else
+                {
+                    medicalServiceGroupIdToLabTestIds[medicalServiceGroupId]
+                        .Add(labTest.Id);
+                }
+            }
+
+            // update queue for each lab medical service group
             var currentContext = await _userContext.GetCurrentContext();
-            var labTestIds = labOrderForm.LabTests.Select(x => x.Id).ToArray();
-            await _labTestQueueService.EnqueueNewLabTests(labTestIds, currentContext.ClinicId);
+            foreach (var medicalServiceGroupId in medicalServiceGroupIdToLabTestIds.Keys)
+            {
+                var labTestIds = medicalServiceGroupIdToLabTestIds[medicalServiceGroupId].ToArray();
+                await _labTestQueueService.EnqueueNewLabTestForMedicalServiceGroup(labTestIds,
+                    medicalServiceGroupId, currentContext.ClinicId);
+            }
+
             return receiptId;
         }
 
@@ -228,7 +249,10 @@ namespace ClinicManagementSoftware.Core.Services
                 }),
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.Address,
+                    AddressCity = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressCity,
+                    AddressDistrict = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressDistrict,
+                    AddressStreet = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressStreet,
+                    AddressDetail = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.AddressDetail,
                     Name = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.Name,
                     PhoneNumber = labOrderForm.PatientHospitalizedProfile.Patient.Clinic.PhoneNumber
                 }
@@ -250,12 +274,12 @@ namespace ClinicManagementSoftware.Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task CreateLabOrderForm(CreateOrEditLabOrderFormDto request)
+        public async Task<long> CreateLabOrderForm(CreateOrEditLabOrderFormDto request)
         {
             var currentUser = await _userContext.GetCurrentContext();
             var labOrderForm = new LabOrderForm
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 DoctorId = currentUser.UserId,
                 Code = request.Code,
                 Status = (byte) EnumLabOrderFormStatus.NotPaid,
@@ -268,7 +292,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 var labTest = new LabTest
                 {
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     Description = test.Description,
                     LabOrderFormId = labOrderForm.Id,
                     MedicalServiceId = test.MedicalServiceId,
@@ -288,15 +312,16 @@ namespace ClinicManagementSoftware.Core.Services
 
             doctorVisitingForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.HavingTesting;
             await _patientDoctorVisitingFormRepository.UpdateAsync(doctorVisitingForm);
+            return labOrderForm.Id;
         }
 
         public async Task DeleteLabOrderForm(long id)
         {
             var labOrderForm = await _labOrderFormRepository.GetByIdAsync(id);
-            if (labOrderForm == null)
-                throw new ArgumentException(
-                    $"Cannot find lab order form with id: {id}");
-            await _labOrderFormRepository.DeleteAsync(labOrderForm);
+            if (labOrderForm == null) throw new ArgumentException($"Cannot find lab order form with id: {id}");
+            labOrderForm.IsDeleted = true;
+            labOrderForm.DeletedAt = DateTime.Now;
+            await _labOrderFormRepository.UpdateAsync(labOrderForm);
         }
     }
 }

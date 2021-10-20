@@ -7,6 +7,7 @@
         public string Code { get; set; }
         public string Description { get; set; }
         public string DoctorVisitingFormCode { get; set; }
+        public string Status { get; set; }
         public long DoctorVisitingFormId { get; set; }
     }
 }

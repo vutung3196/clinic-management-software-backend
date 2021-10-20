@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.LabOrderForm;
-using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
-using ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile;
+using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
-using ClinicManagementSoftware.Core.Exceptions.Prescription;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Filters;
@@ -35,7 +32,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         //[HttpGet]
-        //public async Task<IActionResult> GetByClinicId()
+        //public async Task<IActionResult> GetAll()
         //{
         //    try
         //    {
@@ -94,8 +91,8 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                await _labOrderFormService.CreateLabOrderForm(request);
-                return Ok("Create prescription successfully");
+                var result = await _labOrderFormService.CreateLabOrderForm(request);
+                return Ok(new Response<long>(result));
             }
             catch (ArgumentException exception)
             {

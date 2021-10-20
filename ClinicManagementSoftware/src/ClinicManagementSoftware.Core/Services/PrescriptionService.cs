@@ -62,13 +62,14 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 PatientHospitalizedProfileId = request.PatientHospitalizedProfileId,
                 MedicalInsuranceCode = request.MedicalInsuranceCode,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 DiagnosedDescription = request.DiagnosedDescription,
                 DoctorSuggestion = request.DoctorSuggestion,
                 MedicationInformation = medicationInformation,
                 Code = request.Code,
                 PatientDoctorVisitFormId = request.PatientDoctorVisitingFormId,
                 DoctorId = currentUser.UserId,
+                DiseaseNote = request.DiseaseNote,
                 RevisitDate = request.RevisitDate
             };
 
@@ -82,7 +83,7 @@ namespace ClinicManagementSoftware.Core.Services
                     $"Cannot find doctor visiting form with id : {request.PatientDoctorVisitingFormId}");
             }
 
-            visitingForm.UpdatedAt = DateTime.UtcNow;
+            visitingForm.UpdatedAt = DateTime.Now;
             visitingForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.Done;
             await _patientDoctorVisitingFormRepository.UpdateAsync(visitingForm);
 
@@ -110,6 +111,16 @@ namespace ClinicManagementSoftware.Core.Services
             await _patientHospitalizedProfileRepository.UpdateAsync(patientHospitalizedProfile);
 
             return currentPrescription.Id;
+        }
+
+        public async Task SendEmail(long prescriptionId)
+        {
+            var prescription = await GetPrescriptionById(prescriptionId);
+
+            if (!string.IsNullOrEmpty(prescription.PatientInformation.EmailAddress))
+            {
+                await SendPrescriptionEmail(prescription, prescription.PatientInformation);
+            }
         }
 
         private async Task SendPrescriptionEmail(PrescriptionInformation prescription, PatientDto patientInformation)
@@ -144,7 +155,7 @@ namespace ClinicManagementSoftware.Core.Services
             mailTemplate = mailTemplate.Replace("{prescription.clinicInformation.name}",
                 prescriptionInformation.ClinicInformation.Name);
             mailTemplate = mailTemplate.Replace("{prescription.clinicInformation.address}",
-                prescriptionInformation.ClinicInformation.Address);
+                prescriptionInformation.ClinicInformation.AddressDetailInformation);
             mailTemplate = mailTemplate.Replace("{prescription.clinicInformation.phoneNumber}",
                 prescriptionInformation.ClinicInformation.PhoneNumber);
 
@@ -166,12 +177,14 @@ namespace ClinicManagementSoftware.Core.Services
 
             mailTemplate = mailTemplate.Replace("{prescription.diagnosedDescription}",
                 prescriptionInformation.DiagnosedDescription);
+            mailTemplate = mailTemplate.Replace("{prescription.diseaseNote}",
+                prescriptionInformation.DiseaseNote);
             mailTemplate = mailTemplate.Replace("{prescription.patientInformation.age}",
                 patientInformation.DateOfBirth.Format());
             var gender = patientInformation.Age;
             mailTemplate = mailTemplate.Replace("{prescription.doctorSuggestion}",
                 prescriptionInformation.DoctorSuggestion);
-            mailTemplate = mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDate);
+            mailTemplate = mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDateDisplayed);
             var arrayTime = prescriptionInformation.CreatedAt.Split("/");
             if (arrayTime.Length == 3)
             {
@@ -220,7 +233,7 @@ namespace ClinicManagementSoftware.Core.Services
             if (prescriptionRequest.MedicationInformation != null && prescriptionRequest.MedicationInformation.Any())
                 medicineInformation = JsonConvert.SerializeObject(prescriptionRequest.MedicationInformation);
 
-            currentPrescription.UpdatedAt = DateTime.UtcNow;
+            currentPrescription.UpdatedAt = DateTime.Now;
             currentPrescription.DiagnosedDescription = prescriptionRequest.DiagnosedDescription;
             currentPrescription.DoctorSuggestion = prescriptionRequest.DoctorSuggestion;
             currentPrescription.MedicationInformation = medicineInformation;
@@ -235,13 +248,13 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var currentPatient = await _patientRepository.GetByIdAsync(patientId);
             if (currentPatient == null)
-                throw new PatientNotFoundException($"Patient not found with patientId {patientId}");
+                throw new PatientNotFoundException($"PatientInformation not found with patientId {patientId}");
 
             var currentPatientPrescriptions = await GetPrescriptionsFromPatientId(patientId);
             return currentPatientPrescriptions.Select(x => _mapper.Map<PrescriptionInformation>(x)).ToList();
         }
 
-        public async Task<IEnumerable<PatientPrescriptionResponse>> GetPrescriptionsByClinicId()
+        public async Task<IEnumerable<PatientPrescriptionResponse>> GetAllPrescriptions()
         {
             var currentUser = await _userContext.GetCurrentContext();
             var spec = new GetPrescriptionsByClinicIdSpec(currentUser.ClinicId);
@@ -252,9 +265,11 @@ namespace ClinicManagementSoftware.Core.Services
                 .ThenByDescending(x => x.CreatedAt);
             var result = prescriptions.Select(x => new PatientPrescriptionResponse
             {
-                Patient = _mapper.Map<PatientDto>(x.PatientHospitalizedProfile.Patient),
-                Prescription = _mapper.Map<PrescriptionInformation>(x)
+                PatientInformation = _mapper.Map<PatientDto>(x.PatientHospitalizedProfile.Patient),
+                Prescription = _mapper.Map<PrescriptionInformation>(x),
+                DoctorName = x.Doctor.FullName,
             }).ToList();
+
             return result;
         }
 
@@ -270,7 +285,10 @@ namespace ClinicManagementSoftware.Core.Services
             result.PatientInformation = _mapper.Map<PatientDto>(prescription.PatientHospitalizedProfile.Patient);
             result.ClinicInformation = new ClinicInformationResponse()
             {
-                Address = prescription.PatientHospitalizedProfile.Patient.Clinic.Address,
+                AddressCity = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressCity,
+                AddressDistrict = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressDistrict,
+                AddressStreet = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressStreet,
+                AddressDetail = prescription.PatientHospitalizedProfile.Patient.Clinic.AddressDetail,
                 Name = prescription.PatientHospitalizedProfile.Patient.Clinic.Name,
                 PhoneNumber = prescription.PatientHospitalizedProfile.Patient.Clinic.PhoneNumber
             };

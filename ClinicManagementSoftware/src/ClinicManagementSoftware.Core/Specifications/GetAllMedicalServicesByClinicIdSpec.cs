@@ -7,16 +7,9 @@ namespace ClinicManagementSoftware.Core.Specifications
     {
         public GetAllMedicalServicesByClinicIdSpec(long clinicId)
         {
-            Query.Where(x => x.ClinicId == clinicId)
-                .Include(x => x.MedicalServiceGroup);
-        }
-    }
-
-    public sealed class GetAllMedicationsSpec : Specification<Medication>
-    {
-        public GetAllMedicationsSpec()
-        {
-            Query.Include(x => x.MedicationGroup);
+            Query.Where(medicalService => medicalService.ClinicId == clinicId)
+                .Include(medicalService => medicalService.MedicalServiceGroup)
+                .Where(medicalService => medicalService.IsDeleted == false);
         }
     }
 }

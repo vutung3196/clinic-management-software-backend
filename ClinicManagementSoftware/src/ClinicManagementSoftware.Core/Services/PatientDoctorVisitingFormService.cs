@@ -118,7 +118,7 @@ namespace ClinicManagementSoftware.Core.Services
             // update queue
             await _doctorQueueService.DeleteAVisitingFormInDoctorQueue(id, patientDoctorVisitForm.DoctorId);
             patientDoctorVisitForm.IsDeleted = true;
-            patientDoctorVisitForm.DeletedAt = DateTime.UtcNow;
+            patientDoctorVisitForm.DeletedAt = DateTime.Now;
             await _patientDoctorVisitingFormRepository.UpdateAsync(patientDoctorVisitForm);
         }
 
@@ -137,7 +137,10 @@ namespace ClinicManagementSoftware.Core.Services
                 Id = patientDoctorVisitForm.Id,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = patientDoctorVisitForm.Patient.Clinic.Address,
+                    AddressCity = patientDoctorVisitForm.Patient.Clinic.AddressCity,
+                    AddressDistrict = patientDoctorVisitForm.Patient.Clinic.AddressDistrict,
+                    AddressStreet = patientDoctorVisitForm.Patient.Clinic.AddressStreet,
+                    AddressDetail = patientDoctorVisitForm.Patient.Clinic.AddressDetail,
                     Name = patientDoctorVisitForm.Patient.Clinic.Name,
                     PhoneNumber = patientDoctorVisitForm.Patient.Clinic.PhoneNumber
                 },
@@ -170,8 +173,8 @@ namespace ClinicManagementSoftware.Core.Services
             var visitingForm = new PatientDoctorVisitForm
             {
                 Code = request.VisitingFormCode,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
                 Description = request.Description,
                 PatientId = request.PatientId,
                 DoctorId = request.DoctorId,
@@ -199,7 +202,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Visiting form is not found with patientId: {id}");
             }
 
-            patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;
+            patientDoctorVisitForm.UpdatedAt = DateTime.Now;
             patientDoctorVisitForm.Description = request.Description;
 
             // delete old queue if assigning new doctor
@@ -252,7 +255,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Visiting form is not found with patientId: {doctorVisitingFormId}");
             }
 
-            patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;
+            patientDoctorVisitForm.UpdatedAt = DateTime.Now;
             return ConvertToPatientDoctorVisitingFormDto(patientDoctorVisitForm);
         }
 
@@ -263,7 +266,7 @@ namespace ClinicManagementSoftware.Core.Services
             foreach (var visitingForm in visitingForms)
             {
                 visitingForm.IsDeleted = true;
-                visitingForm.DeletedAt = DateTime.UtcNow;
+                visitingForm.DeletedAt = DateTime.Now;
                 await _doctorQueueService.DeleteAVisitingFormInDoctorQueue(visitingForm.Id, visitingForm.DoctorId);
                 await _patientDoctorVisitingFormRepository.UpdateAsync(visitingForm);
             }
@@ -282,7 +285,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Visiting form is not found with patientId: {doctorVisitingFormId}");
             }
 
-            patientDoctorVisitForm.UpdatedAt = DateTime.UtcNow;
+            patientDoctorVisitForm.UpdatedAt = DateTime.Now;
             return ConvertToPatientDoctorVisitingFormDto(patientDoctorVisitForm);
         }
 

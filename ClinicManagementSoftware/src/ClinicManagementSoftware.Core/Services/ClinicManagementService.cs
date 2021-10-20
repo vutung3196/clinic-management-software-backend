@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
@@ -10,6 +11,7 @@ using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
+using SendGrid;
 
 namespace ClinicManagementSoftware.Core.Services
 {
@@ -18,13 +20,15 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<Clinic> _clinicSpecificationRepository;
         private readonly ILabTestQueueService _labTestQueueService;
         private readonly IUserService _userService;
+        private readonly ISendGridService _sendGridService;
 
         public ClinicManagementService(IRepository<Clinic> clinicSpecificationRepository,
-            IUserService userService, ILabTestQueueService labTestQueueService)
+            IUserService userService, ILabTestQueueService labTestQueueService, ISendGridService sendGridService)
         {
             _clinicSpecificationRepository = clinicSpecificationRepository;
             _userService = userService;
             _labTestQueueService = labTestQueueService;
+            _sendGridService = sendGridService;
         }
 
         public async Task UpdateClinicInformation(long id, CreateUpdateClinicRequestDto request)
@@ -35,10 +39,24 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find clinic with id {id}");
             }
 
-            clinic.Address = request.Address;
-            //clinic.EmailAddress = request.EmailAddress;
+            if (clinic.FirstTimeRegistration.HasValue && clinic.FirstTimeRegistration.Value && request.Enabled)
+            {
+                // sending email back to the customer
+                clinic.FirstTimeRegistration = false;
+                var content =
+                    "Tài khoản của bạn đã được phê duyệt, vui lòng đăng nhập tại localhost:3000";
+
+                await _sendGridService.Send(content, "Phê duyệt tài khoản", MimeType.Text,
+                    clinic.EmailAddress, "Clinic management software");
+            }
+
+            clinic.EmailAddress = request.EmailAddress;
             clinic.PhoneNumber = request.PhoneNumber;
             clinic.Name = request.Name;
+            clinic.AddressDetail = request.AddressDetail;
+            clinic.AddressCity = request.AddressCity;
+            clinic.AddressDistrict = request.AddressDistrict;
+            clinic.AddressStreet = request.AddressStreet;
             clinic.IsEnabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
             await _clinicSpecificationRepository.UpdateAsync(clinic);
         }
@@ -53,10 +71,14 @@ namespace ClinicManagementSoftware.Core.Services
 
             return new ClinicInformationResponse
             {
-                Address = clinic.Address,
                 PhoneNumber = clinic.PhoneNumber,
+                EmailAddress = clinic.EmailAddress,
                 Id = clinic.Id,
-                Name = clinic.Name
+                Name = clinic.Name,
+                AddressCity = clinic.AddressCity,
+                AddressDistrict = clinic.AddressDistrict,
+                AddressStreet = clinic.AddressStreet,
+                AddressDetail = clinic.AddressDetail,
             };
         }
 
@@ -64,10 +86,15 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var clinic = new Clinic
             {
-                Address = request.Address,
+                AddressDetail = request.AddressDetail,
+                AddressCity = request.AddressCity,
+                AddressDistrict = request.AddressDistrict,
+                AddressStreet = request.AddressStreet,
                 PhoneNumber = request.PhoneNumber,
+                EmailAddress = request.EmailAddress,
                 Name = request.Name,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                FirstTimeRegistration = request.FirstTimeRegistration,
                 IsEnabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
             };
 
@@ -95,16 +122,28 @@ namespace ClinicManagementSoftware.Core.Services
             // create new lab test queue
             await _labTestQueueService.CreateNewLabTestQueue(clinic.Id);
 
+            // send email to system administrator to approve new clinic
+            if (request.FirstTimeRegistration)
+            {
+                var content =
+                    $"Phòng khám với tên {request.Name} vừa đăng ký, bạn vui lòng phê duyệt tài khoản tại trang quản lý";
+                await _sendGridService.Send(content, "Phê duyệt tài khoản", MimeType.Text,
+                    ConfigurationConstant.SystemAdminEmail, "Clinic management software");
+            }
+
             return new ClinicInformationForAdminResponse
             {
                 Name = request.Name,
-                Address = clinic.Address,
                 PhoneNumber = clinic.PhoneNumber,
                 Id = clinic.Id,
                 Password = "",
                 Username = request.UserName,
                 CreatedAt = clinic.CreatedAt.Format(),
                 Enabled = clinic.IsEnabled == (byte) EnumEnabled.Active,
+                AddressDetail = clinic.AddressDetail,
+                AddressCity = clinic.AddressCity,
+                AddressDistrict = clinic.AddressDistrict,
+                AddressStreet = clinic.AddressStreet,
             };
         }
 
@@ -116,7 +155,6 @@ namespace ClinicManagementSoftware.Core.Services
 
             return clinics.Select(clinic => new ClinicInformationForAdminResponse
             {
-                Address = clinic.Address,
                 PhoneNumber = clinic.PhoneNumber,
                 Id = clinic.Id,
                 Name = clinic.Name,
@@ -125,6 +163,11 @@ namespace ClinicManagementSoftware.Core.Services
                     ?.Username ?? string.Empty,
                 CreatedAt = clinic.CreatedAt.Format(),
                 Enabled = clinic.IsEnabled == (byte) EnumEnabled.Active,
+                EmailAddress = clinic.EmailAddress,
+                AddressDetail = clinic.AddressDetail,
+                AddressCity = clinic.AddressCity,
+                AddressDistrict = clinic.AddressDistrict,
+                AddressStreet = clinic.AddressStreet,
             });
         }
     }

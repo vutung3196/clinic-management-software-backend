@@ -81,6 +81,7 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task<MedicalServiceDto> CreateMedicalService(MedicalServiceDto request)
         {
+            var currentUser = await _userContext.GetCurrentContext();
             var medicalServiceGroup = await _medicalServiceGroupSpecification.GetByIdAsync(request.GroupId);
             if (medicalServiceGroup == null)
             {
@@ -89,11 +90,13 @@ namespace ClinicManagementSoftware.Core.Services
 
             var medicalService = new MedicalService
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Description = request.Description,
                 MedicalServiceGroupId = request.GroupId,
                 Name = request.Name,
                 Price = request.Price,
+                ClinicId = currentUser.ClinicId,
+                IsDeleted = false
             };
 
             medicalService = await _medicalServiceRepository.AddAsync(medicalService);
@@ -117,7 +120,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find medication service with id: {id}");
             }
 
-            medicalService.UpdatedAt = DateTime.UtcNow;
+            medicalService.UpdatedAt = DateTime.Now;
             medicalService.Description = request.Description;
             medicalService.MedicalServiceGroupId = request.GroupId;
             medicalService.Name = request.Name;
@@ -138,7 +141,9 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find medication service with id: {id}");
             }
 
-            await _medicalServiceRepository.DeleteAsync(medicalService);
+            medicalService.IsDeleted = true;
+
+            await _medicalServiceRepository.UpdateAsync(medicalService);
         }
     }
 }

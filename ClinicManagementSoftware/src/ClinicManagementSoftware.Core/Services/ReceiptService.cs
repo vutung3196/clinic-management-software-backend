@@ -18,14 +18,17 @@ namespace ClinicManagementSoftware.Core.Services
     public class ReceiptService : IReceiptService
     {
         private readonly IRepository<Receipt> _receiptRepository;
+        private readonly IRepository<Clinic> _clinicRepository;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
 
-        public ReceiptService(IRepository<Receipt> receiptRepository, IMapper mapper, IUserContext userContext)
+        public ReceiptService(IRepository<Receipt> receiptRepository, IMapper mapper, IUserContext userContext,
+            IRepository<Clinic> clinicRepository)
         {
             _receiptRepository = receiptRepository;
             _mapper = mapper;
             _userContext = userContext;
+            _clinicRepository = clinicRepository;
         }
 
         public async Task<ReceiptResponse> GetReceiptById(long id)
@@ -50,7 +53,10 @@ namespace ClinicManagementSoftware.Core.Services
                     : null,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = receipt.Patient.Clinic.Address,
+                    AddressCity = receipt.Patient.Clinic.AddressCity,
+                    AddressDistrict = receipt.Patient.Clinic.AddressDistrict,
+                    AddressStreet = receipt.Patient.Clinic.AddressStreet,
+                    AddressDetail = receipt.Patient.Clinic.AddressDetail,
                     Name = receipt.Patient.Clinic.Name,
                     PhoneNumber = receipt.Patient.Clinic.PhoneNumber
                 }
@@ -64,7 +70,7 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var receipt = new Receipt
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Description = createReceiptDto.Description,
                 Code = createReceiptDto.Code,
                 PatientId = createReceiptDto.PatientId,
@@ -93,7 +99,81 @@ namespace ClinicManagementSoftware.Core.Services
             var currentUser = await _userContext.GetCurrentContext();
             var @spec = new GetAllReceiptOfClinicSpec(currentUser.ClinicId);
             var receipts = await _receiptRepository.ListAsync(@spec);
-            return receipts.Select(x => _mapper.Map<ReceiptResponse>(x));
+            var result = receipts.Select(x => new ReceiptResponse()
+            {
+                Description = x.Description,
+                Code = x.Code,
+                CreatedAt = x.CreatedAt.Format(),
+                Id = x.Id,
+                MedicalServices = !string.IsNullOrEmpty(x.Services)
+                    ? JsonConvert
+                        .DeserializeObject<ICollection<ReceiptMedicalServiceDto>>(x.Services)
+                    : null,
+                PatientInformation = _mapper.Map<PatientDto>(x.Patient),
+                Total = x.Total,
+                TotalInText = x.Total.ConvertToText(),
+            });
+            return result;
+        }
+
+        public async Task<ReceiptReportResponse> GetReceiptReport(ReceiptReportRequestDto request)
+        {
+            var currentContext = await _userContext.GetCurrentContext();
+            var @spec = new GetReceiptReportSpec(request.StartDate, request.EndDate, currentContext.ClinicId);
+            var @clinicSpec = new GetClinicInformationByIdSpec(currentContext.ClinicId);
+            var clinic = await _clinicRepository.GetBySpecAsync(@clinicSpec);
+            var receipts = await _receiptRepository.ListAsync(@spec);
+            if (receipts.Count == 0)
+            {
+                return new ReceiptReportResponse();
+            }
+
+            var dictionary = receipts.ToDictionary(x => x, x =>
+                !string.IsNullOrWhiteSpace(x.Services)
+                    ? JsonConvert.DeserializeObject<ICollection<ReceiptMedicalServiceDto>>(x.Services)
+                    : null);
+
+            var reportMedicalServiceDtos = new List<ReceiptReportMedicalServiceDto>();
+            var sampleReceipt = receipts.FirstOrDefault();
+            var total = receipts.Sum(x => x.Total);
+            foreach (var receipt in dictionary.Keys)
+            {
+                var receiptMedicalServiceDtos = dictionary[receipt];
+                var receiptReportMedicalServiceDtos = receiptMedicalServiceDtos.Select(x =>
+                    new ReceiptReportMedicalServiceDto
+                    {
+                        Description = receipt.Description,
+                        Id = receipt.Id,
+                        CreatedAt = receipt.CreatedAt.Format(),
+                        PatientInformation = _mapper.Map<PatientDto>(receipt.Patient),
+                        BasePrice = x.BasePrice,
+                        Name = x.Name,
+                        Quantity = x.Quantity,
+                        ReceiptCode = receipt.Code,
+                    });
+                reportMedicalServiceDtos.AddRange(receiptReportMedicalServiceDtos);
+            }
+
+            var result = new ReceiptReportResponse
+            {
+                ContainingPatientAddress = request.ContainingPatientAddress,
+                ContainingPatientAge = request.ContainingPatientAge,
+                ContainingPatientEmail = request.ContainingPatientEmail,
+                ContainingPatientName = request.ContainingPatientName,
+                ContainingPatientPhoneNumber = request.ContainingPatientPhoneNumber,
+                ClinicInformation = new ClinicInformationResponse
+                {
+                    AddressCity = clinic?.AddressCity,
+                    AddressDistrict = clinic?.AddressDistrict,
+                    AddressStreet = clinic?.AddressStreet,
+                    AddressDetail = clinic?.AddressDetail,
+                    Name = clinic?.Name,
+                    PhoneNumber = clinic?.PhoneNumber
+                },
+                MedicalServices = reportMedicalServiceDtos,
+                Total = total,
+            };
+            return result;
         }
     }
 }

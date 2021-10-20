@@ -10,5 +10,6 @@ namespace ClinicManagementSoftware.Core.Dto.User
         public string PhoneNumber { get; set; }
         public bool Enabled { get; set; }
         public string Role { get; set; }
+        public long? MedicalServiceGroupForTestSpecialistId { get; set; }
     }
 }

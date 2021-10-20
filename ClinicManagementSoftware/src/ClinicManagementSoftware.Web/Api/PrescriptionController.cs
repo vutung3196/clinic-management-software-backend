@@ -54,11 +54,11 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByClinicId()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var result = await _prescriptionService.GetPrescriptionsByClinicId();
+                var result = await _prescriptionService.GetAllPrescriptions();
                 var response = new Response<IEnumerable<PatientPrescriptionResponse>>(result);
 
                 return Ok(response);
@@ -117,21 +117,20 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
-        // PUT api/<PrescriptionController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CreatePrescriptionDto request)
+        [HttpPost("sendemail")]
+        public async Task<IActionResult> SendEmail([FromBody] SendPrescriptionEmailRequest request)
         {
             try
             {
-                var result = await _prescriptionService.EditPrescription(id, request);
-                return Ok(new Response<PrescriptionInformation>(result));
+                await _prescriptionService.SendEmail(request.Id);
+                return Ok("Send prescription email successfully");
             }
             catch (ArgumentException exception)
             {
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);
             }
-            catch (PrescriptionNotFoundException exception)
+            catch (PatientNotFoundException exception)
             {
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);
@@ -142,26 +141,6 @@ namespace ClinicManagementSoftware.Web.Api
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
-        // DELETE api/<PrescriptionController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id)
-        {
-            try
-            {
-                await _prescriptionService.DeleteAsync(id);
-                return Ok("Delete successfully");
-            }
-            catch (PrescriptionNotFoundException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        // PUT api/<PrescriptionController>/5
     }
 }

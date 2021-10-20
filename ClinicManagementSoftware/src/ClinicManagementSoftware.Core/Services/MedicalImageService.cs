@@ -74,7 +74,7 @@ namespace ClinicManagementSoftware.Core.Services
                 var cloudinaryFile = new CloudinaryFile
                 {
                     PublicId = cloudinaryField.PublicId,
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     Bytes = cloudinaryField.Bytes,
                     FileName = cloudinaryField.OriginalFilename,
                     Height = cloudinaryField.Height,
@@ -89,7 +89,7 @@ namespace ClinicManagementSoftware.Core.Services
                 {
                     CloudinaryFileId = cloudinaryFile.Id,
                     FileName = cloudinaryField.OriginalFilename,
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     FilePath = string.Empty,
                     LabTestId = labTest.Id,
                 };

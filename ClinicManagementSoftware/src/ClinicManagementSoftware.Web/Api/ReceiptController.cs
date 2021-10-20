@@ -43,6 +43,21 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
+        [HttpGet("receiptreport")]
+        public async Task<IActionResult> Get([FromQuery] ReceiptReportRequestDto request)
+        {
+            try
+            {
+                var result = await _receiptService.GetReceiptReport(request);
+                return Ok(new Response<ReceiptReportResponse>(result));
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {

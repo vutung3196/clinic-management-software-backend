@@ -18,8 +18,14 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("clinic_id")] public long ClinicId { get; set; }
         [Column("phone_number")] public string PhoneNumber { get; set; }
 
+        [Column("medical_service_group_for_test_specialist_id")] public long? MedicalServiceGroupForTestSpecialistId { get; set; }
+
+        public MedicalServiceGroup MedicalServiceGroupForTestSpecialist { get; set; }
+
         public Clinic Clinic { get; set; }
+
         public Role Role { get; set; }
+
         // FOR DOCTOR ROLE
         public ICollection<Prescription> Prescriptions { get; set; }
         public ICollection<VisitingDoctorQueue> VisitingDoctorQueues { get; set; }

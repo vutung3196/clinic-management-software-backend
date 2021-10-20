@@ -42,7 +42,7 @@ namespace ClinicManagementSoftware.Core.Services
         {
             var patientHospitalizedProfile = new PatientHospitalizedProfile
             {
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 IsDeleted = false,
                 Description = request.Description,
                 DiseaseName = request.DiseaseName,
@@ -72,7 +72,7 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find patient hospitalized profile with id: {id}");
             }
 
-            patientHospitalizedProfile.UpdatedAt = DateTime.UtcNow;
+            patientHospitalizedProfile.UpdatedAt = DateTime.Now;
             patientHospitalizedProfile.Description = request.Description;
             patientHospitalizedProfile.DiseaseName = request.DiseaseName;
             patientHospitalizedProfile.RevisitDate = request.RevisitDate;
@@ -96,7 +96,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             patientHospitalizedProfile.IsDeleted = true;
-            patientHospitalizedProfile.DeletedAt = DateTime.UtcNow;
+            patientHospitalizedProfile.DeletedAt = DateTime.Now;
 
             await _patientHospitalizedProfileRepository.UpdateAsync(patientHospitalizedProfile);
         }
@@ -143,6 +143,7 @@ namespace ClinicManagementSoftware.Core.Services
                     Description = x.Description,
                     DoctorVisitingFormCode = x.PatientDoctorVisitForm?.Code,
                     DoctorVisitingFormId = x.PatientDoctorVisitFormId,
+                    Status = GetLabOrderFormStatus(x.Status),
                 }),
                 LabTests = labTests.Select(x =>
                     new LabTestInformation
@@ -173,6 +174,16 @@ namespace ClinicManagementSoftware.Core.Services
             return status == (byte) EnumLabTestStatus.Done ? "Đã có kết quả" : "Chưa có kết quả";
         }
 
+        private static string GetLabOrderFormStatus(byte status)
+        {
+            return status switch
+            {
+                (byte) EnumLabOrderFormStatus.NotPaid => "Chưa thanh toán",
+                (byte) EnumLabOrderFormStatus.Paid => "Đã thanh toán",
+                _ => "Hoàn thành"
+            };
+        }
+
         public async Task DeletePatientProfilesByPatientId(long patientId)
         {
             var @spec = new GetPatientHospitalizedProfilesByPatientId(patientId);
@@ -180,7 +191,7 @@ namespace ClinicManagementSoftware.Core.Services
             foreach (var profile in patientHospitalizedProfiles)
             {
                 profile.IsDeleted = true;
-                profile.DeletedAt = DateTime.UtcNow;
+                profile.DeletedAt = DateTime.Now;
                 await _patientHospitalizedProfileRepository.UpdateAsync(profile);
             }
         }
@@ -204,7 +215,10 @@ namespace ClinicManagementSoftware.Core.Services
                 RevisitDate = x.RevisitDate,
                 ClinicInformation = new ClinicInformationResponse
                 {
-                    Address = x.Patient.Clinic.Address,
+                    AddressCity = x.Patient.Clinic.AddressCity,
+                    AddressDistrict = x.Patient.Clinic.AddressDistrict,
+                    AddressStreet = x.Patient.Clinic.AddressStreet,
+                    AddressDetail = x.Patient.Clinic.AddressDetail,
                     Name = x.Patient.Clinic.Name,
                     PhoneNumber = x.Patient.Clinic.PhoneNumber
                 }

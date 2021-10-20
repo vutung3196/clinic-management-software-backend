@@ -79,37 +79,38 @@ namespace ClinicManagementSoftware.Core.Services
             return currentUsers.Select(user => _mapper.Map<UserResultResponse>(user));
         }
 
-        public async Task<UserResultResponse> CreateUser(CreateUserDto input)
+        public async Task<UserResultResponse> CreateUser(CreateUserDto request)
         {
             var currentUserContext = await _userContext.GetCurrentContext();
-            var @spec = new GetUserRoleAndClinicByUsernameSpec(input.UserName.Trim());
+            var @spec = new GetUserRoleAndClinicByUsernameSpec(request.UserName.Trim());
             var duplicatedUser = await _userRepository.GetBySpecAsync(@spec);
             if (duplicatedUser != null)
             {
                 throw new ArgumentException("Username đã có người dùng");
             }
 
-            var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
+            var @roleSpec = new GetRoleByRoleNameSpec(request.Role.Trim());
             var role = await _roleRepository.GetBySpecAsync(@roleSpec);
             if (role == null)
             {
-                throw new ArgumentException($"Cannot find a role having name: {input.Role}");
+                throw new ArgumentException($"Cannot find a role having name: {request.Role}");
             }
 
             // TODO Create new doctor queue here for doctor
 
 
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var user = new User
             {
-                CreatedAt = DateTime.UtcNow,
-                Username = input.UserName.Trim(),
+                CreatedAt = DateTime.Now,
+                Username = request.UserName.Trim(),
                 ClinicId = currentUserContext.ClinicId,
-                Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
+                Enabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
                 Password = passwordHash,
-                PhoneNumber = input.PhoneNumber,
-                FullName = input.FullName,
-                RoleId = role.Id
+                //PhoneNumber = request.PhoneNumber,
+                FullName = request.FullName,
+                RoleId = role.Id,
+                MedicalServiceGroupForTestSpecialistId = request.MedicalServiceGroupForTestSpecialistId
             };
             user = await _userRepository.AddAsync(user);
             if (role.RoleName == "Doctor")
@@ -120,33 +121,33 @@ namespace ClinicManagementSoftware.Core.Services
             return _mapper.Map<UserResultResponse>(user);
         }
 
-        public async Task<UserResultResponse> CreateUserWithClinic(CreateUserDto input, long clinicId)
+        public async Task<UserResultResponse> CreateUserWithClinic(CreateUserDto request, long clinicId)
         {
-            var @spec = new GetUserRoleAndClinicByUsernameSpec(input.UserName.Trim());
+            var @spec = new GetUserRoleAndClinicByUsernameSpec(request.UserName.Trim());
             var duplicatedUser = await _userRepository.GetBySpecAsync(@spec);
             if (duplicatedUser != null)
             {
                 throw new ArgumentException("Username should be unique");
             }
 
-            var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
+            var @roleSpec = new GetRoleByRoleNameSpec(request.Role.Trim());
             var role = await _roleRepository.GetBySpecAsync(@roleSpec);
             if (role == null)
             {
-                throw new ArgumentException($"Cannot find a role having name: {input.Role}");
+                throw new ArgumentException($"Cannot find a role having name: {request.Role}");
             }
 
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var user = new User
             {
-                CreatedAt = DateTime.UtcNow,
-                Username = input.UserName.Trim(),
+                CreatedAt = DateTime.Now,
+                Username = request.UserName.Trim(),
                 ClinicId = clinicId,
-                Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
+                Enabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
                 Password = passwordHash,
-                PhoneNumber = input.PhoneNumber,
-                FullName = input.FullName,
-                RoleId = role.Id
+                PhoneNumber = request.PhoneNumber,
+                FullName = request.FullName,
+                RoleId = role.Id,
             };
             user = await _userRepository.AddAsync(user);
             return _mapper.Map<UserResultResponse>(user);
@@ -159,7 +160,7 @@ namespace ClinicManagementSoftware.Core.Services
             return duplicatedUser != null;
         }
 
-        public async Task<UserResultResponse> EditUser(long id, EditUserDto input)
+        public async Task<UserResultResponse> EditUser(long id, EditUserDto request)
         {
             var currentUserContext = await _userContext.GetCurrentContext();
             var @spec = new GetUserAndRoleByIdSpec(id);
@@ -175,23 +176,25 @@ namespace ClinicManagementSoftware.Core.Services
                     $"This admin cannot have access to this user having id: {user.Id}");
             }
 
-            if (!string.IsNullOrWhiteSpace(input.Password))
+            if (!string.IsNullOrWhiteSpace(request.Password))
             {
-                var passwordHash = BCrypt.Net.BCrypt.HashPassword(input.Password);
+                var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 user.Password = passwordHash;
             }
 
-            user.FullName = input.FullName;
-            user.PhoneNumber = input.PhoneNumber;
-            user.Enabled = input.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
-            var @roleSpec = new GetRoleByRoleNameSpec(input.Role.Trim());
+            user.FullName = request.FullName;
+            //user.PhoneNumber = request.PhoneNumber;
+            user.Enabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
+            var @roleSpec = new GetRoleByRoleNameSpec(request.Role.Trim());
             var newRole = await _roleRepository.GetBySpecAsync(@roleSpec);
             if (newRole == null)
             {
-                throw new ArgumentException($"Cannot find a role having name: {input.Role}");
+                throw new ArgumentException($"Cannot find a role having name: {request.Role}");
             }
 
             user.RoleId = newRole.Id;
+            user.MedicalServiceGroupForTestSpecialistId = request.MedicalServiceGroupForTestSpecialistId;
+
 
             await _userRepository.UpdateAsync(user);
 

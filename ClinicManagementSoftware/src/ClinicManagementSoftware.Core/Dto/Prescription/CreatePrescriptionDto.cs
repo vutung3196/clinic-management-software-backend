@@ -14,7 +14,7 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
         public long PatientHospitalizedProfileId { get; set; }
         public string MedicalInsuranceCode { get; set; }
         public string Code { get; set; }
-        public string PrescriptionCode { get; set; }
+        public string DiseaseNote { get; set; }
         public long PatientDoctorVisitingFormId { get; set; }
     }
 }

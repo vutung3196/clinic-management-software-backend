@@ -1,18 +1,16 @@
-﻿using Ardalis.Specification;
+﻿using System;
+using Ardalis.Specification;
 using ClinicManagementSoftware.Core.Entities;
 
 namespace ClinicManagementSoftware.Core.Specifications
 {
-    public sealed class GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec :
-        Specification<PatientDoctorVisitForm>,
-        ISingleResultSpecification
+    public sealed class GetReceiptReportSpec : Specification<Receipt>
     {
-        public GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(long id)
+        public GetReceiptReportSpec(DateTime startDate, DateTime endDate, long clinicId)
         {
-            Query.Include(patientDoctorVisitForm => patientDoctorVisitForm.Patient)
-                .ThenInclude(patient => patient.Clinic)
-                .Include(patientDoctorVisitForm => patientDoctorVisitForm.Doctor)
-                .Where(patientDoctorVisitForm => patientDoctorVisitForm.Id == id);
+            Query.Where(x => x.Patient.ClinicId == clinicId)
+                .Where(x => x.CreatedAt >= startDate && x.CreatedAt <= endDate)
+                .Include(x => x.Patient);
         }
     }
 }

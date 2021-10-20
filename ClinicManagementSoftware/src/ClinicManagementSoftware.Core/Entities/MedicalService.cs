@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -17,5 +18,8 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("description")] public string Description { get; set; }
         [Column("is_visiting_doctor_service")] public bool IsVisitingDoctorService { get; set; }
         public ICollection<LabTest> LabTests { get; set; }
+
+        [Column("is_deleted")] public bool IsDeleted { get; set; }
+        [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
     }
 }
