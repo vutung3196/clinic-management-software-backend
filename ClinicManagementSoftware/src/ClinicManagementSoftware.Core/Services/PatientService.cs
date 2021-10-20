@@ -58,7 +58,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 var startDate = DateTime.Now.ResetTimeToStartOfDay();
                 var endDate = DateTime.Now.ResetTimeToEndOfDay();
-                var @spec = new GetPatientsOfClinicSpec(currentUserContext.ClinicId, startDate, endDate);
+                var @spec = new GetPatientsOfClinicFromDateSpec(currentUserContext.ClinicId, startDate, endDate);
                 var patients = await _patientRepository.ListAsync(@spec);
                 var result = patients
                     .OrderByDescending(x => x.CreatedAt)
