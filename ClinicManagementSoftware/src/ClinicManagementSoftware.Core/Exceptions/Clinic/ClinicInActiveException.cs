@@ -2,13 +2,13 @@
 
 namespace ClinicManagementSoftware.Core.Exceptions.Clinic
 {
-    public class ClinicInActiveException : Exception
+    public class ClinicNotFoundException : Exception
     {
-        public ClinicInActiveException(string message) : base(message)
+        public ClinicNotFoundException(string message) : base(message)
         {
         }
 
-        public ClinicInActiveException(string message, Exception innerException) : base(message, innerException)
+        public ClinicNotFoundException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

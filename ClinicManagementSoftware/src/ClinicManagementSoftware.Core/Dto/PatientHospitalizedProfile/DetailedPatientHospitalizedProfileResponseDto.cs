@@ -13,5 +13,10 @@ namespace ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile
 
         // lab test 
         public IEnumerable<LabTestInformation> LabTests { get; set; }
+
+        public string DiseaseName { get; set; }
+
+        public string Code { get; set; }
+        public string Description { get; set; }
     }
 }

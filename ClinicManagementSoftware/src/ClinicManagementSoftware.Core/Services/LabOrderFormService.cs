@@ -289,6 +289,11 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task<long> CreateLabOrderForm(CreateOrEditLabOrderFormDto request)
         {
+            if (request.LabTests.Any(x => x.Description.Length > 100))
+            {
+                throw new ArgumentException("Miêu tả của xét nghiệm không được vượt quá 100 ký tự");
+            }
+
             var currentUser = await _userContext.GetCurrentContext();
             var labOrderForm = new LabOrderForm
             {

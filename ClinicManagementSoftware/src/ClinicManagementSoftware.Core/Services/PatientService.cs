@@ -67,7 +67,7 @@ namespace ClinicManagementSoftware.Core.Services
             }
             else
             {
-                var @spec = new GetPatientsByNameOfClinicSpec(currentUserContext.ClinicId, searchName);
+                var @spec = new GetPatientsByNameOfClinicSpec(currentUserContext.ClinicId, searchName.Trim());
                 var patients = await _patientRepository.ListAsync(@spec);
                 var result = patients.OrderByDescending(x => x.CreatedAt).Select(x => _mapper.Map<PatientDto>(x));
                 return result;
@@ -102,6 +102,7 @@ namespace ClinicManagementSoftware.Core.Services
                 MedicalInsuranceCode = request.MedicalInsuranceCode,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
+                ActiveDate = DateTime.Now,
                 IsDeleted = 0
             };
 

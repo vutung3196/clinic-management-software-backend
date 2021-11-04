@@ -9,7 +9,12 @@ namespace ClinicManagementSoftware.Core.Interfaces
     {
         Task<IEnumerable<CloudinaryFile>> GetMedicalImageFiles(long labTestId);
         Task<IEnumerable<CloudinaryFile>> GetMedicalImageFilesByVisitingFormId(long visitingFormId);
-        Task<List<CloudinaryFile>> SaveChanges(long patientId, IList<CloudinaryFieldDto> cloudinaryFields);
+
+        Task<List<CloudinaryFile>> CreateFileImagesForLabTest(long patientId,
+            IList<CloudinaryFieldDto> cloudinaryFields);
+
+        Task<CloudinaryFile> CreateImageLogoForClinic(CloudinaryFieldDto cloudinaryField);
         Task Delete(long id);
+        Task DeleteCloudinaryFile(string cloudinaryFileId);
     }
 }

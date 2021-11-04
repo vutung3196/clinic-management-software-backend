@@ -15,12 +15,15 @@ namespace ClinicManagementSoftware.Core.Services
     {
         private readonly IUserContext _userContext;
         private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupRepository;
+        private readonly ILabTestQueueService _labTestQueueService;
 
         public MedicalServiceGroupService(IUserContext userContext,
-            IRepository<MedicalServiceGroup> medicalServiceGroupRepository)
+            IRepository<MedicalServiceGroup> medicalServiceGroupRepository,
+            ILabTestQueueService labTestQueueService)
         {
             _userContext = userContext;
             _medicalServiceGroupRepository = medicalServiceGroupRepository;
+            _labTestQueueService = labTestQueueService;
         }
 
         public async Task<IEnumerable<MedicalServiceGroupResponseDto>> GetAllMedicalServiceGroups()
@@ -47,6 +50,10 @@ namespace ClinicManagementSoftware.Core.Services
             };
 
             medicalServiceGroup = await _medicalServiceGroupRepository.AddAsync(medicalServiceGroup);
+
+            // create a new queue here please
+            await _labTestQueueService.CreateNewLabTestQueue(currentUser.ClinicId, medicalServiceGroup.Id);
+
             return new MedicalServiceGroupResponseDto(medicalServiceGroup.Id, medicalServiceGroup.Name,
                 medicalServiceGroup.Description, medicalServiceGroup.CreatedAt.Format());
         }

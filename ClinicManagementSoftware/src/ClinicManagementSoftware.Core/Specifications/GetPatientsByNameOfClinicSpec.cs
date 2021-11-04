@@ -1,4 +1,5 @@
-﻿using Ardalis.Specification;
+﻿using System;
+using Ardalis.Specification;
 using ClinicManagementSoftware.Core.Entities;
 
 namespace ClinicManagementSoftware.Core.Specifications
@@ -8,7 +9,7 @@ namespace ClinicManagementSoftware.Core.Specifications
         public GetPatientsByNameOfClinicSpec(long clinicId, string searchName)
         {
             Query.Where(patient => patient.ClinicId == clinicId && patient.IsDeleted == 0)
-                .Where(x => x.FullName.Contains(searchName));
+                .Where(x => x.FullName.Contains(searchName, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

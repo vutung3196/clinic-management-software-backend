@@ -10,7 +10,7 @@ namespace ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile
         [MaxLength(50, ErrorMessage = "Tên bệnh không vượt quá 50 ký tự")]
         public string DiseaseName { get; set; }
 
-        [MaxLength(50, ErrorMessage = "Mô tả bệnh không vượt quá 50 ký tự")]
+        [MaxLength(100, ErrorMessage = "Mô tả bệnh không vượt quá 100 ký tự")]
         public string Description { get; set; }
 
         public string Code { get; set; }

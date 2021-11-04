@@ -1,6 +1,7 @@
 ﻿using System;
 using ClinicManagementSoftware.Core.Dto.Clinic;
 using ClinicManagementSoftware.Core.Dto.Patient;
+using ClinicManagementSoftware.Core.Helpers;
 
 namespace ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile
 {
@@ -12,7 +13,7 @@ namespace ClinicManagementSoftware.Core.Dto.PatientHospitalizedProfile
         public string Description { get; set; }
         public string Code { get; set; }
         public DateTime? RevisitDate { get; set; }
-        public string RevisitDateDisplayed { get; set; }
+        public string RevisitDateDisplayed => RevisitDate.HasValue ? RevisitDate.Format() : null;
 
 
         public string CreatedAt { get; set; }

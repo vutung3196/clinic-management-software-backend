@@ -31,6 +31,7 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public DateTime? UpdatedAt { get; set; }
 
         public DateTime? DeletedAt { get; set; }
+        public DateTime? ActiveDate { get; set; }
         public string AddressDetail { get; set; }
         public string AddressCity { get; set; }
         public string AddressStreet { get; set; }

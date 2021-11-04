@@ -349,7 +349,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ClinicManagementSoftware.Core.Services.UserService" BaseTypeListCollapsed="true">
-    <Position X="5" Y="4.75" Width="4.5" />
+    <Position X="7" Y="3.5" Width="3" />
     <TypeIdentifier />
     <Lollipop Orientation="Right" Position="0.331" Collapsed="true" />
   </Class>

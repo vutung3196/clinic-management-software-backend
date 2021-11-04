@@ -9,7 +9,7 @@ namespace ClinicManagementSoftware.Core.Specifications
         public GetPatientsOfClinicFromDateSpec(long clinicId, DateTime startDate, DateTime endDate)
         {
             Query.Where(patient => patient.ClinicId == clinicId && patient.IsDeleted == 0)
-                .Where(x => x.CreatedAt >= startDate && x.CreatedAt <= endDate);
+                .Where(x => x.ActiveDate >= startDate && x.ActiveDate <= endDate);
         }
     }
 }

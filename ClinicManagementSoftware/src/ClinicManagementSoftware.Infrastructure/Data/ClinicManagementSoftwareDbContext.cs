@@ -59,7 +59,6 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(user => user.Role)
                 .WithMany(role => role.Users);
 
-
             modelBuilder.Entity<RolePermission>()
                 .HasOne(rolePermission => rolePermission.Role)
                 .WithMany(role => role.RolePermissions);
@@ -135,7 +134,11 @@ namespace ClinicManagementSoftware.Infrastructure.Data
 
             modelBuilder.Entity<MedicalImageFile>()
                 .HasOne(medicalImageFile => medicalImageFile.CloudinaryFile)
-                .WithOne(hospitalizedProfile => hospitalizedProfile.MedicalImageFile);
+                .WithOne(cloudinaryFile => cloudinaryFile.MedicalImageFile);
+
+            modelBuilder.Entity<Clinic>()
+                .HasOne(medicalImageFile => medicalImageFile.CloudinaryFile)
+                .WithOne(cloudinaryFile => cloudinaryFile.Clinic);
 
             modelBuilder.Entity<Prescription>()
                 .HasOne(prescription => prescription.PatientDoctorVisitForm)
@@ -152,7 +155,7 @@ namespace ClinicManagementSoftware.Infrastructure.Data
             modelBuilder.Entity<User>()
                 .HasOne(user => user.MedicalServiceGroupForTestSpecialist)
                 .WithMany(medicalServiceGroup
-                => medicalServiceGroup.Users);
+                    => medicalServiceGroup.Users);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

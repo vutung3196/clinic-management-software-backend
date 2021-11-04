@@ -17,6 +17,9 @@ namespace ClinicManagementSoftware.Core.Entities
         public IList<MedicalService> MedicalServices { get; set; }
         public IList<LabTestQueue> LabTestQueues { get; set; }
         public IList<MedicalServiceGroup> MedicalServiceGroups { get; set; }
+
+        [Column("cloudinary_file_id")] public long? CloudinaryFileId { get; set; }
+        public CloudinaryFile CloudinaryFile { get; set; }
         [Column("email_address")] public string EmailAddress { get; set; }
 
         [Column("address_street")] public string AddressStreet { get; set; }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Cloudinary;
 using ClinicManagementSoftware.Core.Dto.Cloudinary;
 using ClinicManagementSoftware.Core.Entities;
+using ClinicManagementSoftware.Core.Exceptions.Clinic;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -18,16 +19,21 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<LabTest> _labTestRepository;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IRepository<PatientDoctorVisitForm> _visitingFormRepository;
+        private readonly IUserContext _userContext;
+        private readonly IRepository<Clinic> _clinicRepository;
 
         public MedicalImageService(IRepository<CloudinaryFile> cloudinaryFileRepository,
             IRepository<MedicalImageFile> medicalImageFileRepository, IRepository<LabTest> labTestRepository,
-            ICloudinaryService cloudinaryService, IRepository<PatientDoctorVisitForm> visitingFormRepository)
+            ICloudinaryService cloudinaryService, IRepository<PatientDoctorVisitForm> visitingFormRepository,
+            IUserContext userContext, IRepository<Clinic> clinicRepository)
         {
             _cloudinaryFileRepository = cloudinaryFileRepository;
             _medicalImageFileRepository = medicalImageFileRepository;
             _labTestRepository = labTestRepository;
             _cloudinaryService = cloudinaryService;
             _visitingFormRepository = visitingFormRepository;
+            _userContext = userContext;
+            _clinicRepository = clinicRepository;
         }
 
         public async Task<IEnumerable<CloudinaryFile>> GetMedicalImageFiles(long labTestId)
@@ -56,7 +62,8 @@ namespace ClinicManagementSoftware.Core.Services
             return medicalImageFiles.Select(imageFile => imageFile.CloudinaryFile);
         }
 
-        public async Task<List<CloudinaryFile>> SaveChanges(long labTestId, IList<CloudinaryFieldDto> cloudinaryFields)
+        public async Task<List<CloudinaryFile>> CreateFileImagesForLabTest(long labTestId,
+            IList<CloudinaryFieldDto> cloudinaryFields)
         {
             var labTest = await _labTestRepository.GetByIdAsync(labTestId);
             if (labTest == null)
@@ -101,18 +108,34 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
-        public async Task<MedicalImageFile> EditMedicalImageFile(long id, string name, string description)
+        public async Task<CloudinaryFile> CreateImageLogoForClinic(CloudinaryFieldDto cloudinaryField)
         {
-            var currentMedicalImageFile = await _medicalImageFileRepository.GetByIdAsync(id);
-            if (currentMedicalImageFile == null)
+            var currentUser = await _userContext.GetCurrentContext();
+            var cloudinaryFile = new CloudinaryFile
             {
-                throw new ArgumentException("Cannot find medical image file with id: {id}");
+                PublicId = cloudinaryField.PublicId,
+                CreatedAt = DateTime.Now,
+                Bytes = cloudinaryField.Bytes,
+                FileName = cloudinaryField.OriginalFilename,
+                Height = cloudinaryField.Height,
+                Width = cloudinaryField.Width,
+                Url = cloudinaryField.Url,
+                SecureUrl = cloudinaryField.SecureUrl,
+            };
+
+            var currentClinic = await _clinicRepository.GetByIdAsync(currentUser.ClinicId);
+            if (currentClinic == null)
+            {
+                throw new ClinicNotFoundException($"Cannot find clinic with id {currentUser.ClinicId}");
             }
 
-            currentMedicalImageFile.FileName = name;
-            currentMedicalImageFile.Description = description;
-            await _medicalImageFileRepository.UpdateAsync(currentMedicalImageFile);
-            return currentMedicalImageFile;
+
+            // save to cloudinary file table in database
+            cloudinaryFile = await _cloudinaryFileRepository.AddAsync(cloudinaryFile);
+            // update clinic
+            currentClinic.CloudinaryFileId = cloudinaryFile.Id;
+            await _clinicRepository.UpdateAsync(currentClinic);
+            return cloudinaryFile;
         }
 
         public async Task Delete(long id)
@@ -126,6 +149,11 @@ namespace ClinicManagementSoftware.Core.Services
 
             await _medicalImageFileRepository.DeleteAsync(currentMedicalImageFile);
             await _cloudinaryService.DeleteImage(currentMedicalImageFile.CloudinaryFile.PublicId);
+        }
+
+        public async Task DeleteCloudinaryFile(string publicId)
+        {
+            await _cloudinaryService.DeleteImage(publicId);
         }
     }
 }

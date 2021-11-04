@@ -15,25 +15,24 @@ namespace ClinicManagementSoftware.Core.Services
     public class ClinicReportService : IClinicReportService
     {
         private readonly IRepository<Receipt> _receiptSpecificationRepository;
-        private readonly IRepository<Patient> _patientSpecificationRepository;
         private readonly IRepository<Prescription> _prescriptionRepository;
-        private readonly IRepository<Patient> _patientRepository;
         private readonly IRepository<LabTest> _labTestRepository;
         private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
+        private readonly IRepository<Patient> _patientRepository;
         private readonly IUserContext _userContext;
 
         public ClinicReportService(IRepository<Receipt> receiptSpecificationRepository,
-            IRepository<Patient> patientSpecificationRepository, IRepository<Prescription> prescriptionRepository,
-            IUserContext userContext, IRepository<Patient> patientRepository, IRepository<LabTest> labTestRepository,
-            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository)
+            IRepository<Prescription> prescriptionRepository,
+            IUserContext userContext, IRepository<LabTest> labTestRepository,
+            IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository,
+            IRepository<Patient> patientRepository)
         {
             _receiptSpecificationRepository = receiptSpecificationRepository;
-            _patientSpecificationRepository = patientSpecificationRepository;
             _prescriptionRepository = prescriptionRepository;
             _userContext = userContext;
-            _patientRepository = patientRepository;
             _labTestRepository = labTestRepository;
             _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
+            _patientRepository = patientRepository;
         }
 
         public async Task<FinancialReportResponse> Get(DateTime startDate, DateTime endDate)
@@ -60,7 +59,7 @@ namespace ClinicManagementSoftware.Core.Services
             var receiptByDayInformations = CalculateReceiptsByDayInformation(receipts);
             result.ReceiptByDayInformations = receiptByDayInformations;
             var patientSpec = new GetPatientsOfClinicFromDateSpec(currentUser.ClinicId, startDate, endDate);
-            var patients = await _patientSpecificationRepository.ListAsync(patientSpec);
+            var patients = await _patientRepository.ListAsync(patientSpec);
             result.TotalNumberNewPatients = patients.Count;
 
             var labTestSpec = new GetLabTestsPerformedOfClinicFromDateSpec(currentUser.ClinicId, startDate, endDate);

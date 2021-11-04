@@ -7,7 +7,9 @@ namespace ClinicManagementSoftware.Core.Specifications
     {
         public GetPatientHospitalizedProfilesByPatientId(long patientId)
         {
-            Query.Where(x => x.PatientId == patientId).Include(x => x.Patient);
+            Query.Where(x => x.PatientId == patientId).Include(x => x.Patient)
+                .Include(x => x.LabOrderForms)
+                .ThenInclude(x => x.LabTests);
         }
     }
 }

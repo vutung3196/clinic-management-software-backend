@@ -24,6 +24,7 @@ namespace ClinicManagementSoftware.Core.Services
     {
         private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
         private readonly IRepository<MedicalService> _medicalServiceRepository;
+        private readonly IRepository<Patient> _patientRepository;
         private readonly IDoctorQueueService _doctorQueueService;
         private readonly IReceiptService _receiptService;
         private readonly IUserContext _userContext;
@@ -33,7 +34,8 @@ namespace ClinicManagementSoftware.Core.Services
             IRepository<PatientDoctorVisitForm> patientDoctorVisitingFormRepository,
             IUserContext userContext,
             IDoctorQueueService doctorQueueService, IReceiptService receiptService,
-            IRepository<MedicalService> medicalServiceRepository, IMapper mapper)
+            IRepository<MedicalService> medicalServiceRepository, IMapper mapper,
+            IRepository<Patient> patientRepository)
         {
             _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
             _userContext = userContext;
@@ -41,6 +43,7 @@ namespace ClinicManagementSoftware.Core.Services
             _receiptService = receiptService;
             _medicalServiceRepository = medicalServiceRepository;
             _mapper = mapper;
+            _patientRepository = patientRepository;
         }
 
         public async Task<IEnumerable<PatientDoctorVisitingFormDto>> GetAllByRole()
@@ -181,6 +184,15 @@ namespace ClinicManagementSoftware.Core.Services
                 VisitingStatus = (byte) EnumDoctorVisitingFormStatus.WaitingForDoctor
             };
 
+            var patient = await _patientRepository.GetByIdAsync(request.PatientId);
+            if (patient == null)
+            {
+                throw new ArgumentException($"Cannot find a patient with id {request.PatientId}");
+            }
+
+            patient.ActiveDate = DateTime.Now;
+            await _patientRepository.UpdateAsync(patient);
+
             visitingForm = await _patientDoctorVisitingFormRepository.AddAsync(visitingForm);
             await _doctorQueueService.EnqueueNewPatient(visitingForm.Id, request.DoctorId);
 
@@ -200,6 +212,11 @@ namespace ClinicManagementSoftware.Core.Services
             if (patientDoctorVisitForm == null)
             {
                 throw new ArgumentException($"Visiting form is not found with patientId: {id}");
+            }
+
+            if (patientDoctorVisitForm.VisitingStatus != (byte) EnumDoctorVisitingFormStatus.WaitingForDoctor)
+            {
+                throw new ArgumentException("Cannot edit patient doctor visiting form with status not Đang chờ khám");
             }
 
             patientDoctorVisitForm.UpdatedAt = DateTime.Now;
