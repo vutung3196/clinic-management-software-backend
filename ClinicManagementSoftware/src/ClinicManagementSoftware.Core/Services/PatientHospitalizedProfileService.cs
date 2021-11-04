@@ -20,16 +20,21 @@ namespace ClinicManagementSoftware.Core.Services
     public class PatientHospitalizedProfileService : IPatientHospitalizedProfileService
     {
         private readonly IRepository<PatientHospitalizedProfile> _patientHospitalizedProfileRepository;
+        private readonly IRepository<LabOrderForm> _labOrderFromRepository;
+        private readonly IRepository<LabTest> _labTestRepository;
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
 
         public PatientHospitalizedProfileService(
             IRepository<PatientHospitalizedProfile> patientHospitalizedProfileRepository, IMapper mapper,
-            IUserContext userContext)
+            IUserContext userContext, IRepository<LabOrderForm> labOrderFromRepository,
+            IRepository<LabTest> labTestRepository)
         {
             _patientHospitalizedProfileRepository = patientHospitalizedProfileRepository;
             _mapper = mapper;
             _userContext = userContext;
+            _labOrderFromRepository = labOrderFromRepository;
+            _labTestRepository = labTestRepository;
         }
 
         public Task<PatientHospitalizedProfileResponseDto> GetPatientProfilesByPatientId(long patientId)
@@ -134,7 +139,21 @@ namespace ClinicManagementSoftware.Core.Services
 
             var result = new DetailedPatientHospitalizedProfileResponseDto
             {
-                Prescriptions = detailedProfile.Prescriptions.Select(x => _mapper.Map<PrescriptionInformation>(x)),
+                DiseaseName = detailedProfile.DiseaseName,
+                Code = detailedProfile.Code,
+                Description = detailedProfile.Description,
+                Prescriptions = detailedProfile.Prescriptions.Select(x =>
+                    new PrescriptionInformation
+                    {
+                        Id = x.Id,
+                        Code = x.Code,
+                        CreatedAt = x.CreatedAt.Format(),
+                        DiagnosedDescription = x.DiagnosedDescription,
+                        DoctorSuggestion = x.DoctorSuggestion,
+                        DiseaseNote = x.DiseaseNote,
+                        DoctorVisitingFormCode = x.PatientDoctorVisitForm?.Code,
+                        RevisitDateDisplayed = x.RevisitDate.HasValue ? x.RevisitDate.Format() : null
+                    }),
                 LabOrderForms = detailedProfile.LabOrderForms.Select(x => new LabOrderFormInformation
                 {
                     Id = x.Id,
@@ -193,6 +212,18 @@ namespace ClinicManagementSoftware.Core.Services
                 profile.IsDeleted = true;
                 profile.DeletedAt = DateTime.Now;
                 await _patientHospitalizedProfileRepository.UpdateAsync(profile);
+                foreach (var labOrderForm in profile.LabOrderForms)
+                {
+                    labOrderForm.IsDeleted = true;
+                    labOrderForm.DeletedAt = DateTime.Now;
+                    await _labOrderFromRepository.UpdateAsync(labOrderForm);
+                    foreach (var labTest in labOrderForm.LabTests)
+                    {
+                        labTest.IsDeleted = true;
+                        labTest.DeletedAt = DateTime.Now;
+                        await _labTestRepository.UpdateAsync(labTest);
+                    }
+                }
             }
         }
 
@@ -211,7 +242,6 @@ namespace ClinicManagementSoftware.Core.Services
 
                 PatientInformation = _mapper.Map<PatientDto>(x.Patient),
                 PatientDetailedInformation = x.Patient.FullName,
-                RevisitDateDisplayed = x.RevisitDate.HasValue ? x.RevisitDate.Value.Format() : string.Empty,
                 RevisitDate = x.RevisitDate,
                 ClinicInformation = new ClinicInformationResponse
                 {

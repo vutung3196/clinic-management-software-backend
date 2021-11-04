@@ -116,7 +116,7 @@ namespace ClinicManagementSoftware.Core.Services
             await _labTestQueueRepository.UpdateAsync(testQueue);
         }
 
-        public async Task CreateNewLabTestQueue(long clinicId)
+        public async Task CreateNewLabTestQueue(long clinicId, long medicalServiceGroupId)
         {
             var visitingDoctorQueueData = new QueueData
             {
@@ -126,7 +126,8 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 ClinicId = clinicId,
                 CreatedAt = DateTime.Now,
-                Queue = JsonConvert.SerializeObject(visitingDoctorQueueData)
+                Queue = JsonConvert.SerializeObject(visitingDoctorQueueData),
+                MedicalServiceGroupForTestSpecialistId = medicalServiceGroupId
             };
 
             await _labTestQueueRepository.AddAsync(labTestQueue);

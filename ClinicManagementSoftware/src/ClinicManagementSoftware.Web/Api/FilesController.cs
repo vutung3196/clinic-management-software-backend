@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.Files;
+using ClinicManagementSoftware.Core.Exceptions.Clinic;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
@@ -15,7 +16,6 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class FilesController : ControllerBase
     {
         private readonly IMedicalImageService _patientMedicalImageService;
@@ -29,6 +29,8 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet]
+        [Authorize]
+
         public async Task<IActionResult> Get(long labTestId)
         {
             try
@@ -59,6 +61,8 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("byvisitingform")]
+        [Authorize]
+
         public async Task<IActionResult> GetByVisitingForm(long visitingFormId)
         {
             try
@@ -90,11 +94,15 @@ namespace ClinicManagementSoftware.Web.Api
 
 
         [HttpPost]
+        [Authorize]
+
         public async Task<IActionResult> Post([FromBody] CreateFileRequest request)
         {
             try
             {
-                var result = await _patientMedicalImageService.SaveChanges(request.LabTestId, request.CloudinaryFiles);
+                var result =
+                    await _patientMedicalImageService.CreateFileImagesForLabTest(request.LabTestId,
+                        request.CloudinaryFiles);
                 var response = result.Select(x => new ImageFileResponse
                 {
                     PublicId = x.PublicId,
@@ -113,26 +121,41 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
-        //// PUT api/<FilesController>/5
-        //[HttpPut("{id}")]
-        //// Update file request
-        //public async Task<IActionResult> Put(long id, [FromBody] EditFileRequest request)
-        //{
-        //    try
-        //    {
-        //        await _patientMedicalImageService.E(id, request.FileName, request.Description);
-        //        return Ok("Updated file successfully");
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError(exception.Message);
-        //        return StatusCode(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
+        [HttpPost("cliniclogo")]
+        [Authorize]
+
+        public async Task<IActionResult> UploadLogo([FromBody] CreateClinicLogoRequest request)
+        {
+            try
+            {
+                var result = await _patientMedicalImageService.CreateImageLogoForClinic(request.CloudinaryFile);
+                var response = new ImageFileResponse
+                {
+                    PublicId = result.PublicId,
+                    CreatedAt = result.CreatedAt.Format(),
+                    Name = result.FileName,
+                    Url = result.Url,
+                    SecureUrl = result.SecureUrl
+                };
+                return Ok(new Response<ImageFileResponse>(response));
+            }
+            catch (ClinicNotFoundException exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         // DELETE api/<FilesController>/5
         // delete file 
-        [HttpDelete("{id}")]
+        [HttpDelete("{request}")]
+        [Authorize]
+
         public async Task<IActionResult> Delete(long id)
         {
             try
@@ -146,5 +169,25 @@ namespace ClinicManagementSoftware.Web.Api
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpDelete("cloudinary")]
+        public async Task<IActionResult> DeleteCloudinaryFile([FromBody] DeleteCloudinaryFileRequest request)
+        {
+            try
+            {
+                await _patientMedicalImageService.DeleteCloudinaryFile(request.PublicId);
+                return Ok("Delete file successfully");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+    }
+
+    public class DeleteCloudinaryFileRequest
+    {
+        public string PublicId { get; set; }
     }
 }

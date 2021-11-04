@@ -12,6 +12,7 @@ using ClinicManagementSoftware.Core.Exceptions.User;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
+using SendGrid;
 
 namespace ClinicManagementSoftware.Core.Services
 {
@@ -22,16 +23,18 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IUserContext _userContext;
         private readonly IDoctorQueueService _doctorQueueService;
         private readonly IMapper _mapper;
+        private readonly ISendGridService _sendGridService;
 
         public UserService(IMapper mapper,
             IRepository<User> userRepository, IUserContext userContext,
-            IRepository<Role> roleRepository, IDoctorQueueService doctorQueueService)
+            IRepository<Role> roleRepository, IDoctorQueueService doctorQueueService, ISendGridService sendGridService)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _userContext = userContext;
             _roleRepository = roleRepository;
             _doctorQueueService = doctorQueueService;
+            _sendGridService = sendGridService;
         }
 
         public async Task<UserDto> CreateAsync(UserDto input)
@@ -75,7 +78,7 @@ namespace ClinicManagementSoftware.Core.Services
             var currentUserContext = await _userContext.GetCurrentContext();
             var currentClinicId = currentUserContext.ClinicId;
             var @spec = new GetUsersByClinicIdSpec(currentClinicId);
-            var currentUsers = await _userRepository.ListAsync(@spec);
+            var currentUsers = (await _userRepository.ListAsync(@spec)).OrderByDescending(x => x.CreatedAt);
             return currentUsers.Select(user => _mapper.Map<UserResultResponse>(user));
         }
 
@@ -96,8 +99,6 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find a role having name: {request.Role}");
             }
 
-            // TODO Create new doctor queue here for doctor
-
 
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var user = new User
@@ -107,7 +108,7 @@ namespace ClinicManagementSoftware.Core.Services
                 ClinicId = currentUserContext.ClinicId,
                 Enabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive,
                 Password = passwordHash,
-                //PhoneNumber = request.PhoneNumber,
+                EmailAddress = request.EmailAddress,
                 FullName = request.FullName,
                 RoleId = role.Id,
                 MedicalServiceGroupForTestSpecialistId = request.MedicalServiceGroupForTestSpecialistId
@@ -117,6 +118,12 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 await _doctorQueueService.CreateNewDoctorQueue(user.Id);
             }
+
+            var content =
+                $"Tài khoản của bạn đã được tạo, với tên người dùng là {request.UserName} và mật khẩu là {request.Password}";
+
+            await _sendGridService.Send(content, "Tạo mới tài khoản", MimeType.Text,
+                request.EmailAddress, "Clinic management software");
 
             return _mapper.Map<UserResultResponse>(user);
         }
@@ -192,9 +199,20 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find a role having name: {request.Role}");
             }
 
+            // for doctor
+            if (newRole.RoleName.Equals("Doctor") && !user.Role.RoleName.Equals("Doctor"))
+            {
+                await _doctorQueueService.CreateNewDoctorQueue(user.Id);
+            }
+
             user.RoleId = newRole.Id;
             user.MedicalServiceGroupForTestSpecialistId = request.MedicalServiceGroupForTestSpecialistId;
 
+            var content =
+                $"Tài khoản của bạn đã được cập nhật, với tên người dùng là {user.Username} và mật khẩu là {request.Password}";
+
+            await _sendGridService.Send(content, "Tạo mới tài khoản", MimeType.Text,
+                request.EmailAddress, "Clinic management software");
 
             await _userRepository.UpdateAsync(user);
 

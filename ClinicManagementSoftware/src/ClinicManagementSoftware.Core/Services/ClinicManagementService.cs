@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Constants;
 using ClinicManagementSoftware.Core.Dto.Clinic;
+using ClinicManagementSoftware.Core.Dto.Files;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
@@ -18,16 +19,14 @@ namespace ClinicManagementSoftware.Core.Services
     public class ClinicManagementService : IClinicManagementService
     {
         private readonly IRepository<Clinic> _clinicSpecificationRepository;
-        private readonly ILabTestQueueService _labTestQueueService;
         private readonly IUserService _userService;
         private readonly ISendGridService _sendGridService;
 
         public ClinicManagementService(IRepository<Clinic> clinicSpecificationRepository,
-            IUserService userService, ILabTestQueueService labTestQueueService, ISendGridService sendGridService)
+            IUserService userService, ISendGridService sendGridService)
         {
             _clinicSpecificationRepository = clinicSpecificationRepository;
             _userService = userService;
-            _labTestQueueService = labTestQueueService;
             _sendGridService = sendGridService;
         }
 
@@ -63,12 +62,14 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task<ClinicInformationResponse> GetClinicInformation(long id)
         {
-            var clinic = await _clinicSpecificationRepository.GetByIdAsync(id);
+            var @spec = new GetClinicAndLogoImageBySpec(id);
+            var clinic = await _clinicSpecificationRepository.GetBySpecAsync(@spec);
             if (clinic == null)
             {
                 throw new ArgumentException($"Cannot find clinic with id {id}");
             }
 
+            var clinicCloudinaryFile = clinic.CloudinaryFile;
             return new ClinicInformationResponse
             {
                 PhoneNumber = clinic.PhoneNumber,
@@ -79,6 +80,16 @@ namespace ClinicManagementSoftware.Core.Services
                 AddressDistrict = clinic.AddressDistrict,
                 AddressStreet = clinic.AddressStreet,
                 AddressDetail = clinic.AddressDetail,
+                ImageFile = clinicCloudinaryFile != null
+                    ? new ImageFileResponse
+                    {
+                        PublicId = clinicCloudinaryFile.PublicId,
+                        CreatedAt = clinicCloudinaryFile.CreatedAt.Format(),
+                        Name = clinicCloudinaryFile.FileName,
+                        Url = clinicCloudinaryFile.Url,
+                        SecureUrl = clinicCloudinaryFile.SecureUrl,
+                    }
+                    : null
             };
         }
 
@@ -101,7 +112,7 @@ namespace ClinicManagementSoftware.Core.Services
             var isDuplicatedUser = await _userService.IsDuplicatedUser(request.UserName);
             if (isDuplicatedUser)
             {
-                throw new ArgumentException("Username bị trùng");
+                throw new ArgumentException("Username của bạn đã có người dùng");
             }
 
             clinic = await _clinicSpecificationRepository.AddAsync(clinic);
@@ -118,9 +129,6 @@ namespace ClinicManagementSoftware.Core.Services
             };
 
             await _userService.CreateUserWithClinic(createUserDto, clinic.Id);
-
-            // create new lab test queue
-            await _labTestQueueService.CreateNewLabTestQueue(clinic.Id);
 
             // send email to system administrator to approve new clinic
             if (request.FirstTimeRegistration)
@@ -153,7 +161,7 @@ namespace ClinicManagementSoftware.Core.Services
             var spec = new GetClinicsAndAdminSpec();
             var clinics = await _clinicSpecificationRepository.ListAsync(spec);
 
-            return clinics.Select(clinic => new ClinicInformationForAdminResponse
+            return clinics.OrderByDescending(x => x.CreatedAt).Select(clinic => new ClinicInformationForAdminResponse
             {
                 PhoneNumber = clinic.PhoneNumber,
                 Id = clinic.Id,

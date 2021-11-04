@@ -6,8 +6,10 @@ namespace ClinicManagementSoftware.Web.ApiModels.Patient
     public class CreateOrUpdatePatientModel
     {
         [Required(ErrorMessage = "Tên phải bắt buộc")]
+        [MaxLength(70, ErrorMessage = "Tên bệnh nhân không vượt quá 70 ký tự")]
         public string FullName { get; set; }
 
+        [MaxLength(62, ErrorMessage = "Email không vượt quá 62 ký tự")]
         public string EmailAddress { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
@@ -27,7 +29,7 @@ namespace ClinicManagementSoftware.Web.ApiModels.Patient
 
         public string Gender { get; set; }
 
-        [MaxLength(20, ErrorMessage = "Số nhà không vượt quá 15 ký tự")]
+        [MaxLength(20, ErrorMessage = "Thông tin địa chỉ chi tiết không vượt quá 15 ký tự")]
         public string AddressDetail { get; set; }
     }
 }

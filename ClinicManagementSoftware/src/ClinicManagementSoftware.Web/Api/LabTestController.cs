@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ClinicManagementSoftware.Core.Dto.LabOrderForm;
 using ClinicManagementSoftware.Core.Dto.LabTest;
-using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using Microsoft.AspNetCore.Authorization;

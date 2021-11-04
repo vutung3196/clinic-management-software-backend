@@ -12,6 +12,7 @@ namespace ClinicManagementSoftware.Core.Dto.User
         public byte Enabled { get; set; }
         public long ClinicId { get; set; }
         public string Role { get; set; }
+        public string EmailAddress { get; set; }
         public long? MedicalServiceGroupForTestSpecialistId { get; set; }
 
         public string RoleDescription => Role switch

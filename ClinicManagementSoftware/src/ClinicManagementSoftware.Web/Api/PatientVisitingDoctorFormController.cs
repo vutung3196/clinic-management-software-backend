@@ -44,6 +44,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // GET api/<PatientController>/5
         [HttpGet("doctorAvailability")]
+        [Authorize(Roles = "Receptionist")]
         public async Task<IActionResult> GetDoctorAvailability()
         {
             try
@@ -79,6 +80,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpPut("movetoend")]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> MoveAPatientToTheEndOfADoctorQueue([FromBody] QueueMoveToElementDto dto)
         {
             try
@@ -96,6 +98,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpPut("movetobeginning")]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> MoveAPatientToTheBeginningOfADoctorQueue([FromBody] QueueMoveToElementDto dto)
         {
             try
@@ -114,6 +117,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // POST api/<PatientController>
         [HttpPost]
+        [Authorize(Roles = "Receptionist")]
         [ValidateModel]
         public async Task<IActionResult> Post([FromBody] CreateOrUpdatePatientDoctorVisitingFormDto request)
         {
@@ -149,25 +153,25 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
-        // DELETE api/<PatientController>/5
-        [HttpDelete("{id:long}")]
-        public async Task<IActionResult> Delete(long id)
-        {
-            try
-            {
-                await _patientDoctorVisitingFormService.DeleteById(id);
-                return Ok($"Visiting form with id {id} has been deleted successfully");
-            }
-            catch (ArgumentNullException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //// DELETE api/<PatientController>/5
+        //[HttpDelete("{id:long}")]
+        //public async Task<IActionResult> Delete(long id)
+        //{
+        //    try
+        //    {
+        //        await _patientDoctorVisitingFormService.DeleteById(id);
+        //        return Ok($"Visiting form with id {id} has been deleted successfully");
+        //    }
+        //    catch (ArgumentNullException exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return BadRequest(exception.Message);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
     }
 }

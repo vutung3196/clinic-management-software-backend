@@ -131,6 +131,7 @@ namespace ClinicManagementSoftware.Web
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IDiseaseService, DiseaseService>();
             services.AddScoped<ISendGridService, SendGridService>();
+            services.AddScoped<IClinicReportService, ClinicReportService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

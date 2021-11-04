@@ -218,8 +218,21 @@ namespace ClinicManagementSoftware.Core.Services
                     Name = x.MedicalService.Name,
                     Price = x.MedicalService.Price,
                     Description = x.Description,
+                    Status = GetLabTestStatus(x.Status)
                 }),
             });
+        }
+
+        private static string GetLabTestStatus(byte status)
+        {
+            return status switch
+            {
+                (byte) EnumLabTestStatus.NotPaid => "Chưa thanh toán",
+                (byte) EnumLabTestStatus.WaitingForTesting => "Đang chờ xét nghiệm",
+                (byte) EnumLabTestStatus.WaitingForResult => "Đang chờ kết quả",
+                (byte) EnumLabTestStatus.Done => "Đã có kết quả",
+                _ => ""
+            };
         }
 
         public async Task<LabOrderFormDto> GetLabOrderFormById(long id)
@@ -276,6 +289,11 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task<long> CreateLabOrderForm(CreateOrEditLabOrderFormDto request)
         {
+            if (request.LabTests.Any(x => x.Description.Length > 100))
+            {
+                throw new ArgumentException("Miêu tả của xét nghiệm không được vượt quá 100 ký tự");
+            }
+
             var currentUser = await _userContext.GetCurrentContext();
             var labOrderForm = new LabOrderForm
             {
@@ -317,10 +335,27 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task DeleteLabOrderForm(long id)
         {
-            var labOrderForm = await _labOrderFormRepository.GetByIdAsync(id);
+            var @spec = new GetLabOrderFormAndLabTestsByIdSpec(id);
+            var labOrderForm = await _labOrderFormRepository.GetBySpecAsync(@spec);
+            if (labOrderForm == null)
+            {
+                throw new ArgumentException($"Cannot find lab order form with id: {id}");
+            }
+
+            if (labOrderForm.Status != (byte) EnumLabOrderFormStatus.NotPaid)
+            {
+                throw new ArgumentException("The system only allows you to delete non-paid lab order form");
+            }
+
             if (labOrderForm == null) throw new ArgumentException($"Cannot find lab order form with id: {id}");
             labOrderForm.IsDeleted = true;
             labOrderForm.DeletedAt = DateTime.Now;
+            foreach (var labTest in labOrderForm.LabTests)
+            {
+                labTest.IsDeleted = true;
+                labTest.DeletedAt = DateTime.Now;
+            }
+
             await _labOrderFormRepository.UpdateAsync(labOrderForm);
         }
     }

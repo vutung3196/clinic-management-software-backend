@@ -55,7 +55,14 @@ namespace ClinicManagementSoftware.Core.Services
         {
             string medicationInformation = null;
             if (request.MedicationInformation != null && request.MedicationInformation.Any())
+            {
+                if (request.MedicationInformation.Any(x => x.Usage.Length > 100))
+                {
+                    throw new ArgumentException("Cách dùng của thuốc không vượt quá 100 ký tự");
+                }
+
                 medicationInformation = JsonConvert.SerializeObject(request.MedicationInformation);
+            }
 
             var currentUser = await _userContext.GetCurrentContext();
             var currentPrescription = new Prescription
@@ -184,7 +191,8 @@ namespace ClinicManagementSoftware.Core.Services
             var gender = patientInformation.Age;
             mailTemplate = mailTemplate.Replace("{prescription.doctorSuggestion}",
                 prescriptionInformation.DoctorSuggestion);
-            mailTemplate = mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDateDisplayed);
+            mailTemplate =
+                mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDateDisplayed);
             var arrayTime = prescriptionInformation.CreatedAt.Split("/");
             if (arrayTime.Length == 3)
             {

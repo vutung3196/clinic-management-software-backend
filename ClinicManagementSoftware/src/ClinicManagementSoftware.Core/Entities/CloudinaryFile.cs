@@ -21,5 +21,6 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
 
         public MedicalImageFile MedicalImageFile { get; set; }
+        public Clinic Clinic { get; set; }
     }
 }

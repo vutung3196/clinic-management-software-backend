@@ -1,4 +1,6 @@
-﻿namespace ClinicManagementSoftware.Core.Dto.Clinic
+﻿using ClinicManagementSoftware.Core.Dto.Files;
+
+namespace ClinicManagementSoftware.Core.Dto.Clinic
 {
     public class ClinicInformationResponse
     {
@@ -16,5 +18,6 @@
             AddressDetail + ", " + AddressStreet + ", " + AddressDistrict + ", " + AddressCity;
 
         public string AddressDetail { get; set; }
+        public ImageFileResponse ImageFile { get; set; }
     }
 }
