@@ -21,26 +21,6 @@ namespace ClinicManagementSoftware.Core.Services
             _labTestQueueRepository = labTestQueueRepository;
         }
 
-        public async Task EnqueueNewLabTests(long[] labTestIds, long clinicId)
-        {
-            var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
-            var currentDoctorQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
-            if (currentDoctorQueue == null)
-            {
-                throw new ArgumentException($"Cannot find current queue with clinic id: {clinicId}");
-            }
-
-            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
-            foreach (var labTestId in labTestIds)
-            {
-                currentQueue.Data.Enqueue(labTestId);
-            }
-
-            currentDoctorQueue.UpdatedAt = DateTime.Now;
-            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
-            await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
-        }
-
         public async Task EnqueueNewLabTestForMedicalServiceGroup(long[] labTestIds, long medicalServiceGroupId,
             long clinicId)
         {
@@ -61,24 +41,6 @@ namespace ClinicManagementSoftware.Core.Services
             currentLabTestQueue.UpdatedAt = DateTime.Now;
             currentLabTestQueue.Queue = JsonConvert.SerializeObject(currentQueue);
             await _labTestQueueRepository.UpdateAsync(currentLabTestQueue);
-        }
-
-        public async Task<long> MoveAFirstPatientToTheEndOfTheQueue(long clinicId)
-        {
-            var @spec = new GetLabTestQueueByClinicIdSpec(clinicId);
-            var currentDoctorQueue = await _labTestQueueRepository.GetBySpecAsync(@spec);
-            if (currentDoctorQueue == null)
-            {
-                throw new ArgumentException($"Cannot find current queue with {clinicId}");
-            }
-
-            var currentQueue = JsonConvert.DeserializeObject<QueueData>(currentDoctorQueue.Queue);
-            var currentVisitingFormId = currentQueue.Data.Dequeue();
-            currentQueue.Data.Enqueue(currentVisitingFormId);
-            currentDoctorQueue.UpdatedAt = DateTime.Now;
-            currentDoctorQueue.Queue = JsonConvert.SerializeObject(currentQueue);
-            await _labTestQueueRepository.UpdateAsync(currentDoctorQueue);
-            return currentVisitingFormId;
         }
 
         public async Task<Queue<long>> GetCurrentLabTestQueue(long clinicId, long medicalServiceGroupId)

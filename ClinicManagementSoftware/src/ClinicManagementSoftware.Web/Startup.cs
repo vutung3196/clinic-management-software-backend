@@ -111,6 +111,7 @@ namespace ClinicManagementSoftware.Web
             });
 
             services.AddHttpContextAccessor();
+            services.AddScoped<ITokenAuthenticationService, TokenAuthenticationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserContext, UserContext>();
             services.AddScoped<IJwtAuthManagerService, JwtAuthManagerService>();

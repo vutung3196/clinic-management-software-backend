@@ -35,17 +35,5 @@ namespace ClinicManagementSoftware.Core.Services
                 currentUser.MedicalServiceGroupForTestSpecialistId);
             return currentUserContext;
         }
-
-        public async Task<CurrentUserContext> GetUserContextByUserName(string username)
-        {
-            var @spec = new GetUserRoleAndClinicByUsernameSpec(username);
-            var currentUser = await _userRepository.GetBySpecAsync(@spec);
-            if (currentUser == null)
-                throw new UserNotFoundException($"Cannot find current user with username is: {username}");
-            var currentUserContext = new CurrentUserContext(currentUser.Id, currentUser.ClinicId,
-                currentUser.Username, currentUser.FullName, currentUser.Role,
-                currentUser.MedicalServiceGroupForTestSpecialistId);
-            return currentUserContext;
-        }
     }
 }

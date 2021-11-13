@@ -30,12 +30,12 @@ namespace ClinicManagementSoftware.Web.Api
 
         [HttpGet]
         [Authorize]
-
+        [Authorize(Roles = "Doctor,TestSpecialist")]
         public async Task<IActionResult> Get(long labTestId)
         {
             try
             {
-                var result = await _patientMedicalImageService.GetMedicalImageFiles(labTestId);
+                var result = await _patientMedicalImageService.GetMedicalImageFilesOfALabTest(labTestId);
                 var response = result.Select(x => new ImageFileResponse
                 {
                     Id = x.MedicalImageFile.Id,
@@ -61,8 +61,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("byvisitingform")]
-        [Authorize]
-
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> GetByVisitingForm(long visitingFormId)
         {
             try
@@ -95,7 +94,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [HttpPost]
         [Authorize]
-
+        [Authorize(Roles = "TestSpecialist")]
         public async Task<IActionResult> Post([FromBody] CreateFileRequest request)
         {
             try
@@ -123,7 +122,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [HttpPost("cliniclogo")]
         [Authorize]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UploadLogo([FromBody] CreateClinicLogoRequest request)
         {
             try
@@ -154,8 +153,7 @@ namespace ClinicManagementSoftware.Web.Api
         // DELETE api/<FilesController>/5
         // delete file 
         [HttpDelete("{request}")]
-        [Authorize]
-
+        [Authorize(Roles = "TestSpecialist")]
         public async Task<IActionResult> Delete(long id)
         {
             try
@@ -184,10 +182,5 @@ namespace ClinicManagementSoftware.Web.Api
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-    }
-
-    public class DeleteCloudinaryFileRequest
-    {
-        public string PublicId { get; set; }
     }
 }

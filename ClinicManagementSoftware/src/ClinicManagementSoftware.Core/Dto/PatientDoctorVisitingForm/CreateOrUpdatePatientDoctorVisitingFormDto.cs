@@ -7,7 +7,7 @@ namespace ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm
         public string VisitingFormCode { get; set; }
 
         [Required(ErrorMessage = "Lý do khám là bắt buộc")]
-        [MaxLength(100, ErrorMessage = "Miêu tả không được vượt quá 100 ký tự")]
+        [MaxLength(100, ErrorMessage = "Lý do khám không được vượt quá 100 ký tự")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Cần phải chọn bác sĩ")]

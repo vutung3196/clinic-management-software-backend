@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicManagementSoftware.SharedKernel", "src\ClinicManagementSoftware.SharedKernel\ClinicManagementSoftware.SharedKernel.csproj", "{EF171B7B-EA01-4D4C-8192-01186BDA9956}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicManagementSoftware.Web", "src\ClinicManagementSoftware.Web\ClinicManagementSoftware.Web.csproj", "{7AA4AB0E-1DAC-4727-813F-AEDC5F7FAC9D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F50D880C-B45F-44DE-A6F0-4C2E5F3E75AB} = {F50D880C-B45F-44DE-A6F0-4C2E5F3E75AB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

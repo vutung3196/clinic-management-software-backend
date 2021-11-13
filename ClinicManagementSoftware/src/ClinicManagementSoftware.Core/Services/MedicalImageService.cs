@@ -36,7 +36,7 @@ namespace ClinicManagementSoftware.Core.Services
             _clinicRepository = clinicRepository;
         }
 
-        public async Task<IEnumerable<CloudinaryFile>> GetMedicalImageFiles(long labTestId)
+        public async Task<IEnumerable<CloudinaryFile>> GetMedicalImageFilesOfALabTest(long labTestId)
         {
             var @spec = new GetDetailedLabTestByIdSpec(labTestId);
             var labTest = await _labTestRepository.GetBySpecAsync(@spec);

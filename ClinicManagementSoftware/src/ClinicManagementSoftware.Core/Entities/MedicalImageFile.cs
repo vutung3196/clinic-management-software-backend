@@ -21,5 +21,6 @@ namespace ClinicManagementSoftware.Core.Entities
         public CloudinaryFile CloudinaryFile { get; set; }
 
         [Column("deleted_at")] public DateTime? DeletedAt { get; set; }
+        [Column("is_deleted")] public byte? IsDeleted { get; set; }
     }
 }

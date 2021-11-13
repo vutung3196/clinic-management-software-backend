@@ -3,8 +3,8 @@ using ClinicManagementSoftware.Core.Dto.User;
 
 namespace ClinicManagementSoftware.Core.Interfaces
 {
-    public interface IUserContext
+    public interface ITokenAuthenticationService
     {
-        Task<CurrentUserContext> GetCurrentContext();
+        Task<UserDto> LoginAsync(string userName, string password);
     }
 }

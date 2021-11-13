@@ -28,6 +28,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize]
         [HttpGet("{id}")]
+        [Authorize(Roles = "MasterAdmin,Admin")]
         public async Task<IActionResult> GetClinic(long id)
         {
             try

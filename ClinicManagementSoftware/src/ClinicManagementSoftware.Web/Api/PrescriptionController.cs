@@ -31,27 +31,27 @@ namespace ClinicManagementSoftware.Web.Api
             _logger = logger;
         }
 
-        [HttpGet("getbypatient")]
-        public async Task<IActionResult> GetByPatientId(long patientId)
-        {
-            try
-            {
-                var result = await _prescriptionService.GetPrescriptionsByPatientId(patientId);
-                var response = new Response<ICollection<PrescriptionInformation>>(result);
+        //[HttpGet("getbypatient")]
+        //public async Task<IActionResult> GetByPatientId(long patientId)
+        //{
+        //    try
+        //    {
+        //        var result = await _prescriptionService.GetPrescriptionsByPatientId(patientId);
+        //        var response = new Response<ICollection<PrescriptionInformation>>(result);
 
-                return Ok(response);
-            }
-            catch (PatientNotFoundException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //        return Ok(response);
+        //    }
+        //    catch (PatientNotFoundException exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return BadRequest(exception.Message);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

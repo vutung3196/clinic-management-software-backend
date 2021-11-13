@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="ClinicManagementSoftware.Core.DefaultCoreModule" Collapsed="true">
     <Position X="108.75" Y="0.5" Width="1.5" />
     <TypeIdentifier />
@@ -143,8 +143,8 @@
     <TypeIdentifier />
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Entities.MedicalService" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="107" Y="3.5" Width="1.5" />
+  <Class Name="ClinicManagementSoftware.Core.Entities.MedicalService" BaseTypeListCollapsed="true">
+    <Position X="112.75" Y="3.25" Width="3.25" />
     <TypeIdentifier />
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -289,12 +289,12 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="ClinicManagementSoftware.Core.Services.JwtAuthManagerService" BaseTypeListCollapsed="true">
-    <Position X="53" Y="6.25" Width="2" />
+    <Position X="12.5" Y="7.75" Width="2.75" />
     <TypeIdentifier />
-    <Lollipop Position="0.305" Collapsed="true" />
+    <Lollipop Orientation="Left" Position="1.096" Collapsed="true" />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Services.LabOrderFormService" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="12" Y="1.75" Width="1.5" />
+  <Class Name="ClinicManagementSoftware.Core.Services.LabOrderFormService" BaseTypeListCollapsed="true">
+    <Position X="12" Y="1.75" Width="2" />
     <TypeIdentifier />
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -347,11 +347,6 @@
     <Position X="63.75" Y="1.75" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="ClinicManagementSoftware.Core.Services.UserService" BaseTypeListCollapsed="true">
-    <Position X="7" Y="3.5" Width="3" />
-    <TypeIdentifier />
-    <Lollipop Orientation="Right" Position="0.331" Collapsed="true" />
   </Class>
   <Class Name="ClinicManagementSoftware.Core.Specifications.GetAllMedicalServiceGroupByClinicIdSpec" Collapsed="true">
     <Position X="110.5" Y="0.5" Width="1.5" />
@@ -410,7 +405,7 @@
     <Position X="107" Y="2.5" Width="1.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Specifications.PatientHospitalizedProfileSpec" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Specifications.PatientHospitalizedProfileSpec">
     <Position X="108.75" Y="4.5" Width="1.5" />
     <TypeIdentifier />
   </Class>
@@ -424,6 +419,29 @@
       <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAIAAAAIA=</HashCode>
       <FileName>ApiModels\Wrapper\Response.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="ClinicManagementSoftware.Web.Api.TokenAuthController">
+    <Position X="4" Y="7" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAIAIIAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Api\TokenAuthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClinicManagementSoftware.Web.Api.ClinicController">
+    <Position X="13.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAABAAABAAAAAAAACIAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Api\ClinicController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Cloudinary.CloudinaryClient">
+    <Position X="8.5" Y="8.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClinicManagementSoftware.Core.Services.UserService">
+    <Position X="1.25" Y="9.75" Width="2.25" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
   </Class>
   <Interface Name="ClinicManagementSoftware.Core.Interfaces.IClinicManagementService" Collapsed="true">
     <Position X="100" Y="7.75" Width="1.5" />
@@ -481,8 +499,8 @@
     <Position X="110.5" Y="8.5" Width="1.5" />
     <TypeIdentifier />
   </Interface>
-  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IUserService" Collapsed="true">
-    <Position X="100" Y="9.25" Width="1.5" />
+  <Interface Name="ClinicManagementSoftware.Core.Interfaces.IUserService">
+    <Position X="4.25" Y="11" Width="2.5" />
     <TypeIdentifier />
   </Interface>
   <Enum Name="ClinicManagementSoftware.Core.Enum.EnumDoctorVisitingFormStatus" Collapsed="true">

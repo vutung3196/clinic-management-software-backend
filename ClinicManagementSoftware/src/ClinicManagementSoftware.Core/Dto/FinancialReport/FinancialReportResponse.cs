@@ -10,7 +10,6 @@ namespace ClinicManagementSoftware.Core.Dto.FinancialReport
         public int TotalNumberNewPatients { get; set; }
         public int TotalNumberPrescriptions { get; set; }
         public int TotalNumberTestPerformed { get; set; }
-        public IEnumerable<PatientPaymentInformation> PatientPaymentInformation { get; set; }
         public IEnumerable<ReceiptByDayInformation> ReceiptByDayInformations { get; set; }
         public IEnumerable<int> NumberOfPatientsByMonth { get; set; }
     }

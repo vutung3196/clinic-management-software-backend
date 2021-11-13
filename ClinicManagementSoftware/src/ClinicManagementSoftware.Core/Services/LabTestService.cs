@@ -21,7 +21,6 @@ namespace ClinicManagementSoftware.Core.Services
     public class LabTestService : ILabTestService
     {
         private readonly IRepository<LabTest> _labTestRepository;
-        private readonly ILabOrderFormService _labOrderFormService;
         private readonly IUserContext _userContext;
         private readonly ILabTestQueueService _labTestQueueService;
         private readonly IMapper _mapper;
@@ -29,12 +28,11 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<PatientDoctorVisitForm> _doctorVisitingFormRepository;
 
         public LabTestService(IRepository<LabTest> labTestRepository,
-            ILabOrderFormService labOrderFormService, IUserContext userContext,
+           IUserContext userContext,
             ILabTestQueueService labTestQueueService, IMapper mapper, IRepository<LabOrderForm> labOrderFormRepository,
             IRepository<PatientDoctorVisitForm> doctorVisitingFormRepository)
         {
             _labTestRepository = labTestRepository;
-            _labOrderFormService = labOrderFormService;
             _userContext = userContext;
             _labTestQueueService = labTestQueueService;
             _mapper = mapper;
@@ -79,17 +77,6 @@ namespace ClinicManagementSoftware.Core.Services
                 StatusDisplayed = GetLabTestStatus(labTest.Status),
                 Status = labTest.Status
             };
-        }
-
-        public async Task<IEnumerable<LabTestDto>> GetAllByRole()
-        {
-            var labOrderForms = await _labOrderFormService.GetAllByRole();
-            var a = labOrderForms.Select(x => x.LabTests).ToList();
-            var labTests = labOrderForms.Select(x => new LabTestDto()
-            {
-                //Description = x.
-            });
-            throw new System.NotImplementedException();
         }
 
         public async Task<IEnumerable<LabTestDto>> GetCurrentLabTestsNeedToBePerformed(

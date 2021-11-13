@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
-using JetBrains.Annotations;
 
 namespace ClinicManagementSoftware.Core.Entities
 {
@@ -33,6 +32,5 @@ namespace ClinicManagementSoftware.Core.Entities
         [Column("medical_insurance_code")] public string MedicalInsuranceCode { get; set; }
         [Column("code")] public string Code { get; set; }
         [Column("disease_note")] public string DiseaseNote { get; set; }
-
     }
 }

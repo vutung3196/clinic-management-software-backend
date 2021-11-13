@@ -47,11 +47,11 @@ namespace ClinicManagementSoftware.Core.Services
             }
 
             var totalReceiptAmount = receipts.Sum(x => x.Total);
-            if (receipts.Any())
-            {
-                var topPatients = GetTop10PatientPaymentInformation(receipts);
-                result.PatientPaymentInformation = topPatients;
-            }
+            //if (receipts.Any())
+            //{
+            //    var topPatients = GetTop10PatientPaymentInformation(receipts);
+            //    result.PatientPaymentInformation = topPatients;
+            //}
 
             result.TotalReceiptAmount = totalReceiptAmount;
 
@@ -82,28 +82,6 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
-        public async Task<DashboardReportResponse> GetDashBoardReport(long clinicId, DateTime startDate,
-            DateTime endDate)
-        {
-            var result = new DashboardReportResponse();
-
-            var @receiptSpec = new GetAllReceiptsFromDateSpec(clinicId, startDate, endDate);
-            var receipts = await _receiptSpecificationRepository.ListAsync(@receiptSpec);
-            if (receipts.Count == 0)
-            {
-                return result;
-            }
-
-            return result;
-        }
-
-        public async Task<IEnumerable<MedicalServiceReport>> GetDashBoardReport(DateTime startDate, DateTime endDate)
-        {
-            var result = new List<MedicalServiceReport>();
-
-            return result;
-        }
-
         private static IEnumerable<int> GetPatientCountByMonth(IReadOnlyCollection<PatientDoctorVisitForm> forms)
         {
             var result = new List<int>();
@@ -117,28 +95,6 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
-        private static IEnumerable<PatientPaymentInformation> GetTop10PatientPaymentInformation(
-            IEnumerable<Receipt> receipts)
-        {
-            var topPatients = receipts
-                .GroupBy(x => x.Patient)
-                .ToDictionary(x => x.Key,
-                    x => x.Sum(receipt => receipt.Total));
-
-            var result = topPatients.OrderByDescending(x => x.Value).Take(10)
-                .Select(x => new PatientPaymentInformation
-                {
-                    Name = x.Key.FullName,
-                    DateOfBirth = x.Key.DateOfBirth.HasValue ? x.Key.DateOfBirth.Format() : "",
-                    Amount = x.Value,
-                    Gender = x.Key.Gender == (byte) EnumGender.Nam ? "Nam" : "Nữ",
-                    Address = x.Key.AddressDetail + ", " + x.Key.AddressStreet + ", " + x.Key.AddressDistrict + ", " +
-                              x.Key.AddressCity,
-                    EmailAddress = x.Key.EmailAddress,
-                    PhoneNumber = x.Key.PhoneNumber
-                });
-            return result;
-        }
 
         private static IEnumerable<ReceiptByDayInformation> CalculateReceiptsByDayInformation(
             IEnumerable<Receipt> receipts)

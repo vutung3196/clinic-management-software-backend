@@ -109,22 +109,6 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
-        public async Task DeleteById(long id)
-        {
-            var @spec = new GetDoctorVisitingFormAndPatientAndDoctorByVisitingFormIdSpec(id);
-            var patientDoctorVisitForm = await _patientDoctorVisitingFormRepository.GetBySpecAsync(@spec);
-            if (patientDoctorVisitForm == null)
-            {
-                throw new ArgumentException($"Visiting form is not found with patientId: {id}");
-            }
-
-            // update queue
-            await _doctorQueueService.DeleteAVisitingFormInDoctorQueue(id, patientDoctorVisitForm.DoctorId);
-            patientDoctorVisitForm.IsDeleted = true;
-            patientDoctorVisitForm.DeletedAt = DateTime.Now;
-            await _patientDoctorVisitingFormRepository.UpdateAsync(patientDoctorVisitForm);
-        }
-
         private PatientDoctorVisitingFormDto ConvertToPatientDoctorVisitingFormDto(
             PatientDoctorVisitForm patientDoctorVisitForm)
         {
@@ -173,6 +157,7 @@ namespace ClinicManagementSoftware.Core.Services
             CreateOrUpdatePatientDoctorVisitingFormDto request)
         {
             var currentContext = await _userContext.GetCurrentContext();
+
             var visitingForm = new PatientDoctorVisitForm
             {
                 Code = request.VisitingFormCode,
@@ -216,7 +201,7 @@ namespace ClinicManagementSoftware.Core.Services
 
             if (patientDoctorVisitForm.VisitingStatus != (byte) EnumDoctorVisitingFormStatus.WaitingForDoctor)
             {
-                throw new ArgumentException("Cannot edit patient doctor visiting form with status not Đang chờ khám");
+                throw new ArgumentException("Cannot edit patient doctor visiting form having status: Đang chờ khám");
             }
 
             patientDoctorVisitForm.UpdatedAt = DateTime.Now;
