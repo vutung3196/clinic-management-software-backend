@@ -152,7 +152,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // DELETE api/<FilesController>/5
         // delete file 
-        [HttpDelete("{request}")]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "TestSpecialist")]
         public async Task<IActionResult> Delete(long id)
         {

@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicManagementSoftware.We
 		{F50D880C-B45F-44DE-A6F0-4C2E5F3E75AB} = {F50D880C-B45F-44DE-A6F0-4C2E5F3E75AB}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicManagementSoftware.Test", "ClinicManagementSoftware.Test\ClinicManagementSoftware.Test.csproj", "{14E9FA56-8516-448B-A423-6357DD961C63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{7AA4AB0E-1DAC-4727-813F-AEDC5F7FAC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AA4AB0E-1DAC-4727-813F-AEDC5F7FAC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AA4AB0E-1DAC-4727-813F-AEDC5F7FAC9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E9FA56-8516-448B-A423-6357DD961C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E9FA56-8516-448B-A423-6357DD961C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E9FA56-8516-448B-A423-6357DD961C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E9FA56-8516-448B-A423-6357DD961C63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

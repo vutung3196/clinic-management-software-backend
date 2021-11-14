@@ -8,6 +8,7 @@ using ClinicManagementSoftware.Core.Dto.Files;
 using ClinicManagementSoftware.Core.Dto.User;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
+using ClinicManagementSoftware.Core.Exceptions.Clinic;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
@@ -57,6 +58,17 @@ namespace ClinicManagementSoftware.Core.Services
             clinic.AddressDistrict = request.AddressDistrict;
             clinic.AddressStreet = request.AddressStreet;
             clinic.IsEnabled = request.Enabled ? (byte) EnumEnabled.Active : (byte) EnumEnabled.InActive;
+            await _clinicSpecificationRepository.UpdateAsync(clinic);
+        }
+
+        public async Task DeactivateClinic(long id)
+        {
+            var clinic = await _clinicSpecificationRepository.GetByIdAsync(id);
+            if (clinic == null)
+            {
+                throw new ClinicNotFoundException("Not found");
+            }
+            clinic.IsEnabled = (byte) EnumEnabled.InActive;
             await _clinicSpecificationRepository.UpdateAsync(clinic);
         }
 
