@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ClinicManagementSoftware.SharedKernel;
 using ClinicManagementSoftware.SharedKernel.Interfaces;

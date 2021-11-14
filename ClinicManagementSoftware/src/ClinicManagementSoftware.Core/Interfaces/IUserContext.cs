@@ -6,6 +6,5 @@ namespace ClinicManagementSoftware.Core.Interfaces
     public interface IUserContext
     {
         Task<CurrentUserContext> GetCurrentContext();
-        Task<CurrentUserContext> GetUserContextByUserName(string username);
     }
 }

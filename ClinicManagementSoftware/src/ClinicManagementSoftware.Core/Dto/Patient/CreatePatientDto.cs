@@ -18,13 +18,9 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
 
         public string PhoneNumber { get; set; }
 
-        public string Occupation { get; set; }
-
         public string Gender { get; set; }
 
         public byte IsDeleted { get; set; }
-
-        public string PatientCode { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

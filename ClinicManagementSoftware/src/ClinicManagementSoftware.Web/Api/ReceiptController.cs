@@ -44,7 +44,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("receiptreport")]
-        public async Task<IActionResult> Get([FromQuery] ReceiptReportRequestDto request)
+        public async Task<IActionResult> GetReceiptReport([FromQuery] ReceiptReportRequestDto request)
         {
             try
             {

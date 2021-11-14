@@ -9,7 +9,7 @@ namespace ClinicManagementSoftware.Core.Specifications
         public GetPatientsByNameOfClinicSpec(long clinicId, string searchName)
         {
             Query.Where(patient => patient.ClinicId == clinicId && patient.IsDeleted == 0)
-                .Where(x => x.FullName.Contains(searchName, StringComparison.InvariantCultureIgnoreCase));
+                .Where(x => x.FullName.ToLower().Contains(searchName.ToLower()));
         }
     }
 }

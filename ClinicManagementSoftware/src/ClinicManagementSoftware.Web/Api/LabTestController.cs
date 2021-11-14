@@ -28,6 +28,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("{id:long}")]
+        [Authorize(Roles = "Doctor,TestSpecialist")]
         public async Task<IActionResult> GetById(long id)
         {
             try
@@ -48,6 +49,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("bystatus")]
+        [Authorize(Roles = "Doctor,TestSpecialist")]
         public async Task<IActionResult> GetByStatus(byte status)
         {
             try
@@ -66,6 +68,7 @@ namespace ClinicManagementSoftware.Web.Api
         // PUT api/<PrescriptionController>/5
         // update image
         [HttpPut("{id}")]
+        [Authorize(Roles = "TestSpecialist")]
         public async Task<IActionResult> Put(long id, [FromBody] EditLabTestDto request)
         {
             try
@@ -87,6 +90,7 @@ namespace ClinicManagementSoftware.Web.Api
 
 
         [HttpPut("movetoend")]
+        [Authorize(Roles = "TestSpecialist")]
         public async Task<IActionResult> MoveALabTestToTheEndOfAQueue([FromBody] QueueMoveToElementDto request)
         {
             try
@@ -103,6 +107,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpPut("movetobeginning")]
+        [Authorize(Roles = "TestSpecialist")]
         public async Task<IActionResult> MoveALabTestToTheBeginningOfAQueue([FromBody] QueueMoveToElementDto request)
         {
             try
@@ -117,10 +122,5 @@ namespace ClinicManagementSoftware.Web.Api
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-    }
-
-    public class QueueMoveToElementDto
-    {
-        public long Id { get; set; }
     }
 }

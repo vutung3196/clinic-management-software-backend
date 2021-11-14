@@ -16,7 +16,6 @@ namespace ClinicManagementSoftware.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Receptionist,Doctor")]
     public class MedicalServiceController : ControllerBase
     {
         private readonly IMedicalServiceService _medicalService;
@@ -32,6 +31,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // GET api/<ClinicServiceController>/5
         [HttpGet]
+        [Authorize(Roles = "Admin,Receptionist,Doctor")]
         public async Task<IActionResult> Get()
         {
             try
@@ -48,6 +48,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("bygroup")]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> GetByGroup()
         {
             try
@@ -64,6 +65,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("doctorvisitingformmedicalservice")]
+        [Authorize(Roles = "Receptionist")]
         public async Task<IActionResult> GetDoctorVisitingFormMedicalService()
         {
             try
@@ -81,6 +83,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // POST api/<ClinicServiceController>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] MedicalServiceDto request)
         {
             try
@@ -103,6 +106,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // PUT api/<ClinicServiceController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(long id, [FromBody] MedicalServiceDto request)
         {
             try
@@ -125,6 +129,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         // DELETE api/<ClinicServiceController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(long id)
         {
             try

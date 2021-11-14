@@ -7,7 +7,7 @@ namespace ClinicManagementSoftware.Core.Interfaces
 {
     public interface IMedicalImageService
     {
-        Task<IEnumerable<CloudinaryFile>> GetMedicalImageFiles(long labTestId);
+        Task<IEnumerable<CloudinaryFile>> GetMedicalImageFilesOfALabTest(long labTestId);
         Task<IEnumerable<CloudinaryFile>> GetMedicalImageFilesByVisitingFormId(long visitingFormId);
 
         Task<List<CloudinaryFile>> CreateFileImagesForLabTest(long patientId,

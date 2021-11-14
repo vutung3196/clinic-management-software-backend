@@ -137,28 +137,6 @@ namespace ClinicManagementSoftware.Core.Services
             return receiptId;
         }
 
-        public async Task PayLabOrderForm(long id)
-        {
-            var @spec = new GetLabOrderFormAndLabTestsAndPatientInformationSpec(id);
-            var labOrderForm = await _labOrderFormRepository.GetBySpecAsync(@spec);
-            if (labOrderForm == null)
-            {
-                throw new ArgumentException($"Cannot find lab order form with id: {id}");
-            }
-
-            labOrderForm.Status = (byte) EnumLabOrderFormStatus.Paid;
-            foreach (var test in labOrderForm.LabTests)
-            {
-                await _labTestRepository.DeleteAsync(test);
-            }
-
-            foreach (var labTest in labOrderForm.LabTests)
-            {
-                labTest.Status = (byte) EnumLabTestStatus.WaitingForTesting;
-                await _labTestRepository.UpdateAsync(labTest);
-            }
-        }
-
         public async Task<IEnumerable<LabOrderFormDto>> GetAllByRole()
         {
             // validate role

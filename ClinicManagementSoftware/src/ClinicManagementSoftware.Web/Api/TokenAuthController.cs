@@ -18,18 +18,17 @@ namespace ClinicManagementSoftware.Web.Api
     [Route("api/[controller]")]
     public class TokenAuthController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly ITokenAuthenticationService _tokenAuthenticationService;
         private readonly IJwtAuthManagerService _jwtAuthManagerService;
         private readonly ILogger<TokenAuthController> _logger;
-        private readonly IUserContext _userContext;
 
-        public TokenAuthController(IUserService userService, IJwtAuthManagerService jwtAuthManagerService,
-            ILogger<TokenAuthController> logger, IUserContext userContext)
+        public TokenAuthController(IJwtAuthManagerService jwtAuthManagerService,
+            ILogger<TokenAuthController> logger,
+            ITokenAuthenticationService tokenAuthenticationService)
         {
-            _userService = userService;
             _jwtAuthManagerService = jwtAuthManagerService;
             _logger = logger;
-            _userContext = userContext;
+            _tokenAuthenticationService = tokenAuthenticationService;
         }
 
         [HttpPost("auth")]
@@ -38,24 +37,23 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
-                var loginResult = await _userService.LoginAsync(request.UserName, request.Password);
+                var userResult = await _tokenAuthenticationService.LoginAsync(request.UserName, request.Password);
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.Name, loginResult.UserName),
-                    new Claim(ClaimTypes.Role, loginResult.Role.RoleName)
+                    new Claim(ClaimTypes.Name, userResult.UserName),
+                    new Claim(ClaimTypes.Role, userResult.Role.RoleName)
                 };
 
                 var jwtResult = _jwtAuthManagerService.GenerateTokens(request.UserName, claims, DateTime.Now);
-                var userContext = await _userContext.GetUserContextByUserName(request.UserName);
                 return Ok(new Response<AuthenticateResultModel>(new AuthenticateResultModel
                 {
                     AccessToken = jwtResult.AccessToken,
                     AccessTokenExpiredAt = jwtResult.AccessTokenExpireAt,
                     UserName = request.UserName,
-                    ClinicId = userContext.ClinicId,
-                    Id = userContext.UserId,
-                    FullName = userContext.FullName,
-                    Role = loginResult.Role.RoleName
+                    ClinicId = userResult.ClinicId,
+                    Id = userResult.Id,
+                    FullName = userResult.FullName,
+                    Role = userResult.Role.RoleName
                 }));
             }
             catch (UserNotFoundException exception)

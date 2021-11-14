@@ -28,6 +28,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(DateTime startDate, DateTime endDate)
         {
             try

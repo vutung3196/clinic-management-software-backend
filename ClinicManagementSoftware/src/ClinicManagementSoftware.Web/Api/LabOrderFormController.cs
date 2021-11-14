@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.LabOrderForm;
-using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
@@ -140,25 +139,25 @@ namespace ClinicManagementSoftware.Web.Api
 
 
         // PUT api/<PrescriptionController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CreateOrEditLabOrderFormDto request)
-        {
-            try
-            {
-                await _labOrderFormService.EditLabOrderForm(id, request);
-                return Ok("Update successfully");
-            }
-            catch (ArgumentException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Put(long id, [FromBody] CreateOrEditLabOrderFormDto request)
+        //{
+        //    try
+        //    {
+        //        await _labOrderFormService.EditLabOrderForm(id, request);
+        //        return Ok("Update successfully");
+        //    }
+        //    catch (ArgumentException exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return BadRequest(exception.Message);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
 
         // DELETE api/<PrescriptionController>/5
         [HttpDelete("{id}")]

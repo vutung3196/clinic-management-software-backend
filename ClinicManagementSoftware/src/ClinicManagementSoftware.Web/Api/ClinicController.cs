@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.Clinic;
+using ClinicManagementSoftware.Core.Exceptions.Clinic;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
 using ClinicManagementSoftware.Web.Filters;
@@ -28,6 +29,7 @@ namespace ClinicManagementSoftware.Web.Api
 
         [Authorize]
         [HttpGet("{id}")]
+        [Authorize(Roles = "MasterAdmin,Admin")]
         public async Task<IActionResult> GetClinic(long id)
         {
             try
@@ -95,6 +97,28 @@ namespace ClinicManagementSoftware.Web.Api
                 return Ok("Update successfully");
             }
             catch (ArgumentException exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Authorize(Roles = "MasterAdmin")]
+        [HttpDelete("{id}")]
+        [ValidateModel]
+        public async Task<IActionResult> DeactivateClinic(long id)
+        {
+            try
+            {
+                await _clinicService.DeactivateClinic(id);
+                return Ok("Deactivate successfully");
+            }
+            catch (ClinicNotFoundException exception)
             {
                 _logger.LogError(exception.Message);
                 return StatusCode(StatusCodes.Status400BadRequest, exception.Message);

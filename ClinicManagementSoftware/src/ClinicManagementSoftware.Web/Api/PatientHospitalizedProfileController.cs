@@ -126,26 +126,26 @@ namespace ClinicManagementSoftware.Web.Api
             }
         }
 
-        // DELETE api/<ClinicServiceController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id)
-        {
-            try
-            {
-                await _patientHospitalizedProfileService.DeletePatientProfile(id);
-                var response = new Response<string>("Delete successfully");
-                return Ok(response);
-            }
-            catch (ArgumentException exception)
-            {
-                _logger.LogError(exception.Message);
-                return BadRequest(exception.Message);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        //// DELETE api/<ClinicServiceController>/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(long id)
+        //{
+        //    try
+        //    {
+        //        await _patientHospitalizedProfileService.DeletePatientProfile(id);
+        //        var response = new Response<string>("Delete successfully");
+        //        return Ok(response);
+        //    }
+        //    catch (ArgumentException exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return BadRequest(exception.Message);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        _logger.LogError(exception.Message);
+        //        return StatusCode(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
     }
 }

@@ -9,7 +9,6 @@ using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Dto.Prescription;
 using ClinicManagementSoftware.Core.Entities;
 using ClinicManagementSoftware.Core.Enum;
-using ClinicManagementSoftware.Core.Exceptions.Patient;
 using ClinicManagementSoftware.Core.Exceptions.Prescription;
 using ClinicManagementSoftware.Core.Helpers;
 using ClinicManagementSoftware.Core.Interfaces;
@@ -228,40 +227,6 @@ namespace ClinicManagementSoftware.Core.Services
             return result;
         }
 
-        public async Task<PrescriptionInformation> EditPrescription(long prescriptionId,
-            CreatePrescriptionDto prescriptionRequest)
-        {
-            var currentPrescription = await _prescriptionRepository.GetByIdAsync(prescriptionId);
-            var currentUser = await _userContext.GetCurrentContext();
-            if (currentPrescription == null)
-                throw new PrescriptionNotFoundException(
-                    $"Prescriptions not found with Id: {prescriptionId}");
-
-            string medicineInformation = null;
-            if (prescriptionRequest.MedicationInformation != null && prescriptionRequest.MedicationInformation.Any())
-                medicineInformation = JsonConvert.SerializeObject(prescriptionRequest.MedicationInformation);
-
-            currentPrescription.UpdatedAt = DateTime.Now;
-            currentPrescription.DiagnosedDescription = prescriptionRequest.DiagnosedDescription;
-            currentPrescription.DoctorSuggestion = prescriptionRequest.DoctorSuggestion;
-            currentPrescription.MedicationInformation = medicineInformation;
-            currentPrescription.RevisitDate = prescriptionRequest.RevisitDate;
-            currentPrescription.DoctorId = currentUser.UserId;
-
-            await _prescriptionRepository.UpdateAsync(currentPrescription);
-            return _mapper.Map<PrescriptionInformation>(currentPrescription);
-        }
-
-        public async Task<ICollection<PrescriptionInformation>> GetPrescriptionsByPatientId(long patientId)
-        {
-            var currentPatient = await _patientRepository.GetByIdAsync(patientId);
-            if (currentPatient == null)
-                throw new PatientNotFoundException($"PatientInformation not found with patientId {patientId}");
-
-            var currentPatientPrescriptions = await GetPrescriptionsFromPatientId(patientId);
-            return currentPatientPrescriptions.Select(x => _mapper.Map<PrescriptionInformation>(x)).ToList();
-        }
-
         public async Task<IEnumerable<PatientPrescriptionResponse>> GetAllPrescriptions()
         {
             var currentUser = await _userContext.GetCurrentContext();
@@ -302,25 +267,6 @@ namespace ClinicManagementSoftware.Core.Services
             };
             result.DoctorName = prescription.Doctor.FullName;
             return result;
-        }
-
-
-        public async Task DeleteAsync(long id)
-        {
-            var patientPrescription = await _prescriptionRepository.GetByIdAsync(id);
-            if (patientPrescription == null)
-                throw new PrescriptionNotFoundException(
-                    $"Cannot find patient prescription with id: {id}");
-            await _prescriptionRepository.DeleteAsync(patientPrescription);
-        }
-
-        private async Task<List<Prescription>> GetPrescriptionsFromPatientId(long patientId)
-        {
-            var currentPatientHospitalizedProfiles =
-                await _patientHospitalizedProfileRepository.ListAsync(
-                    new PatientHospitalizedProfileSpec(patientId));
-            return currentPatientHospitalizedProfiles.SelectMany(x => x.Prescriptions)
-                .OrderByDescending(x => x.CreatedAt).ToList();
         }
     }
 }

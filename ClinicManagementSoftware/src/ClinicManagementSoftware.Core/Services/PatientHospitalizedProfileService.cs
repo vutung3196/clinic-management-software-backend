@@ -37,11 +37,6 @@ namespace ClinicManagementSoftware.Core.Services
             _labTestRepository = labTestRepository;
         }
 
-        public Task<PatientHospitalizedProfileResponseDto> GetPatientProfilesByPatientId(long patientId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<PatientHospitalizedProfileResponseDto> CreatePatientProfile(
             CreatePatientHospitalizedProfileDto request)
         {
@@ -90,20 +85,6 @@ namespace ClinicManagementSoftware.Core.Services
                 Id = patientHospitalizedProfile.Id,
                 RevisitDate = patientHospitalizedProfile.RevisitDate
             };
-        }
-
-        public async Task DeletePatientProfile(long id)
-        {
-            var patientHospitalizedProfile = await _patientHospitalizedProfileRepository.GetByIdAsync(id);
-            if (patientHospitalizedProfile == null)
-            {
-                throw new ArgumentException($"Cannot find patient hospitalized profile with id: {id}");
-            }
-
-            patientHospitalizedProfile.IsDeleted = true;
-            patientHospitalizedProfile.DeletedAt = DateTime.Now;
-
-            await _patientHospitalizedProfileRepository.UpdateAsync(patientHospitalizedProfile);
         }
 
         public async Task<IEnumerable<PatientHospitalizedProfileResponseDto>> GetPatientHospitalizedProfilesForPatient(

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ClinicManagementSoftware.Core.Dto.MedicalService;
 
 namespace ClinicManagementSoftware.Core.Dto.Receipt
 {
