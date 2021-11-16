@@ -15,15 +15,21 @@ namespace ClinicManagementSoftware.Core.Services
     {
         private readonly IUserContext _userContext;
         private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupRepository;
+        private readonly IRepository<MedicalService> _medicalServiceRepository;
+        private readonly IRepository<LabTest> _labTestRepository;
         private readonly ILabTestQueueService _labTestQueueService;
+
 
         public MedicalServiceGroupService(IUserContext userContext,
             IRepository<MedicalServiceGroup> medicalServiceGroupRepository,
-            ILabTestQueueService labTestQueueService)
+            ILabTestQueueService labTestQueueService, IRepository<LabTest> labTestRepository,
+            IRepository<MedicalService> medicalServiceRepository)
         {
             _userContext = userContext;
             _medicalServiceGroupRepository = medicalServiceGroupRepository;
             _labTestQueueService = labTestQueueService;
+            _labTestRepository = labTestRepository;
+            _medicalServiceRepository = medicalServiceRepository;
         }
 
         public async Task<IEnumerable<MedicalServiceGroupResponseDto>> GetAllMedicalServiceGroups()
@@ -79,11 +85,26 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task DeleteMedicalServiceGroup(long id)
         {
-            var medicalServiceGroup = await _medicalServiceGroupRepository.GetByIdAsync(id);
+            var medicalServiceGroup =
+                await _medicalServiceGroupRepository.GetBySpecAsync(
+                    new GetMedicalServiceGroupAndMedicalServicesById(id));
+
+            var labTest = await _labTestRepository.GetBySpecAsync(
+                new GetLabTestHavingDeletingMedicalServiceGroupSpec(id));
+            if (labTest != null)
+            {
+                throw new ArgumentException("Không thể xóa nhóm chỉ định này, do đang có xét nghiệm chưa thanh toán");
+            }
 
             if (medicalServiceGroup == null)
             {
                 throw new ArgumentException($"Cannot find medication service group with id: {id}");
+            }
+
+            foreach (var medicalService in medicalServiceGroup.MedicalServices)
+            {
+                medicalService.IsDeleted = true;
+                await _medicalServiceRepository.UpdateAsync(medicalService);
             }
 
             medicalServiceGroup.IsDeleted = true;
