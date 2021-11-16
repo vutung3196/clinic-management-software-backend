@@ -208,29 +208,41 @@ namespace ClinicManagementSoftware.Core.Services
             patientDoctorVisitForm.Description = request.Description;
 
             // delete old queue if assigning new doctor
-            var oldDoctorId = patientDoctorVisitForm.DoctorId;
-            var newDoctorId = request.DoctorId;
-            if (newDoctorId != oldDoctorId)
+            if (request.DoctorId != patientDoctorVisitForm.DoctorId)
             {
                 // delete an element in old queue
                 await _doctorQueueService.DeleteAVisitingFormInDoctorQueue(patientDoctorVisitForm.Id,
-                    oldDoctorId);
+                    patientDoctorVisitForm.DoctorId);
 
                 // update new queue
-                await _doctorQueueService.EnqueueNewPatient(patientDoctorVisitForm.Id, newDoctorId);
+                await _doctorQueueService.EnqueueNewPatient(patientDoctorVisitForm.Id, request.DoctorId);
                 patientDoctorVisitForm.DoctorId = request.DoctorId;
             }
 
             if (request.ChangeStatusFromWaitingForDoctorToVisitingDoctor)
             {
-                patientDoctorVisitForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.VisitingDoctor;
-                await _doctorQueueService.MoveAVisitingFormToTheBeginningOfTheQueue(id,
-                    patientDoctorVisitForm.DoctorId);
+                // update status of all other visiting forms
+                await UpdateOtherDoctorVisitingFormsToWaitingForDoctor(patientDoctorVisitForm.DoctorId);
+                patientDoctorVisitForm.VisitingStatus = (byte)EnumDoctorVisitingFormStatus.VisitingDoctor;
             }
-
 
             await _patientDoctorVisitingFormRepository.UpdateAsync(patientDoctorVisitForm);
             return ConvertToPatientDoctorVisitingFormDto(patientDoctorVisitForm);
+        }
+
+        private async Task UpdateOtherDoctorVisitingFormsToWaitingForDoctor(long doctorId)
+        {
+            // get all other visiting forms
+            var doctorVisitingFormIds = await _doctorQueueService.GetCurrentDoctorQueue(doctorId);
+            foreach (var id in doctorVisitingFormIds)
+            {
+                var visitingForm = await _patientDoctorVisitingFormRepository.GetByIdAsync(id);
+                if (visitingForm is {VisitingStatus: (byte) EnumDoctorVisitingFormStatus.VisitingDoctor})
+                {
+                    visitingForm.VisitingStatus = (byte) EnumDoctorVisitingFormStatus.WaitingForDoctor;
+                    await _patientDoctorVisitingFormRepository.UpdateAsync(visitingForm);
+                }
+            }
         }
 
         public async Task<IEnumerable<DoctorAvailabilityDto>> GetCurrentDoctorAvailabilities()
