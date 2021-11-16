@@ -17,15 +17,17 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IUserContext _userContext;
         private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupSpecification;
         private readonly IRepository<MedicalService> _medicalServiceRepository;
+        private readonly IRepository<LabTest> _labTestRepository;
 
 
         public MedicalServiceService(IUserContext userContext,
             IRepository<MedicalServiceGroup> medicalServiceGroupSpecification,
-            IRepository<MedicalService> medicalServiceRepository)
+            IRepository<MedicalService> medicalServiceRepository, IRepository<LabTest> labTestRepository)
         {
             _userContext = userContext;
             _medicalServiceGroupSpecification = medicalServiceGroupSpecification;
             _medicalServiceRepository = medicalServiceRepository;
+            _labTestRepository = labTestRepository;
         }
 
 
@@ -134,6 +136,14 @@ namespace ClinicManagementSoftware.Core.Services
 
         public async Task DeleteMedicalService(long id)
         {
+            // check all lab tests having "Chưa thanh toán" status
+            var labTest = await _labTestRepository.GetBySpecAsync(
+                new GetLabTestHavingDeletingMedicalServiceSpec(id));
+            if (labTest != null)
+            {
+                throw new ArgumentException("Không thể xóa dịch vụ này, do đang có xét nghiệm chưa thanh toán");
+            }
+
             var medicalService = await _medicalServiceRepository.GetByIdAsync(id);
 
             if (medicalService == null)
