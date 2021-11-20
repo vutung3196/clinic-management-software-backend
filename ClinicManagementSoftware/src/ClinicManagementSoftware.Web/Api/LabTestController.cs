@@ -28,7 +28,7 @@ namespace ClinicManagementSoftware.Web.Api
         }
 
         [HttpGet("{id:long}")]
-        [Authorize(Roles = "Doctor,TestSpecialist")]
+        [Authorize(Roles = "Doctor,TestSpecialist,Receptionist")]
         public async Task<IActionResult> GetById(long id)
         {
             try

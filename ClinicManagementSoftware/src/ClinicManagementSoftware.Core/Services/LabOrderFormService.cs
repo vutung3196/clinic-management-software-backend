@@ -170,10 +170,12 @@ namespace ClinicManagementSoftware.Core.Services
                     (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
                         x => x.CreatedAt).ToList();
             }
-            else if (currentContext.Role.RoleName.Equals(ConfigurationConstant.TestSpecialistRole))
+            else if (currentContext.Role.RoleName.Equals(ConfigurationConstant.TestSpecialistRole) &&
+                     currentContext.MedicalServiceGroupForTestSpecialistId.HasValue)
             {
                 var @spec =
-                    new GetLabOrderFormsForTestSpecialistSpec(currentContext.ClinicId);
+                    new GetLabOrderFormsForTestSpecialistSpec(currentContext.ClinicId,
+                        currentContext.MedicalServiceGroupForTestSpecialistId.Value);
                 labOrderForms =
                     (await _labOrderFormRepository.ListAsync(@spec)).OrderByDescending(
                         x => x.CreatedAt).ToList();

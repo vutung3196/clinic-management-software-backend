@@ -21,7 +21,6 @@ namespace ClinicManagementSoftware.Core.Services
 {
     public class PrescriptionService : IPrescriptionService
     {
-        private readonly IRepository<Patient> _patientRepository;
         private readonly IRepository<PatientHospitalizedProfile> _patientHospitalizedProfileRepository;
         private readonly IRepository<Prescription> _prescriptionRepository;
         private readonly IRepository<PatientDoctorVisitForm> _patientDoctorVisitingFormRepository;
@@ -31,7 +30,7 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly ISendGridService _sendGridService;
         private readonly IDoctorQueueService _doctorQueueService;
 
-        public PrescriptionService(IRepository<Patient> patientPrescriptionRepository,
+        public PrescriptionService(
             IRepository<PatientHospitalizedProfile> patientHospitalizedProfileRepository,
             IMapper mapper,
             IRepository<Prescription> prescriptionSpecificationRepository, IUserContext userContext,
@@ -39,7 +38,6 @@ namespace ClinicManagementSoftware.Core.Services
             IDoctorQueueService doctorQueueService, ISendGridService sendGridService,
             IRepository<MailTemplate> mailTemplateRepository)
         {
-            _patientRepository = patientPrescriptionRepository;
             _prescriptionRepository = prescriptionSpecificationRepository;
             _userContext = userContext;
             _patientDoctorVisitingFormRepository = patientDoctorVisitingFormRepository;
@@ -216,7 +214,7 @@ namespace ClinicManagementSoftware.Core.Services
             for (var i = 0; i < medicationInformation.Count; i++)
             {
                 var medicationHtml =
-                    " <tr> <td align=\"center\" valign=\"top\"> {index}. </td> <td align=\"left\" valign=\"top\"> <div style={style6}> <strong>{name}</strong> <div>{usage}</div> </div> <div style={style11}> Số lượng: <strong>{number}</strong> Lần </div> <div class=\"clear\"></div> </td> </tr>";
+                    " <tr> <td align=\"center\" valign=\"top\"> {index}. </td> <td align=\"left\" valign=\"top\"> <div style={style6}> <strong>{name}</strong> <div>{usage}</div> </div> <div style={style11}> Số lượng: <strong>{number}</strong> viên </div> <div class=\"clear\"></div> </td> </tr>";
                 medicationHtml = medicationHtml.Replace("{index}", (i + 1).ToString());
                 medicationHtml = medicationHtml.Replace("{name}", medicationInformation[i].Name);
                 medicationHtml = medicationHtml.Replace("{number}", medicationInformation[i].Quantity.ToString());
