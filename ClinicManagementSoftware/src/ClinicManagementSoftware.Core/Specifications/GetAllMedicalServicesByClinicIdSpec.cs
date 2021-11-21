@@ -8,7 +8,6 @@ namespace ClinicManagementSoftware.Core.Specifications
         public GetAllMedicalServicesByClinicIdSpec(long clinicId)
         {
             Query.Where(medicalService => medicalService.ClinicId == clinicId)
-                .Where(medicalService => !medicalService.IsVisitingDoctorService)
                 .Include(medicalService => medicalService.MedicalServiceGroup)
                 .Where(medicalService => medicalService.IsDeleted == false);
         }

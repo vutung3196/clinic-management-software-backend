@@ -101,6 +101,11 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new ArgumentException($"Cannot find medication service group with id: {id}");
             }
 
+            if (medicalServiceGroup.MedicalServices.Any(x => x.IsVisitingDoctorService))
+            {
+                throw new ArgumentException("Không thể xóa nhóm dịch vụ thu tiền khám bệnh ban đầu");
+            }
+
             foreach (var medicalService in medicalServiceGroup.MedicalServices)
             {
                 medicalService.IsDeleted = true;

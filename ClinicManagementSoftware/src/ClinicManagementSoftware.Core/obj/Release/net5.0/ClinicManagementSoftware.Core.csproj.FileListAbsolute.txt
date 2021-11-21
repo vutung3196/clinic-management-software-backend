@@ -1,0 +1,15 @@
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\bin\Release\net5.0\ClinicManagementSoftware.Core.deps.json
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\bin\Release\net5.0\ClinicManagementSoftware.Core.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\bin\Release\net5.0\ref\ClinicManagementSoftware.Core.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\bin\Release\net5.0\ClinicManagementSoftware.Core.pdb
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\bin\Release\net5.0\ClinicManagementSoftware.SharedKernel.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\bin\Release\net5.0\ClinicManagementSoftware.SharedKernel.pdb
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.csproj.AssemblyReference.cache
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.AssemblyInfoInputs.cache
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.AssemblyInfo.cs
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.csproj.CoreCompileInputs.cache
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.csproj.CopyComplete
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ref\ClinicManagementSoftware.Core.dll
+D:\VuTung\Funix\Certificate 8\Codes\backend\clinic-management-software-backend\ClinicManagementSoftware\src\ClinicManagementSoftware.Core\obj\Release\net5.0\ClinicManagementSoftware.Core.pdb

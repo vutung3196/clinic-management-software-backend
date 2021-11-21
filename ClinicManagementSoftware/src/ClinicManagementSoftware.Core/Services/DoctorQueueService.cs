@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.PatientDoctorVisitingForm;
 using ClinicManagementSoftware.Core.Entities;
+using ClinicManagementSoftware.Core.Enum;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Core.Specifications;
 using ClinicManagementSoftware.SharedKernel.Interfaces;
@@ -134,7 +135,8 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 DoctorId = userId,
                 CreatedAt = DateTime.Now,
-                Queue = JsonConvert.SerializeObject(visitingDoctorQueueData)
+                Queue = JsonConvert.SerializeObject(visitingDoctorQueueData),
+                IsDeleted = (byte) EnumIsDeleted.No
             };
 
             await _visitingDoctorQueueRepository.AddAsync(doctorQueue);

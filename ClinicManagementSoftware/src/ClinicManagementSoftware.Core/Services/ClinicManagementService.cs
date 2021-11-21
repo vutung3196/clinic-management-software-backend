@@ -20,15 +20,18 @@ namespace ClinicManagementSoftware.Core.Services
     public class ClinicManagementService : IClinicManagementService
     {
         private readonly IRepository<Clinic> _clinicSpecificationRepository;
+        private readonly IRepository<MedicalServiceGroup> _medicalServiceGroupRepository;
         private readonly IUserService _userService;
         private readonly ISendGridService _sendGridService;
 
         public ClinicManagementService(IRepository<Clinic> clinicSpecificationRepository,
-            IUserService userService, ISendGridService sendGridService)
+            IUserService userService, ISendGridService sendGridService,
+            IRepository<MedicalServiceGroup> medicalServiceGroupRepository)
         {
             _clinicSpecificationRepository = clinicSpecificationRepository;
             _userService = userService;
             _sendGridService = sendGridService;
+            _medicalServiceGroupRepository = medicalServiceGroupRepository;
         }
 
         public async Task UpdateClinicInformation(long id, CreateUpdateClinicRequestDto request)
@@ -68,6 +71,7 @@ namespace ClinicManagementSoftware.Core.Services
             {
                 throw new ClinicNotFoundException("Not found");
             }
+
             clinic.IsEnabled = (byte) EnumEnabled.InActive;
             await _clinicSpecificationRepository.UpdateAsync(clinic);
         }
@@ -150,6 +154,27 @@ namespace ClinicManagementSoftware.Core.Services
                 await _sendGridService.Send(content, "Phê duyệt tài khoản", MimeType.Text,
                     ConfigurationConstant.SystemAdminEmail, "Clinic management software");
             }
+
+            // create a service
+            var medicalServiceGroup = new MedicalServiceGroup
+            {
+                Name = "Khám bệnh",
+                Description = "Tiền khám bệnh",
+                CreatedAt = DateTime.Now,
+                ClinicId = clinic.Id,
+                MedicalServices = new List<MedicalService>()
+                {
+                    new MedicalService()
+                    {
+                        CreatedAt = DateTime.Now,
+                        Name = "Phí khám bệnh",
+                        Description = "Khám bệnh ban đầu",
+                        ClinicId = clinic.Id,
+                        Price = 100000
+                    }
+                }
+            };
+            await _medicalServiceGroupRepository.AddAsync(medicalServiceGroup);
 
             return new ClinicInformationForAdminResponse
             {

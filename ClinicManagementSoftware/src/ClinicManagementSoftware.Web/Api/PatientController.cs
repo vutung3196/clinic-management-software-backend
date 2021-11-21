@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicManagementSoftware.Core.Dto.Patient;
 using ClinicManagementSoftware.Core.Exceptions.Patient;
+using ClinicManagementSoftware.Core.Exceptions.Prescription;
 using ClinicManagementSoftware.Core.Interfaces;
 using ClinicManagementSoftware.Web.ApiModels.Patient;
 using ClinicManagementSoftware.Web.ApiModels.Wrapper;
@@ -77,6 +78,12 @@ namespace ClinicManagementSoftware.Web.Api
         {
             try
             {
+                if (!string.IsNullOrWhiteSpace(request.MedicalInsuranceCode) &&
+                    request.MedicalInsuranceCode.Length != 10)
+                {
+                    throw new InvalidMedicalInsuranceCodeException("Mã số thẻ bảo hiểm y tế bao gồm 10 ký tự");
+                }
+
                 var createPatientDto = new CreatePatientDto
                 {
                     EmailAddress = request.EmailAddress.Trim(),
@@ -85,7 +92,7 @@ namespace ClinicManagementSoftware.Web.Api
                     PhoneNumber = request.PhoneNumber.Trim(),
                     DateOfBirth = request.DateOfBirth,
                     AddressDetail = request.AddressDetail.Trim(),
-                    MedicalInsuranceCode = request.MedicalInsuranceCode.Trim(),
+                    MedicalInsuranceCode = request.MedicalInsuranceCode?.Trim(),
                     AddressCity = request.AddressCity.Trim(),
                     AddressDistrict = request.AddressDistrict.Trim(),
                     AddressStreet = request.AddressStreet.Trim()
@@ -95,10 +102,15 @@ namespace ClinicManagementSoftware.Web.Api
                 var response = new Response<PatientDto>(result);
                 return Ok(response);
             }
+            catch (InvalidMedicalInsuranceCodeException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
+            }
             catch (ArgumentNullException exception)
             {
                 _logger.LogError(exception.Message);
-                return BadRequest("Create patient model should not be null");
+                return BadRequest(exception.Message);
             }
             catch (InvalidGenderException exception)
             {
@@ -125,6 +137,13 @@ namespace ClinicManagementSoftware.Web.Api
                     return BadRequest("Create patient model should not be null");
                 }
 
+                if (!string.IsNullOrWhiteSpace(request.MedicalInsuranceCode) &&
+                    request.MedicalInsuranceCode.Length != 10)
+                {
+                    throw new InvalidMedicalInsuranceCodeException("Mã số thẻ bảo hiểm y tế bao gồm 10 ký tự");
+                }
+
+
                 var updatePatientDto = new UpdatePatientDto
                 {
                     Id = id,
@@ -142,6 +161,11 @@ namespace ClinicManagementSoftware.Web.Api
                 var result = await _patientService.UpdateAsync(updatePatientDto);
                 var response = new Response<PatientDto>(result);
                 return Ok(response);
+            }
+            catch (InvalidMedicalInsuranceCodeException exception)
+            {
+                _logger.LogError(exception.Message);
+                return BadRequest(exception.Message);
             }
             catch (InvalidGenderException exception)
             {

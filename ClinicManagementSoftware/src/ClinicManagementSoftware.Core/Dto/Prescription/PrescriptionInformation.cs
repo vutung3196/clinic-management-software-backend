@@ -19,6 +19,8 @@ namespace ClinicManagementSoftware.Core.Dto.Prescription
         public string DoctorName { get; set; }
         public long DoctorId { get; set; }
         public DateTime RevisitDate { get; set; }
+        public double? Weight { get; set; }
+        public string SupervisorName { get; set; }
         public IEnumerable<MedicationInformation> MedicationInformation { get; set; }
         public PatientDto PatientInformation { get; set; }
         public ClinicInformationResponse ClinicInformation { get; set; }

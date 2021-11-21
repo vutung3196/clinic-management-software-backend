@@ -74,7 +74,9 @@ namespace ClinicManagementSoftware.Core.Services
                 PatientDoctorVisitFormId = request.PatientDoctorVisitingFormId,
                 DoctorId = currentUser.UserId,
                 DiseaseNote = request.DiseaseNote,
-                RevisitDate = request.RevisitDate
+                RevisitDate = request.RevisitDate,
+                SupervisorName = request.SupervisorName,
+                Weight = request.Weight
             };
 
             // update status of doctor visiting form
@@ -183,11 +185,26 @@ namespace ClinicManagementSoftware.Core.Services
                 prescriptionInformation.DiagnosedDescription);
             mailTemplate = mailTemplate.Replace("{prescription.diseaseNote}",
                 prescriptionInformation.DiseaseNote);
-            mailTemplate = mailTemplate.Replace("{prescription.patientInformation.age}",
-                patientInformation.DateOfBirth.Format());
-            var gender = patientInformation.Age;
+
             mailTemplate = mailTemplate.Replace("{prescription.doctorSuggestion}",
                 prescriptionInformation.DoctorSuggestion);
+            if (prescriptionInformation.PatientInformation.Age <= 6)
+            {
+                mailTemplate =
+                    mailTemplate.Replace("{prescription.weight}", prescriptionInformation.Weight + "kg");
+                mailTemplate = mailTemplate.Replace("{prescription.patientInformation.age}",
+                    patientInformation.Month + " tháng");
+            }
+            else
+            {
+                mailTemplate =
+                    mailTemplate.Replace("{prescription.weight}", string.Empty);
+                mailTemplate = mailTemplate.Replace("{prescription.patientInformation.age}",
+                    patientInformation.Age.ToString());
+            }
+
+            mailTemplate =
+                mailTemplate.Replace("{prescription.supervisorName}", prescriptionInformation.SupervisorName);
             mailTemplate =
                 mailTemplate.Replace("{prescription.revisitDate}", prescriptionInformation.RevisitDateDisplayed);
             var arrayTime = prescriptionInformation.CreatedAt.Split("/");
