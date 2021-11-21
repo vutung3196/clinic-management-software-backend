@@ -64,7 +64,7 @@ namespace ClinicManagementSoftware.Core.Services
         public async Task<IEnumerable<MedicalServiceGroupDto>> GetAllMedicalServiceByGroup()
         {
             var currentUser = await _userContext.GetCurrentContext();
-            var @spec = new GetAllMedicalServicesByClinicIdSpec(currentUser.ClinicId);
+            var @spec = new GetAllMedicalServicesForLabOrderFormByClinicIdSpec(currentUser.ClinicId);
             var medicalServices = await _medicalServiceRepository.ListAsync(@spec);
             var result = medicalServices.GroupBy(x => x.MedicalServiceGroup)
                 .Select(x => new MedicalServiceGroupDto()
@@ -149,6 +149,11 @@ namespace ClinicManagementSoftware.Core.Services
             if (medicalService == null)
             {
                 throw new ArgumentException($"Cannot find medication service with id: {id}");
+            }
+
+            if (medicalService.IsVisitingDoctorService)
+            {
+                throw new ArgumentException("Không thể xóa dịch vụ thu tiền khám bệnh ban đầu");
             }
 
             medicalService.IsDeleted = true;

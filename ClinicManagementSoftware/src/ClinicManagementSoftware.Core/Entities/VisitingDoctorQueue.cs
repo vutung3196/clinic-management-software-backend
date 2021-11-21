@@ -19,6 +19,6 @@ namespace ClinicManagementSoftware.Core.Entities
         public DateTime? DeletedAt { get; set; }
 
         [Column("is_deleted")]
-        public byte? IsDeleted { get; set; }
+        public byte IsDeleted { get; set; }
     }
 }

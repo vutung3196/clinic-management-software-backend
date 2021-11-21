@@ -21,6 +21,11 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public string DateOfBirthDetail => DateOfBirth != null ? DateOfBirth.Format() : string.Empty;
         public int? Age => DateOfBirth != null ? DateTime.Now.Year - DateOfBirth.Value.Year : null;
 
+        public int? Month => DateOfBirth.HasValue
+            ? ((DateTime.Now.Year - DateOfBirth.Value.Year) * 12) + DateTime.Now.Month -
+              DateOfBirth.Value.Month
+            : null;
+
         public string MedicalInsuranceCode { get; set; }
     }
 }

@@ -24,7 +24,8 @@ namespace ClinicManagementSoftware.Web.ApiModels.Patient
 
         public string AddressDistrict { get; set; }
 
-        [MaxLength(15, ErrorMessage = "Mã số thẻ bảo hiểm y tế không được vượt quá 15 ký tự")]
+        //[MinLength(10, ErrorMessage = "Mã số thẻ bảo hiểm y tế bao gồm 10 ký tự")]
+        //[StringLength(10, ErrorMessage = "Mã số thẻ bảo hiểm y tế bao gồm 10 ký tự")]
         public string MedicalInsuranceCode { get; set; }
 
         public string Gender { get; set; }

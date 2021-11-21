@@ -1,0 +1,93 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "ClinicManagementSoftware.SharedKernel/1.0.0": {
+        "dependencies": {
+          "Ardalis.Specification": "5.1.0",
+          "MediatR": "9.0.0"
+        },
+        "runtime": {
+          "ClinicManagementSoftware.SharedKernel.dll": {}
+        }
+      },
+      "Ardalis.GuardClauses/3.1.0": {
+        "dependencies": {
+          "JetBrains.Annotations": "2019.1.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Ardalis.GuardClauses.dll": {
+            "assemblyVersion": "3.1.0.0",
+            "fileVersion": "3.1.0.0"
+          }
+        }
+      },
+      "Ardalis.Specification/5.1.0": {
+        "dependencies": {
+          "Ardalis.GuardClauses": "3.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Ardalis.Specification.dll": {
+            "assemblyVersion": "5.1.0.0",
+            "fileVersion": "5.1.0.0"
+          }
+        }
+      },
+      "JetBrains.Annotations/2019.1.3": {
+        "runtime": {
+          "lib/netstandard2.0/JetBrains.Annotations.dll": {
+            "assemblyVersion": "2019.1.3.0",
+            "fileVersion": "2019.1.3.0"
+          }
+        }
+      },
+      "MediatR/9.0.0": {
+        "runtime": {
+          "lib/netstandard2.1/MediatR.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ClinicManagementSoftware.SharedKernel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Ardalis.GuardClauses/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P66NP5pqMvaix4DZ+g205UQHwh0MU4Zq6FNE220F+oZJc8IWqPvlGTAaZFKpjVVKSygetUSIq3IrVLlh/LwvLA==",
+      "path": "ardalis.guardclauses/3.1.0",
+      "hashPath": "ardalis.guardclauses.3.1.0.nupkg.sha512"
+    },
+    "Ardalis.Specification/5.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5HWhPi7zCSdtMmyf/jSK5fM4jmbTGP+xWlHMoMz4gfW/vU8qIgW8U8zoPrYrEbFng3y55v3YgmRSxePW3HXlPw==",
+      "path": "ardalis.specification/5.1.0",
+      "hashPath": "ardalis.specification.5.1.0.nupkg.sha512"
+    },
+    "JetBrains.Annotations/2019.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-E0x48BwZJKoNMNCekWGKsV4saQS89lf58ydT2szseV44CMYIbaHXjc7+305WLw6up3ibZN9yH6QdGSZo5tQhLg==",
+      "path": "jetbrains.annotations/2019.1.3",
+      "hashPath": "jetbrains.annotations.2019.1.3.nupkg.sha512"
+    },
+    "MediatR/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8b3UYNxegHVYcJMG2zH8wn+YqxLvXG+eMfj0cMCq/jTW72p6O3PCKMkrIv0mqyxdW7bA4gblsocw7n+/9Akg5g==",
+      "path": "mediatr/9.0.0",
+      "hashPath": "mediatr.9.0.0.nupkg.sha512"
+    }
+  }
+}

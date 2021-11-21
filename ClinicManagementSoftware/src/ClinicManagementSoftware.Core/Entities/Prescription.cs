@@ -14,13 +14,16 @@ namespace ClinicManagementSoftware.Core.Entities
 
         public PatientHospitalizedProfile PatientHospitalizedProfile { get; set; }
 
-        [Column("patient_doctor_visit_form_id")] public long PatientDoctorVisitFormId { get; set; }
+        [Column("patient_doctor_visit_form_id")]
+        public long PatientDoctorVisitFormId { get; set; }
 
         public PatientDoctorVisitForm PatientDoctorVisitForm { get; set; }
         [Column("doctor_id")] public long DoctorId { get; set; }
         public User Doctor { get; set; }
 
+        [Column("weight")] public double? Weight { get; set; }
 
+        [Column("supervisor_name")] public string SupervisorName { get; set; }
         [Column("diagnosed_description")] public string DiagnosedDescription { get; set; }
 
         // Json
