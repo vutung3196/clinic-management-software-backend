@@ -213,27 +213,28 @@ namespace ClinicManagementSoftware.Core.Services
             var currentContext = await _userContext.GetCurrentContext();
             var @spec = new GetPatientHospitalizedProfilesByClinicIdSpec(currentContext.ClinicId);
             var profiles = await _patientHospitalizedProfileRepository.ListAsync(@spec);
-            var result = profiles.Select(x => new PatientHospitalizedProfileResponseDto()
-            {
-                Description = x.Description,
-                Code = x.Code,
-                CreatedAt = x.CreatedAt.Format(),
-                DiseaseName = x.DiseaseName,
-                Id = x.Id,
-
-                PatientInformation = _mapper.Map<PatientDto>(x.Patient),
-                PatientDetailedInformation = x.Patient.FullName,
-                RevisitDate = x.RevisitDate,
-                ClinicInformation = new ClinicInformationResponse
+            var result = profiles.OrderByDescending(x => x.CreatedAt)
+                .Select(x => new PatientHospitalizedProfileResponseDto()
                 {
-                    AddressCity = x.Patient.Clinic.AddressCity,
-                    AddressDistrict = x.Patient.Clinic.AddressDistrict,
-                    AddressStreet = x.Patient.Clinic.AddressStreet,
-                    AddressDetail = x.Patient.Clinic.AddressDetail,
-                    Name = x.Patient.Clinic.Name,
-                    PhoneNumber = x.Patient.Clinic.PhoneNumber
-                }
-            });
+                    Description = x.Description,
+                    Code = x.Code,
+                    CreatedAt = x.CreatedAt.Format(),
+                    DiseaseName = x.DiseaseName,
+                    Id = x.Id,
+
+                    PatientInformation = _mapper.Map<PatientDto>(x.Patient),
+                    PatientDetailedInformation = x.Patient.FullName,
+                    RevisitDate = x.RevisitDate,
+                    ClinicInformation = new ClinicInformationResponse
+                    {
+                        AddressCity = x.Patient.Clinic.AddressCity,
+                        AddressDistrict = x.Patient.Clinic.AddressDistrict,
+                        AddressStreet = x.Patient.Clinic.AddressStreet,
+                        AddressDetail = x.Patient.Clinic.AddressDetail,
+                        Name = x.Patient.Clinic.Name,
+                        PhoneNumber = x.Patient.Clinic.PhoneNumber
+                    }
+                });
             return result;
         }
     }

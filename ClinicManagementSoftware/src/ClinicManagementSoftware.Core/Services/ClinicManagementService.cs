@@ -170,6 +170,7 @@ namespace ClinicManagementSoftware.Core.Services
                         Name = "Phí khám bệnh",
                         Description = "Khám bệnh ban đầu",
                         ClinicId = clinic.Id,
+                        IsVisitingDoctorService = true,
                         Price = 100000
                     }
                 }

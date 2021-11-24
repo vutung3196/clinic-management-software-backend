@@ -12,6 +12,5 @@ namespace ClinicManagementSoftware.Core.Entities
         public string RoleName { get; set; }
 
         public IList<User> Users { get; set; }
-        public IList<RolePermission> RolePermissions { get; set; }
     }
 }
