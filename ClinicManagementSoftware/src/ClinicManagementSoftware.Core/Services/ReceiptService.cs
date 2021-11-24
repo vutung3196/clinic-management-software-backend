@@ -119,13 +119,32 @@ namespace ClinicManagementSoftware.Core.Services
         public async Task<ReceiptReportResponse> GetReceiptReport(ReceiptReportRequestDto request)
         {
             var currentContext = await _userContext.GetCurrentContext();
-            var @spec = new GetReceiptReportSpec(request.StartDate, request.EndDate, currentContext.ClinicId);
+            var @spec = new GetReceiptReportSpec(request.StartDate.AbsoluteStart(), request.EndDate.AbsoluteEnd(),
+                currentContext.ClinicId);
             var @clinicSpec = new GetClinicInformationByIdSpec(currentContext.ClinicId);
             var clinic = await _clinicRepository.GetBySpecAsync(@clinicSpec);
             var receipts = await _receiptRepository.ListAsync(@spec);
             if (receipts.Count == 0)
             {
-                return new ReceiptReportResponse();
+                return new ReceiptReportResponse()
+                {
+                    ContainingPatientAddress = request.ContainingPatientAddress,
+                    ContainingPatientAge = request.ContainingPatientAge,
+                    ContainingPatientEmail = request.ContainingPatientEmail,
+                    ContainingPatientName = request.ContainingPatientName,
+                    ContainingPatientPhoneNumber = request.ContainingPatientPhoneNumber,
+                    ClinicInformation = new ClinicInformationResponse
+                    {
+                        AddressCity = clinic?.AddressCity,
+                        AddressDistrict = clinic?.AddressDistrict,
+                        AddressStreet = clinic?.AddressStreet,
+                        AddressDetail = clinic?.AddressDetail,
+                        Name = clinic?.Name,
+                        PhoneNumber = clinic?.PhoneNumber
+                    },
+                    MedicalServices = new List<ReceiptReportMedicalServiceDto>(0),
+                    Total = 0,
+                };
             }
 
             var dictionary = receipts.ToDictionary(x => x, x =>

@@ -13,6 +13,7 @@ namespace ClinicManagementSoftware.Core.Dto.Patient
         public string Gender { get; set; }
         public string CreatedAt { get; set; }
         public string UpdatedAt { get; set; }
+        public string ActiveDate { get; set; }
         public string AddressDetail { get; set; }
         public string AddressCity { get; set; }
         public string AddressStreet { get; set; }

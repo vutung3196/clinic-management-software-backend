@@ -24,8 +24,6 @@ namespace ClinicManagementSoftware.Infrastructure.Data
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<MedicalService> MedicalServices { get; set; }
         public DbSet<MedicalServiceGroup> MedicalServiceGroups { get; set; }
@@ -59,13 +57,13 @@ namespace ClinicManagementSoftware.Infrastructure.Data
                 .HasOne(user => user.Role)
                 .WithMany(role => role.Users);
 
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rolePermission => rolePermission.Role)
-                .WithMany(role => role.RolePermissions);
+            //modelBuilder.Entity<RolePermission>()
+            //    .HasOne(rolePermission => rolePermission.Role)
+            //    .WithMany(role => role.RolePermissions);
 
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rolePermission => rolePermission.Permission)
-                .WithMany(permission => permission.RolePermissions);
+            //modelBuilder.Entity<RolePermission>()
+            //    .HasOne(rolePermission => rolePermission.Permission)
+            //    .WithMany(permission => permission.RolePermissions);
 
             modelBuilder.Entity<Patient>()
                 .HasOne(patient => patient.Clinic)

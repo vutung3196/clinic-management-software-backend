@@ -28,7 +28,7 @@ namespace ClinicManagementSoftware.Core.Services
         private readonly IRepository<PatientDoctorVisitForm> _doctorVisitingFormRepository;
 
         public LabTestService(IRepository<LabTest> labTestRepository,
-           IUserContext userContext,
+            IUserContext userContext,
             ILabTestQueueService labTestQueueService, IMapper mapper, IRepository<LabOrderForm> labOrderFormRepository,
             IRepository<PatientDoctorVisitForm> doctorVisitingFormRepository)
         {
@@ -240,6 +240,11 @@ namespace ClinicManagementSoftware.Core.Services
                     when currentLabTest.Status == (byte) EnumLabTestStatus.WaitingForTesting:
                     result.IsMovingFromWaitingForTestingStatusToDoneStatus = true;
                     break;
+            }
+
+            if (result.IsMovingFromWaitingForResultStatusToDoneStatus && string.IsNullOrWhiteSpace(request.Result))
+            {
+                throw new ArgumentException("Cần ghi kết quả xét nghiệm");
             }
 
             // update lab test queue for 1 status please
