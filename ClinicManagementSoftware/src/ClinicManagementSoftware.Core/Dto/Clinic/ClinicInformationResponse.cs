@@ -1,4 +1,5 @@
 ﻿using ClinicManagementSoftware.Core.Dto.Files;
+using ClinicManagementSoftware.Core.Helpers;
 
 namespace ClinicManagementSoftware.Core.Dto.Clinic
 {
@@ -15,7 +16,7 @@ namespace ClinicManagementSoftware.Core.Dto.Clinic
         public string AddressCity { get; set; }
 
         public string AddressDetailInformation =>
-            AddressDetail + ", " + AddressStreet + ", " + AddressDistrict + ", " + AddressCity;
+            ClinicAddressDetailExtension.GetDetailedAddress(AddressDetail, AddressStreet, AddressDistrict, AddressCity);
 
         public string AddressDetail { get; set; }
         public ImageFileResponse ImageFile { get; set; }

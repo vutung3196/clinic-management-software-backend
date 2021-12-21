@@ -42,21 +42,21 @@
       <FileName>Dto\Authentication\RefreshTokenRequest.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.ClinicInformationForAdminResponse" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Dto.ClinicInformationForAdminResponse" Collapsed="true">
     <Position X="30" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAEAAAAAIAAASAAQAQAAAAAAAACAAAAAgAAAAA=</HashCode>
       <FileName>Dto\Clinic\ClinicInformationForAdminResponse.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.ClinicInformationResponse" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Dto.ClinicInformationResponse" Collapsed="true">
     <Position X="39" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAgAAAAAAAAQAQAAAAAAAACAAAAAgAAAAA=</HashCode>
       <FileName>Dto\Clinic\ClinicInformationResponse.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.CreateUpdateClinicRequestDto" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Dto.CreateUpdateClinicRequestDto" Collapsed="true">
     <Position X="21" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAIAAAAAAQAQAAAAAAAACAQAAAAAAAAA=</HashCode>
@@ -228,7 +228,7 @@
     <Position X="101.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAAAAAAAAAAEAQAQAAAAAAAACBAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Clinic.cs</FileName>
+      <FileName>Entities\cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -367,7 +367,7 @@
       <FileName>Exceptions\Authentication\IncorrectPasswordException.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Exceptions.Clinic.ClinicInActiveException" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.ClinicInActiveException" Collapsed="true">
     <Position X="103.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>

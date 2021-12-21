@@ -150,7 +150,7 @@ namespace ClinicManagementSoftware.Core.Services
             var @spec = new GetDetailedLabTestsByStatusAndClinicAndMedicalServiceGroupSpec(status,
                 currentContext.ClinicId, currentContext.MedicalServiceGroupForTestSpecialistId.Value);
             var labTests = await _labTestRepository.ListAsync(@spec);
-            var result = labTests.Select(x => new LabTestDto()
+            var result = labTests.OrderByDescending(x => x.CreatedAt).Select(x => new LabTestDto()
             {
                 Description = x.Description,
                 LabOrderFormCode = x.LabOrderForm.Code,
