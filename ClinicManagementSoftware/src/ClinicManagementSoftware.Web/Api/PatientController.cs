@@ -107,11 +107,16 @@ namespace ClinicManagementSoftware.Web.Api
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);
             }
-            catch (ArgumentNullException exception)
+            catch (ArgumentException exception)
             {
                 _logger.LogError(exception.Message);
                 return BadRequest(exception.Message);
             }
+            //catch (ArgumentNullException exception)
+            //{
+            //    _logger.LogError(exception.Message);
+            //    return BadRequest(exception.Message);
+            //}
             catch (InvalidGenderException exception)
             {
                 _logger.LogError(exception.Message + request);

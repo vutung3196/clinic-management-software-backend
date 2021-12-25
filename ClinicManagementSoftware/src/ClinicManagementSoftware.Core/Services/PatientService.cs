@@ -86,6 +86,11 @@ namespace ClinicManagementSoftware.Core.Services
                 throw new InvalidGenderException("Have invalid gender when creating request");
             }
 
+            if (request.DateOfBirth.HasValue && request.DateOfBirth.Value >= DateTime.Now)
+            {
+                throw new ArgumentException("Ngày tháng năm sinh không hợp lệ");
+            }
+
             var currentUserContext = await _userContext.GetCurrentContext();
             var patientModel = new Patient
             {

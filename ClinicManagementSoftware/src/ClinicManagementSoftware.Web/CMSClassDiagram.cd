@@ -24,15 +24,15 @@
     <Position X="90.75" Y="1.75" Width="1.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.ClinicInformationForAdminResponse" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Dto.ClinicInformationForAdminResponse" Collapsed="true">
     <Position X="30" Y="1.75" Width="1.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.ClinicInformationResponse" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Dto.ClinicInformationResponse" Collapsed="true">
     <Position X="39" Y="1.75" Width="1.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Dto.Clinic.CreateUpdateClinicRequestDto" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Dto.CreateUpdateClinicRequestDto" Collapsed="true">
     <Position X="21" Y="1.75" Width="1.5" />
     <TypeIdentifier />
   </Class>
@@ -217,7 +217,7 @@
     <Position X="100" Y="3.5" Width="1.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="ClinicManagementSoftware.Core.Exceptions.Clinic.ClinicInActiveException" Collapsed="true">
+  <Class Name="ClinicManagementSoftware.Core.Exceptions.ClinicInActiveException" Collapsed="true">
     <Position X="103.5" Y="0.5" Width="1.5" />
     <TypeIdentifier />
   </Class>

@@ -61,6 +61,11 @@ namespace ClinicManagementSoftware.Core.Services
                 medicationInformation = JsonConvert.SerializeObject(request.MedicationInformation);
             }
 
+            if (request.RevisitDate < DateTime.Now)
+            {
+                throw new ArgumentException("Ngày tái khám cần là một ngày trong tương laix");
+            }
+
             var currentUser = await _userContext.GetCurrentContext();
             var currentPrescription = new Prescription
             {
